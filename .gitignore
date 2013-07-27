@@ -1,0 +1,14 @@
+/assets/borderlands
+/assets/icecreamcreepers
+/cpw
+/ibxm
+/net
+/paulscode
+*.lzma
+*.cfg
+fmlversion.properties
+forge_logo.png
+mcpmod.info
+Start.java
+*.class
+*.jar
