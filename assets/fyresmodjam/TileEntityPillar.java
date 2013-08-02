@@ -13,7 +13,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityPillar extends TileEntity {
 
-	public static String[] validBlessings = {"Miner", "Lumberjack", "Warrior", "Hunter"};
+	public static String[] validBlessings = {"Miner", "Lumberjack", "Warrior", "Hunter", "Swamp"};
+	public static String[] blessingDescriptions = {"+25% mine speed on stone and iron blocks", "+25% mine speed on wooden blocks", "+25% melee damage", "+25% projectile damage", "attacks slow enemies for short period of time"};
+	
 	public String blessing = null;
 	
     public TileEntityPillar() {}
@@ -24,7 +26,7 @@ public class TileEntityPillar extends TileEntity {
     	if(worldObj.isRemote) {
     		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
     		
-    		if(player != null && player.getEntityData().hasKey("Blessing")) {
+    		if(player != null && player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals(blessing)) {
     			for(int i = 0; i < 2; i++) {this.worldObj.spawnParticle("portal", this.xCoord + ModjamMod.r.nextDouble(), this.yCoord + ModjamMod.r.nextDouble() * 2, this.zCoord + ModjamMod.r.nextDouble(), (ModjamMod.r.nextDouble() - 0.5D) * 2.0D, -ModjamMod.r.nextDouble(), (ModjamMod.r.nextDouble() - 0.5D) * 2.0D);}
     		}
     	}

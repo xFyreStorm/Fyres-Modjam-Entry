@@ -29,6 +29,8 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.network.packet.Packet5PlayerInventory;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -159,6 +161,8 @@ public class ItemStatHelper implements ICraftingHandler {
 					event.ammount *= 1.25F;
 				} else if(blessing.equals("Hunter") && event.source.isProjectile()) {
 					event.ammount *= 1.25F;
+				} else if(blessing.equals("Swamp") && event.entityLiving != null) {
+					event.entityLiving.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 2, false));
 				}
 			}
 		}
