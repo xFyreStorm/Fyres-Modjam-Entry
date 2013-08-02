@@ -20,16 +20,21 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.network.packet.Packet5PlayerInventory;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 
@@ -122,5 +127,19 @@ public class EntityStatHelper {
 	
 	public void register() {
 		MinecraftForge.EVENT_BUS.register(this);
+	}
+	
+	@ForgeSubscribe
+	public void livingDeath(LivingDeathEvent event) {
+		
+		if(event.entity instanceof EntityLivingBase && event.source != null && event.source.getEntity() != null) {
+			if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
+				String blessing = event.source.getEntity().getEntityData().getString("Blessing");
+				
+				if(blessing.equals("Thief")) {
+					if(event.entity.worldObj.getGameRules().getGameRuleBooleanValue("doMobLoot") && ModjamMod.r.nextInt(10) == 0) {event.entity.dropItem(Item.goldNugget.itemID, 1);}
+				}
+			}
+		}
 	}
 }

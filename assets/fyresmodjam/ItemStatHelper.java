@@ -75,7 +75,7 @@ public class ItemStatHelper implements ICraftingHandler {
 		public Object getNewValue(Random r) {return value;}
 		public String getLore(ItemStack stack) {return null;}
 		public String getAlteredStackName(ItemStack stack) {return stack.getDisplayName();}
-		public void modifyItemStack(ItemStack stack) {}
+		public void modifyStack(ItemStack stack) {}
 	}
 	
 	public static HashMap<Class, ItemStatTracker> statTrackersByClass = new HashMap<Class, ItemStatTracker>();
@@ -204,7 +204,7 @@ public class ItemStatHelper implements ICraftingHandler {
 						
 						setName(stack, s.getAlteredStackName(stack));
 						
-						s.modifyItemStack(stack);
+						s.modifyStack(stack);
 					}
 				}
 				
@@ -217,7 +217,7 @@ public class ItemStatHelper implements ICraftingHandler {
 						
 						setName(stack, s.getAlteredStackName(stack));
 						
-						s.modifyItemStack(stack);
+						s.modifyStack(stack);
 					}
 				}
 				
