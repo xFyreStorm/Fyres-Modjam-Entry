@@ -41,13 +41,15 @@ public class ItemStatHelper implements ICraftingHandler {
 	//There's probably a better way of doing all of this. :P Oh well.
 	
 	public static class ItemStatTracker {
-		public Class c;
-		public int id;
+		public Class[] classes;
+		public int[] ids;
 		
-		public ItemStatTracker(Class c, int id) {
-			this.c = c;
-			this.id = id;
+		public ItemStatTracker(Class[] classes, int[] ids) {
+			this.classes = classes;
+			this.ids = ids;
 		}
+		
+		public ItemStatTracker(Class c, int id) {this(new Class[] {c}, new int[] {id});}
 
 		//public HashMap<String, String> stats = new HashMap<String, String>();
 		public ArrayList<ItemStat> stats = new ArrayList<ItemStat>();
@@ -75,9 +77,9 @@ public class ItemStatHelper implements ICraftingHandler {
 	public static HashMap<Class, ItemStatTracker> statTrackersByClass = new HashMap<Class, ItemStatTracker>();
 	public static HashMap<Integer, ItemStatTracker> statTrackersByID = new HashMap<Integer, ItemStatTracker>();
 	
-	public static void addStatTracker(ItemStatTracker statTracker, Class c, int id) {
-		if(c != null) {statTrackersByClass.put(c, statTracker);}
-		if(id >= 0) {statTrackersByID.put(id, statTracker);}
+	public static void addStatTracker(ItemStatTracker statTracker) {
+		for(Class c : statTracker.classes) {statTrackersByClass.put(c, statTracker);}
+		for(int i : statTracker.ids) {if(i < 0) {continue;} statTrackersByID.put(i, statTracker);}
 	}
 	
 	public static ItemStack giveStat(ItemStack stack, String name, String value) {

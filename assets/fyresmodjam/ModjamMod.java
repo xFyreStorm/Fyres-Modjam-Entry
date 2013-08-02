@@ -2,8 +2,10 @@ package assets.fyresmodjam;
 
 import java.util.Random;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -20,7 +22,9 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+
 import assets.fyresmodjam.ItemStatHelper.*;
+import assets.fyresmodjam.EntityStatHelper.*;
 
 @Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.0a")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
@@ -48,6 +52,19 @@ public class ModjamMod  {
 		
 		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
 		
+		//Entity Trackers
+		
+		EntityStatTracker creeperTracker = new EntityStatTracker(EntityCreeper.class);
+		
+		creeperTracker.addStat(new EntityStat("Level", "") {
+			public Object getNewValue(Random r) {return 1 + r.nextInt(5);}
+			public String getAlteredEntityName(EntityLiving entity) {return entity.getEntityName() + ", Level" + entity.getEntityData().getString(name);}
+		});
+		
+		EntityStatHelper.addStatTracker(creeperTracker);
+		
+		//Item Trackers
+		
 		ItemStatTracker swordTracker = new ItemStatTracker(ItemSword.class, -1);
 		
 		swordTracker.addStat(new ItemStat("Prefix", "") {
@@ -73,7 +90,7 @@ public class ModjamMod  {
 		//swordTracker.giveStat("BonusDamage,+%v bonus damage", "#i,0,6");
 		//swordTracker.giveStat("Rank,Rank: %v", "#i,1,5");
 		
-		ItemStatHelper.addStatTracker(swordTracker, ItemSword.class, -1);
+		ItemStatHelper.addStatTracker(swordTracker);
 	}
 	
 	@EventHandler
