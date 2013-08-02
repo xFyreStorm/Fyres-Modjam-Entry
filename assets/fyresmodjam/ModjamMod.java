@@ -20,7 +20,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import assets.fyresmodjam.ItemStatHelper.StatTracker;
+import assets.fyresmodjam.ItemStatHelper.*;
 
 @Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.0a")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
@@ -48,7 +48,21 @@ public class ModjamMod  {
 		
 		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
 		
-		ItemStatHelper.addStatTracker(new StatTracker().giveStat("BonusDamage,+%v damage.", "#i,0,6"), ItemSword.class, -1);
+		ItemStatTracker swordTracker = new ItemStatTracker();
+		
+		swordTracker.stats.add(new ItemStat("BonusDamage", "") {
+			public Object getNewValue(Random r) {return r.nextInt(7);}
+			
+			public String getLore(ItemStack stack) {
+				int damage = Integer.parseInt(stack.getTagCompound().getString(name));
+				return damage > 0 ? "+" + damage + " bonues damage" : null;
+			}
+		});
+		
+		//swordTracker.giveStat("BonusDamage,+%v bonus damage", "#i,0,6");
+		//swordTracker.giveStat("Rank,Rank: %v", "#i,1,5");
+		
+		ItemStatHelper.addStatTracker(swordTracker, ItemSword.class, -1);
 	}
 	
 	@EventHandler
