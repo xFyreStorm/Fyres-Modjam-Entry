@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.item.Item;
@@ -62,7 +63,12 @@ public class ModjamMod  {
 		creeperTracker.addStat(new EntityStat("Level", "") {
 			public Object getNewValue(Random r) {return 1 + r.nextInt(5);}
 			public String getAlteredEntityName(EntityLiving entity) {return entity.getEntityName() + ", Level " + entity.getEntityData().getString(name);}
-			public void modifyEntity(Entity entity) {entity.}
+			
+			public void modifyEntity(Entity entity) {
+				int healthGain = Integer.parseInt(entity.getEntityData().getString(name)) * 2;
+				((EntityLivingBase) entity).func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(((EntityLivingBase) entity).func_110138_aP() + healthGain);
+				((EntityLivingBase) entity).setEntityHealth(((EntityLivingBase) entity).func_110143_aJ() + healthGain);
+			}
 		});
 		
 		EntityStatHelper.addStatTracker(creeperTracker);
