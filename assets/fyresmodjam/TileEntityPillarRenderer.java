@@ -43,7 +43,7 @@ public class TileEntityPillarRenderer extends TileEntitySpecialRenderer
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)l1, (float)l2);
        
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		boolean active = player != null && player.getEntityData().hasKey("Blessing");
+		boolean active = player != null && player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals(tl.blessing);
         
         GL11.glPushMatrix();
         

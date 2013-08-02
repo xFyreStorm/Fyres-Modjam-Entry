@@ -8,6 +8,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IconFlipped;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -53,6 +54,7 @@ public class BlockPillar extends BlockContainer
     	
     	if(te != null && te instanceof TileEntityPillar && (!par5EntityPlayer.getEntityData().hasKey("Blessing") || !par5EntityPlayer.getEntityData().getString("Blessing").equals(((TileEntityPillar) te).blessing))) {
     		EntityStatHelper.giveStat(par5EntityPlayer, "Blessing", ((TileEntityPillar) te).blessing);
+    		if(par1World.isRemote) {Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("Activated blessing of the " + ((TileEntityPillar) te).blessing + ".");}
     	}
     	
     	return true;
