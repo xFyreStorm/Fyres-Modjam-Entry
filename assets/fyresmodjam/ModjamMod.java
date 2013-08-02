@@ -60,14 +60,14 @@ public class ModjamMod implements IPlayerTracker {
     @Instance("fyresmodjam")
     public static ModjamMod instance;
     
+    public static Random r = new Random();
+    
     public static int itemID = 2875;
     public static int blockID = 2875;
     
     static {
     	loadProperties();
     }
-    
-    public static Random r = new Random();
     
     public static Block blockPillar = new BlockPillar(blockID).setBlockUnbreakable().setResistance(6000000.0F);
     public static Item itemPillar = new ItemPillar(itemID);
@@ -122,7 +122,7 @@ public class ModjamMod implements IPlayerTracker {
 		mobTracker.addStat(new EntityStat("Level", "") {
 			public Object getNewValue(Random r) {
 				int i = 1;
-				for(; i < 5; i++) {if(ModjamMod.r.nextInt(5) == 0) {break;}}
+				for(; i < 5; i++) {if(ModjamMod.r.nextBoolean()) {break;}}
 				return i;
 			}
 			
@@ -138,6 +138,11 @@ public class ModjamMod implements IPlayerTracker {
 				if(level == 5) {
 					if(entity instanceof IRangedAttackMob) {entity.getEntityData().setString("Blessing", "Hunter");}
 					else {entity.getEntityData().setString("Blessing", "Warrior");}
+					
+					if(entity instanceof EntityCreeper) {
+						((EntityCreeper) entity).getDataWatcher().updateObject(17, (byte) 1);
+						((EntityCreeper) entity).getEntityData().setBoolean("powered", true);
+					}
 				}
 			}
 		});
