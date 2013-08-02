@@ -10,9 +10,12 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 
 public class ItemStatHelper {
 	
@@ -50,8 +53,8 @@ public class ItemStatHelper {
 	public static ItemStack addLore(ItemStack stack, String lore) {
 		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
 		if(!stack.getTagCompound().hasKey("display")) {stack.getTagCompound().setTag("display", new NBTTagCompound());}
-		if(!stack.getTagCompound().getCompoundTag("display").hasKey("Lore")) {stack.getTagCompound().getCompoundTag("display").setTag("Lore", new NBTTagCompound());}
-		stack.getTagCompound().getCompoundTag("display").getCompoundTag("Lore").setString(lore, "");
+		if(!stack.getTagCompound().getCompoundTag("display").hasKey("Lore")) {stack.getTagCompound().getCompoundTag("display").setTag("Lore", new NBTTagList());}
+		stack.getTagCompound().getCompoundTag("display").getTagList("Lore").appendTag(new NBTTagString(lore));
 		return stack;
 	}
 	
@@ -74,11 +77,18 @@ public class ItemStatHelper {
 		return false;
 	}
 	
-	@ForgeSubscribe
+	/*@ForgeSubscribe
 	public void entityJoinWorld(EntityJoinWorldEvent event) {
 		if(!event.world.isRemote && event.entity instanceof EntityItem) {
 			EntityItem item = (EntityItem) event.entity;
 			processItemStack(item.getDataWatcher().getWatchableObjectItemStack(10), ModjamMod.r);
+		}
+	}*/
+	
+	@ForgeSubscribe
+	public void itemPickUp(EntityItemPickupEvent event) {
+		if(!event.entityPlayer.worldObj.isRemote) {
+			processItemStack(event.item.getDataWatcher().getWatchableObjectItemStack(10), ModjamMod.r);
 		}
 	}
 	
@@ -90,9 +100,8 @@ public class ItemStatHelper {
 			ItemStack held = entity.getCurrentItemOrArmor(0);
 			
 			if(held != null) {
-				if(held.getItem() instanceof ItemSword) {
-					if(ItemStatHelper.hasStat(held, "display")) {}
-				}
+				String s = getStat(held, "BonusDamage");
+				if(s != null) {event.ammount += Integer.parseInt(s);}
 			}
 		}
 	}

@@ -48,7 +48,7 @@ public class ModjamMod  {
 		
 		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
 		
-		ItemStatHelper.addStatTracker(new StatTracker().giveStat("BonusDamage,+%v damage.", "#i"), ItemSword.class, -1);
+		ItemStatHelper.addStatTracker(new StatTracker().giveStat("BonusDamage,+%v damage.", "#i,0,6"), ItemSword.class, -1);
 	}
 	
 	@EventHandler
