@@ -63,8 +63,8 @@ public class ModjamMod implements IPlayerTracker {
     
     public static Random r = new Random();
     
-    public static int itemID = 2875;
-    public static int blockID = 2875;
+    public static int itemID = 2875, blockID = 2875;
+    public static boolean pillarGlow = true;
     
     static {
     	loadProperties();
@@ -89,6 +89,7 @@ public class ModjamMod implements IPlayerTracker {
 		
 		itemID = Integer.parseInt(prop.getProperty("itemID", "" + itemID));
 		blockID = Integer.parseInt(prop.getProperty("blockID", "" + blockID));
+		pillarGlow = Boolean.parseBoolean(prop.getProperty("pillarGlow", "" + pillarGlow));
 	}
 
 	@EventHandler

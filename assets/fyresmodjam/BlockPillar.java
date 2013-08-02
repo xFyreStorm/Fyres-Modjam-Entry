@@ -21,6 +21,7 @@ public class BlockPillar extends BlockContainer
     protected BlockPillar(int par1) {
         super(par1, Material.rock);
         this.setLightOpacity(0);
+        //this.setTickRandomly(true);
         //this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
     }
 
@@ -147,11 +148,11 @@ public class BlockPillar extends BlockContainer
             return block.getLightValue(world, x, y, z);
         }
         
-        if(Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().theWorld.isRemote) {
+        if(ModjamMod.pillarGlow && Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().theWorld.isRemote) {
         	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         	
-        	if(player != null && te != null && te instanceof TileEntityPillar && ((TileEntityPillar) te).blessing.equals(player.getEntityData().getString("Blessing"))) {
-        		return 7;
+        	if(player != null && te != null && te instanceof TileEntityPillar && ((TileEntityPillar) te).blessing != null && ((TileEntityPillar) te).blessing.equals(player.getEntityData().getString("Blessing"))) {
+        		return 4;
         	}
         }
         

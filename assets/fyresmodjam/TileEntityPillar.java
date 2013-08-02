@@ -29,6 +29,8 @@ public class TileEntityPillar extends TileEntity {
     		if(player != null && player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals(blessing)) {
     			for(int i = 0; i < 2; i++) {this.worldObj.spawnParticle("portal", this.xCoord + ModjamMod.r.nextDouble(), this.yCoord + ModjamMod.r.nextDouble() * 2, this.zCoord + ModjamMod.r.nextDouble(), (ModjamMod.r.nextDouble() - 0.5D) * 2.0D, -ModjamMod.r.nextDouble(), (ModjamMod.r.nextDouble() - 0.5D) * 2.0D);}
     		}
+    		
+    		if(ModjamMod.pillarGlow) {this.worldObj.updateAllLightTypes(this.xCoord, this.yCoord, this.zCoord);}
     	}
     }
 
