@@ -48,15 +48,20 @@ public class ModjamMod  {
 		
 		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
 		
-		ItemStatTracker swordTracker = new ItemStatTracker();
+		ItemStatTracker swordTracker = new ItemStatTracker(ItemSword.class, -1);
 		
-		swordTracker.stats.add(new ItemStat("BonusDamage", "") {
+		swordTracker.addStat(new ItemStat("BonusDamage", "") {
 			public Object getNewValue(Random r) {return r.nextInt(7);}
 			
 			public String getLore(ItemStack stack) {
 				int damage = Integer.parseInt(stack.getTagCompound().getString(name));
 				return damage > 0 ? "+" + damage + " bonues damage" : null;
 			}
+		});
+		
+		swordTracker.addStat(new ItemStat("Rank", "") {
+			public Object getNewValue(Random r) {return 1 + r.nextInt(5);}
+			public String getLore(ItemStack stack) {return "Rank: "+ Integer.parseInt(stack.getTagCompound().getString(name));}
 		});
 		
 		//swordTracker.giveStat("BonusDamage,+%v bonus damage", "#i,0,6");

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
 
+import assets.fyresmodjam.ItemStatHelper.ItemStat;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -22,9 +24,21 @@ public class ItemStatHelper {
 	//There's probably a better way of doing all of this. :P Oh well.
 	
 	public static class ItemStatTracker {
+		public Class c;
+		public int id;
+		
+		public ItemStatTracker(Class c, int id) {
+			this.c = c;
+			this.id = id;
+		}
+
 		//public HashMap<String, String> stats = new HashMap<String, String>();
 		public ArrayList<ItemStat> stats = new ArrayList<ItemStat>();
 		//public StatTracker giveStat(String name, String value) {stats.put(name, value); return this;}
+
+		public void addStat(ItemStat stat) {
+			if(!stats.contains(stat)) {stats.add(stat);}
+		}
 	}
 	
 	public static class ItemStat {
