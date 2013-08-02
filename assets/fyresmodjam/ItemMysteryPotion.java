@@ -58,7 +58,7 @@ public class ItemMysteryPotion extends Item {
 					name = I18n.func_135053_a(potion.getName()) + " Potion";
 					
 					if(!potion.isInstant()) {
-						int time = MysteryPotionData.potionValues[par1ItemStack.getItemDamage()];
+						int time = MysteryPotionData.potionDurations[par1ItemStack.getItemDamage()];
 						name += " (" + time + " seconds)";
 					}
 				}
@@ -101,7 +101,7 @@ public class ItemMysteryPotion extends Item {
 			String name = I18n.func_135053_a(potion.getName()) + " Potion";
 			
 			if(!potion.isInstant()) {
-				int time = MysteryPotionData.potionValues[par1ItemStack.getItemDamage()];
+				int time = MysteryPotionData.potionDurations[par1ItemStack.getItemDamage()];
 				name += " (" + time + " seconds)";
 			}
 			
