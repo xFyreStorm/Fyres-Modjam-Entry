@@ -153,11 +153,13 @@ public class ItemStatHelper implements ICraftingHandler {
 	}
 	
 	public static void processItemStack(ItemStack stack, Random r) {
-		Class c = stack.getItem().getClass();
-		int id = stack.itemID;
-		
-		if(stack != null && (statTrackersByClass.containsKey(c) || statTrackersByID.containsKey(id))) {
+		if(stack != null && (statTrackersByClass.containsKey(stack.getItem().getClass()) || statTrackersByID.containsKey(stack.getItem().itemID))) {
+			
+			Class c = stack.getItem().getClass();
+			int id = stack.getItem().itemID;
+			
 			String processed = ItemStatHelper.getStat(stack, "processed");
+			
 			if(processed == null || processed.equals("false")) {
 				
 				ItemStatTracker statTrackerClass = statTrackersByClass.get(c);

@@ -62,7 +62,8 @@ public class EntityStatHelper {
 		}
 		
 		public Object getNewValue(Random r) {return value;}
-		public String getAlteredEntityName(Entity entity) {return entity.getEntityName();}
+		public String getAlteredEntityName(EntityLiving entity) {return entity.getEntityName();}
+		public void modifyEntity(Entity entity) {}
 	}
 	
 	public static HashMap<Class, EntityStatTracker> statTrackersByClass = new HashMap<Class, EntityStatTracker>();
@@ -94,14 +95,13 @@ public class EntityStatHelper {
 	
 	@ForgeSubscribe
 	public void entityJoinWorld(EntityJoinWorldEvent event) {
-		if(!event.world.isRemote) {
-		}
+		if(!event.world.isRemote) {processEntity(event.entity, ModjamMod.r);}
 	}
 	
 	public static void processEntity(Entity entity, Random r) {
-		Class c = entity.getClass();
-		
-		if(entity != null && statTrackersByClass.containsKey(c)) {
+		if(entity != null && statTrackersByClass.containsKey(entity.getClass())) {
+			Class c = entity.getClass();
+			
 			String processed = EntityStatHelper.getStat(entity, "processed");
 			if(processed == null || processed.equals("false")) {
 				
@@ -112,7 +112,8 @@ public class EntityStatHelper {
 				if(statTrackerClass != null) {
 					for(EntityStat s : statTrackerClass.stats) {
 						giveStat(entity, s.name, s.getNewValue(r).toString());
-						if(entity instanceof EntityLiving) {setName((EntityLiving) entity, s.getAlteredEntityName(entity));}
+						if(entity instanceof EntityLiving) {setName((EntityLiving) entity, s.getAlteredEntityName((EntityLiving) entity));}
+						s.modifyEntity(entity);
 					}
 				}
 			}

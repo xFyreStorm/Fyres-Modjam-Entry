@@ -2,6 +2,7 @@ package assets.fyresmodjam;
 
 import java.util.Random;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -48,7 +49,9 @@ public class ModjamMod  {
 		proxy.register();
 		
 		MinecraftForge.EVENT_BUS.register(this);
+		
 		new ItemStatHelper().register();
+		new EntityStatHelper().register();
 		
 		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
 		
@@ -58,7 +61,8 @@ public class ModjamMod  {
 		
 		creeperTracker.addStat(new EntityStat("Level", "") {
 			public Object getNewValue(Random r) {return 1 + r.nextInt(5);}
-			public String getAlteredEntityName(EntityLiving entity) {return entity.getEntityName() + ", Level" + entity.getEntityData().getString(name);}
+			public String getAlteredEntityName(EntityLiving entity) {return entity.getEntityName() + ", Level " + entity.getEntityData().getString(name);}
+			public void modifyEntity(Entity entity) {entity.}
 		});
 		
 		EntityStatHelper.addStatTracker(creeperTracker);
