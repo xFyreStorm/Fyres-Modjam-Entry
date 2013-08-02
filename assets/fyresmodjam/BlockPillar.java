@@ -1,26 +1,19 @@
 package assets.fyresmodjam;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IconFlipped;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityFallingSand;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockPillar extends BlockContainer
 {
@@ -53,8 +46,28 @@ public class BlockPillar extends BlockContainer
     	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
     	
     	if(te != null && te instanceof TileEntityPillar && (!par5EntityPlayer.getEntityData().hasKey("Blessing") || !par5EntityPlayer.getEntityData().getString("Blessing").equals(((TileEntityPillar) te).blessing))) {
-    		EntityStatHelper.giveStat(par5EntityPlayer, "Blessing", ((TileEntityPillar) te).blessing);
-    		if(par1World.isRemote) {Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("Activated blessing of the " + ((TileEntityPillar) te).blessing + ".");}
+    		
+    		boolean skip = false;
+    		
+    		for(int i = 0; i < par1World.loadedEntityList.size(); i++) {
+    			Entity e = (Entity) par1World.loadedEntityList.get(i);
+    			
+    			if(e instanceof EntityMob) {
+    				double xDiff = par2 - e.posX;
+    				double yDiff = par3 - e.posY;
+    				double zDiff = par4 - e.posZ;
+    				double dist = Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
+    				
+    				if(dist <= 14) {skip = true;}
+    			}
+    		}
+    		
+    		if(!skip) {
+    			EntityStatHelper.giveStat(par5EntityPlayer, "Blessing", ((TileEntityPillar) te).blessing);
+    			if(par1World.isRemote) {Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("Activated blessing of the " + ((TileEntityPillar) te).blessing + ".");}
+    		} else {
+    			if(par1World.isRemote) {Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7cCannot activate pillar with monsters nearby!");}
+    		}
     	}
     	
     	return true;
