@@ -137,7 +137,10 @@ public class EntityStatHelper {
 				String blessing = event.source.getEntity().getEntityData().getString("Blessing");
 				
 				if(blessing.equals("Thief")) {
-					if(event.entity.worldObj.getGameRules().getGameRuleBooleanValue("doMobLoot") && ModjamMod.r.nextInt(10) == 0) {event.entity.dropItem(Item.goldNugget.itemID, 1);}
+					if(event.entity.worldObj.getGameRules().getGameRuleBooleanValue("doMobLoot") && ModjamMod.r.nextInt(5) == 0) {
+						if(!event.entity.worldObj.isRemote) {event.entity.dropItem(Item.goldNugget.itemID, 1);}
+						event.entity.worldObj.playSoundAtEntity(event.entity, "fyresmodjam:coin", 1.0F, 1.0F);
+					}
 				}
 			}
 		}
