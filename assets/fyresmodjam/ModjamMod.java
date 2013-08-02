@@ -4,6 +4,7 @@ import java.util.Properties;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,6 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -170,4 +172,19 @@ public class ModjamMod implements IPlayerTracker {
 	public void onPlayerRespawn(EntityPlayer player) {
 		
 	}
+	
+	@ForgeSubscribe
+    public void checkBreakSpeed(PlayerEvent.BreakSpeed event) {
+    	if(event.entityPlayer != null && event.entityPlayer.getEntityData().hasKey("Blessing")) {
+    		String blessing = event.entityPlayer.getEntityData().getString("Blessing");
+    		
+    		if(blessing.equals("Miner")) {
+    			if(event.block.blockMaterial == Material.rock || event.block.blockMaterial == Material.iron) {
+    				//event.
+    			}
+    		} else if(blessing.equals("Lumberjack")) {
+    			
+    		}
+    	}
+    }
 }
