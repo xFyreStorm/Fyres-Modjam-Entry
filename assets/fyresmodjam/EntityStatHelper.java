@@ -125,19 +125,17 @@ public class EntityStatHelper {
 			
 			for(EntityStatTracker e : genericTrackers) {
 				if(!temp.contains(e)) {
-					for(Class c : e.classes) {if(c.isInstance(entity) || c.isAssignableFrom(entity.getClass())) {temp.add(e); break;}}
+					for(Class c : e.classes) {if(c.isAssignableFrom(entity.getClass())) {temp.add(e); break;}}
 				}
 			}
 			
 			EntityStatHelper.giveStat(entity, "processed", "true");
+			
 			for(EntityStatTracker statTracker : temp) {
-				
-				if(statTracker != null && !temp.contains(statTracker)) {
-					for(EntityStat s : statTracker.stats) {
-						giveStat(entity, s.name, s.getNewValue(r).toString());
-						if(entity instanceof EntityLiving) {setName((EntityLiving) entity, s.getAlteredEntityName((EntityLiving) entity));}
-						s.modifyEntity(entity);
-					}
+				for(EntityStat s : statTracker.stats) {
+					giveStat(entity, s.name, s.getNewValue(r).toString());
+					if(entity instanceof EntityLiving) {setName((EntityLiving) entity, s.getAlteredEntityName((EntityLiving) entity));}
+					s.modifyEntity(entity);
 				}
 			}
 		}
