@@ -47,12 +47,15 @@ public class BlockPillar extends BlockContainer
     }
     
     public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)  {
-    	if(!par5EntityPlayer.getEntityData().hasKey("Blessing") || Integer.parseInt(par5EntityPlayer.getEntityData().getString("Blessing")) != par1World.getBlockMetadata(par2, par3, par4)) {
-    		EntityStatHelper.giveStat(par5EntityPlayer, "Blessing", par1World.getBlockMetadata(par2, par3, par4));
-    		return true;
+    	if(par1World.getBlockMetadata(par2, par3, par4) == 1) {par3--;}
+    	
+    	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
+    	
+    	if(te != null && te instanceof TileEntityPillar && (!par5EntityPlayer.getEntityData().hasKey("Blessing") || !par5EntityPlayer.getEntityData().getString("Blessing").equals(((TileEntityPillar) te).blessing))) {
+    		EntityStatHelper.giveStat(par5EntityPlayer, "Blessing", ((TileEntityPillar) te).blessing);
     	}
     	
-    	return false;
+    	return true;
     }
 
     public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {

@@ -13,6 +13,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityPillar extends TileEntity {
 
+	public static String[] validBlessings = {"Miner", "Lumberjack"};
+	public String blessing = null;
+	
     public TileEntityPillar() {}
 
     public void updateEntity() {
@@ -29,10 +32,14 @@ public class TileEntityPillar extends TileEntity {
 
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
-    	//par1NBTTagCompound.setString("Blessing", par2Str);
+    	if(blessing == null) {blessing = validBlessings[ModjamMod.r.nextInt(validBlessings.length)];}
+    	par1NBTTagCompound.setString("Blessing", blessing);
     }
 
-    public void readFromNBT(NBTTagCompound par1NBTTagCompound) {super.readFromNBT(par1NBTTagCompound);}
+    public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
+    	super.readFromNBT(par1NBTTagCompound);
+    	blessing = par1NBTTagCompound.hasKey("Blessing") ? par1NBTTagCompound.getString("Blessing") : validBlessings[ModjamMod.r.nextInt(validBlessings.length)];
+    }
 
     public Packet getDescriptionPacket() {
         NBTTagCompound tag = new NBTTagCompound();
