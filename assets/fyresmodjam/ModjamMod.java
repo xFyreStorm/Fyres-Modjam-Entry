@@ -5,6 +5,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -67,21 +68,14 @@ public class ModjamMod implements IPlayerTracker {
     public static int itemID = 2875, blockID = 2875;
     public static boolean pillarGlow = true;
     
-    static {
-    	loadProperties();
-    }
+    public static Block blockPillar;
     
-    public static Block blockPillar = new BlockPillar(blockID).setBlockUnbreakable().setResistance(6000000.0F);
-    public static Item itemPillar = new ItemPillar(itemID);
+    public static Item itemPillar;
+    public static Item mysteryPotion;
     
     public static PillarGen pillarGen = new PillarGen();
 	
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		
-	}
-	
-	public static void loadProperties() {
+    public static void loadProperties() {
 		Properties prop = new Properties();
 		
 		try {
@@ -92,6 +86,9 @@ public class ModjamMod implements IPlayerTracker {
 		blockID = Integer.parseInt(prop.getProperty("blockID", "" + blockID));
 		pillarGlow = Boolean.parseBoolean(prop.getProperty("pillarGlow", "" + pillarGlow));
 	}
+    
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event) {loadProperties();}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
@@ -112,11 +109,18 @@ public class ModjamMod implements IPlayerTracker {
 		
 		//Item and Block loading
 		
+		blockPillar = new BlockPillar(blockID).setBlockUnbreakable().setResistance(6000000.0F);
+		
+		itemPillar = new ItemPillar(itemID).setUnlocalizedName("blockPillar");
+		mysteryPotion = new ItemMysteryPotion(itemID + 1).setUnlocalizedName("mysteryPotion").setCreativeTab(CreativeTabs.tabBrewing);
+		
 		GameRegistry.registerBlock(blockPillar, "blockPillar");
 		GameRegistry.registerTileEntity(TileEntityPillar.class, "Pillar Tile Entity");
-		LanguageRegistry.addName(blockPillar, "Pillar");
+		
+		LanguageRegistry.addName(blockPillar, "Pillar Block");
 		
 		LanguageRegistry.addName(itemPillar, "Pillar");
+		LanguageRegistry.addName(mysteryPotion, "Mystery Potion");
 		
 		//Entity Trackers
 		
