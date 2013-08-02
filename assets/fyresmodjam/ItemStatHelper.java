@@ -82,8 +82,8 @@ public class ItemStatHelper implements ICraftingHandler {
 	public static HashMap<Integer, ItemStatTracker> statTrackersByID = new HashMap<Integer, ItemStatTracker>();
 	
 	public static void addStatTracker(ItemStatTracker statTracker) {
-		for(Class c : statTracker.classes) {statTrackersByClass.put(c, statTracker);}
-		for(int i : statTracker.ids) {if(i < 0) {continue;} statTrackersByID.put(i, statTracker);}
+		if(statTracker.classes != null) {for(Class c : statTracker.classes) {statTrackersByClass.put(c, statTracker);}}
+		if(statTracker.ids != null) {for(int i : statTracker.ids) {if(i < 0) {continue;} statTrackersByID.put(i, statTracker);}}
 	}
 	
 	public static ItemStack giveStat(ItemStack stack, String name, Object value) {
@@ -104,7 +104,7 @@ public class ItemStatHelper implements ICraftingHandler {
 		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
 		if(!stack.getTagCompound().hasKey("display")) {stack.getTagCompound().setTag("display", new NBTTagCompound());}
 		if(!stack.getTagCompound().getCompoundTag("display").hasKey("Lore")) {stack.getTagCompound().getCompoundTag("display").setTag("Lore", new NBTTagList());}
-		stack.getTagCompound().getCompoundTag("display").getTagList("Lore").appendTag(new NBTTagString("", lore));
+		if(lore != null) {stack.getTagCompound().getCompoundTag("display").getTagList("Lore").appendTag(new NBTTagString("", lore));}
 		return stack;
 	}
 	
@@ -171,6 +171,8 @@ public class ItemStatHelper implements ICraftingHandler {
 	}
 	
 	public static void processItemStack(ItemStack stack, Random r) {
+		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
+		
 		if(stack != null && (statTrackersByClass.containsKey(stack.getItem().getClass()) || statTrackersByID.containsKey(stack.getItem().itemID))) {
 			
 			Class c = stack.getItem().getClass();
@@ -179,6 +181,8 @@ public class ItemStatHelper implements ICraftingHandler {
 			String processed = ItemStatHelper.getStat(stack, "processed");
 			
 			if(processed == null || processed.equals("false")) {
+				
+				stack.getTagCompound().setTag("Lore", new NBTTagList());
 				
 				ItemStatTracker statTrackerClass = statTrackersByClass.get(c);
 				ItemStatTracker statTrackerID = statTrackersByID.get(c);

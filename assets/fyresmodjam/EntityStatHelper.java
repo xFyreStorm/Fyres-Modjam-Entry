@@ -74,7 +74,7 @@ public class EntityStatHelper {
 	public static HashMap<Class, EntityStatTracker> statTrackersByClass = new HashMap<Class, EntityStatTracker>();
 	
 	public static void addStatTracker(EntityStatTracker statTracker) {
-		for(Class c : statTracker.classes) {statTrackersByClass.put(c, statTracker);}
+		if(statTracker.classes != null) {for(Class c : statTracker.classes) {statTrackersByClass.put(c, statTracker);}}
 	}
 	
 	public static Entity giveStat(Entity entity, String name, Object value) {

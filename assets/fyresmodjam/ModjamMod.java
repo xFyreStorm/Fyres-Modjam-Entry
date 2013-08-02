@@ -26,6 +26,7 @@ import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -162,15 +163,15 @@ public class ModjamMod implements IPlayerTracker {
 		
 		//Item Trackers
 		
-		ItemStatTracker swordTracker = new ItemStatTracker(ItemSword.class, -1);
+		ItemStatTracker weaponTracker = new ItemStatTracker(new Class[] {ItemSword.class, ItemAxe.class}, null);
 		
-		swordTracker.addStat(new ItemStat("Prefix", "") {
+		weaponTracker.addStat(new ItemStat("Prefix", "") {
 			public String[] prefixes = new String[] {"Old", "Sharp", "Average"};
 			public Object getNewValue(Random r) {return prefixes[r.nextInt(prefixes.length)];}
 			public String getAlteredStackName(ItemStack stack) {return "\u00A7f" + stack.getTagCompound().getString(name) + " " + stack.getDisplayName();}
 		});
 		
-		swordTracker.addStat(new ItemStat("Rank", "") {
+		weaponTracker.addStat(new ItemStat("Rank", "") {
 			public Object getNewValue(Random r) {
 				int i = 1;
 				for(; i < 5; i++) {if(ModjamMod.r.nextBoolean()) {break;}}
@@ -179,16 +180,16 @@ public class ModjamMod implements IPlayerTracker {
 			
 			public void modifyStack(ItemStack stack) {
 				int rank = Integer.parseInt(stack.getTagCompound().getString(name));
-				int bonusDamage = -2 + r.nextInt(rank * 2);
+				int bonusDamage = (-2 + rank) + (int) (ModjamMod.r.nextFloat() * rank * 2);
 				
 				ItemStatHelper.giveStat(stack, "BonusDamage", bonusDamage);
-				ItemStatHelper.addLore(stack, bonusDamage > 0 ? "\u00A77\u00A7o  +" + bonusDamage + " bonus damage" : (bonusDamage < 0 ?"\u00A77\u00A7o  " + bonusDamage + " damage" : null));
+				ItemStatHelper.addLore(stack, bonusDamage != 0 ? "\u00A77\u00A7o  " + (bonusDamage > 0 ? "+" : "") + bonusDamage + " damage" : null);
 				
 				ItemStatHelper.addLore(stack, "\u00A7eRank: "+ rank);
 			}
 		});
 		
-		ItemStatHelper.addStatTracker(swordTracker);
+		ItemStatHelper.addStatTracker(weaponTracker);
 		
 		//ItemStatTracker foodTracker = new ItemStatTracker(ItemFood.class, -1);
 		//foodTracker.addStat(new ItemStat("Spoiled", false));
