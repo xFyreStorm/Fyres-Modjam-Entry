@@ -47,7 +47,7 @@ public class ModjamMod  {
 		if(!event.world.isRemote && event.entity instanceof EntityItem) {
 			EntityItem item = (EntityItem) event.entity;
 			ItemStack stack = item.getDataWatcher().getWatchableObjectItemStack(10);
-			ItemStatHelper.setStackName(stack, "Is this working?");
+			//ItemStatHelper.setStackName(stack, "Is this working?");
 		}
 	}
 }
