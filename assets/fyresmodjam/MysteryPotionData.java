@@ -6,25 +6,25 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
 
-public class UnmarkedPotionData extends WorldSavedData {
+public class MysteryPotionData extends WorldSavedData {
 
 	public static String key = "FyresWorldData";
 	
 	public static int[] potionValues = null;
 	public static int[] potionDurations = null;
 
-	public UnmarkedPotionData() {
+	public MysteryPotionData() {
 		super(key);
 	}
 
-	public UnmarkedPotionData(String key) {
+	public MysteryPotionData(String key) {
 		super(key);
 	}
 
-	public static UnmarkedPotionData forWorld(World world) {
+	public static MysteryPotionData forWorld(World world) {
 		MapStorage storage = world.perWorldStorage;
-		UnmarkedPotionData result = (UnmarkedPotionData) storage.loadData(UnmarkedPotionData.class, key);
-		if (result == null) {result = new UnmarkedPotionData(); storage.setData(key, result); }
+		MysteryPotionData result = (MysteryPotionData) storage.loadData(MysteryPotionData.class, key);
+		if (result == null) {result = new MysteryPotionData(); storage.setData(key, result); }
 		return result;
 	}
 

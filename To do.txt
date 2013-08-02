@@ -3,7 +3,6 @@ Idea: Rougelike mod! (Need to think of a name)
 To do:
 
 Add more blessings to pillars
-Unmarked potions
 Figure out what mobs I want to give levels and attribute bonuses
 Figure out what items I want give stats and variation
 Give items stats when taken from creative inventory
@@ -12,3 +11,4 @@ Done:
 
 Basic stat system for mobs and items
 Pillars (randomly spawn around world, give blessing when right clicked, i.e. Blessing of the Miner, +25% Mining Speed)
+Unmarked potions (Each new world you make selects 12 potion types and durations. Drink a mystery potion to find out what it does permanently in that world!)

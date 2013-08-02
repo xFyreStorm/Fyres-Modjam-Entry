@@ -8,7 +8,7 @@ import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
 public class CommonTickHandler implements ITickHandler {
-	public static UnmarkedPotionData worldData = null;
+	public static MysteryPotionData worldData = null;
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
@@ -21,7 +21,7 @@ public class CommonTickHandler implements ITickHandler {
 
 			if(world == null) {return;}
 
-			worldData = UnmarkedPotionData.forWorld(world);
+			worldData = MysteryPotionData.forWorld(world);
 			worldData.markDirty();
 		}
 	}

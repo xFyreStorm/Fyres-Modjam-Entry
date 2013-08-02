@@ -54,11 +54,11 @@ public class ItemMysteryPotion extends Item {
 		if(Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().theWorld.isRemote) {
 			if(Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.getEntityData().hasKey("PotionKnowledge")) {
 				if(Minecraft.getMinecraft().thePlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] != -1) {
-					Potion potion = Potion.potionTypes[UnmarkedPotionData.potionValues[par1ItemStack.getItemDamage()]];
+					Potion potion = Potion.potionTypes[MysteryPotionData.potionValues[par1ItemStack.getItemDamage()]];
 					name = I18n.func_135053_a(potion.getName()) + " Potion";
 					
 					if(!potion.isInstant()) {
-						int time = UnmarkedPotionData.potionValues[par1ItemStack.getItemDamage()];
+						int time = MysteryPotionData.potionValues[par1ItemStack.getItemDamage()];
 						name += " (" + time + " seconds)";
 					}
 				}
@@ -85,10 +85,10 @@ public class ItemMysteryPotion extends Item {
         if(!par3EntityPlayer.capabilities.isCreativeMode) {--par1ItemStack.stackSize;}
         
         if(!par2World.isRemote) {
-        	int value = UnmarkedPotionData.potionValues[par1ItemStack.getItemDamage()];
+        	int value = MysteryPotionData.potionValues[par1ItemStack.getItemDamage()];
         	
         	if(!Potion.potionTypes[value].isInstant()) {
-        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, UnmarkedPotionData.potionDurations[par1ItemStack.getItemDamage()] * 20, 1, true));
+        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, MysteryPotionData.potionDurations[par1ItemStack.getItemDamage()] * 20, 1, true));
         	} else {
         		Potion.potionTypes[value].affectEntity(par3EntityPlayer, par3EntityPlayer, 1, 1);
         	}
@@ -97,11 +97,11 @@ public class ItemMysteryPotion extends Item {
         	par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] = 1;
         	PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")}), (Player) par3EntityPlayer);
         } else if(!par3EntityPlayer.getEntityData().hasKey("PotionKnowledge") || par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] == -1) {
-        	Potion potion = Potion.potionTypes[UnmarkedPotionData.potionValues[par1ItemStack.getItemDamage()]];
+        	Potion potion = Potion.potionTypes[MysteryPotionData.potionValues[par1ItemStack.getItemDamage()]];
 			String name = I18n.func_135053_a(potion.getName()) + " Potion";
 			
 			if(!potion.isInstant()) {
-				int time = UnmarkedPotionData.potionValues[par1ItemStack.getItemDamage()];
+				int time = MysteryPotionData.potionValues[par1ItemStack.getItemDamage()];
 				name += " (" + time + " seconds)";
 			}
 			
