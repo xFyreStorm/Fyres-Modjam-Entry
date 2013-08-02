@@ -170,17 +170,6 @@ public class ModjamMod implements IPlayerTracker {
 			public String getAlteredStackName(ItemStack stack) {return "\u00A7f" + stack.getTagCompound().getString(name) + " " + stack.getDisplayName();}
 		});
 		
-		swordTracker.addStat(new ItemStat("BonusDamage", "") {
-			public Object getNewValue(Random r) {
-				return r.nextInt(7);
-			}
-			
-			public String getLore(ItemStack stack) {
-				int damage = Integer.parseInt(stack.getTagCompound().getString(name));
-				return damage > 0 ? "\u00A77\u00A7o  +" + damage + " bonus damage" : null;
-			}
-		});
-		
 		swordTracker.addStat(new ItemStat("Rank", "") {
 			public Object getNewValue(Random r) {
 				int i = 1;
@@ -188,7 +177,15 @@ public class ModjamMod implements IPlayerTracker {
 				return i;
 			}
 			
-			public String getLore(ItemStack stack) {return "\u00A7eRank: "+ Integer.parseInt(stack.getTagCompound().getString(name));}
+			public void modifyStack(ItemStack stack) {
+				int rank = Integer.parseInt(stack.getTagCompound().getString(name));
+				int bonusDamage = -2 + r.nextInt(rank * 2);
+				
+				ItemStatHelper.giveStat(stack, "BonusDamage", bonusDamage);
+				ItemStatHelper.addLore(stack, bonusDamage > 0 ? "\u00A77\u00A7o  +" + bonusDamage + " bonus damage" : (bonusDamage < 0 ?"\u00A77\u00A7o  " + bonusDamage + " damage" : null));
+				
+				ItemStatHelper.addLore(stack, "\u00A7eRank: "+ rank);
+			}
 		});
 		
 		ItemStatHelper.addStatTracker(swordTracker);
