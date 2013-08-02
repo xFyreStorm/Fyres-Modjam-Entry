@@ -31,6 +31,7 @@ public class UnmarkedPotionData extends WorldSavedData {
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		if(nbttagcompound.hasKey("values")) {potionValues = nbttagcompound.getIntArray("values");}
+		if(nbttagcompound.hasKey("durations")) {potionDurations = nbttagcompound.getIntArray("durations");}
 		checkPotionValues();
 	}
 
@@ -38,6 +39,7 @@ public class UnmarkedPotionData extends WorldSavedData {
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		checkPotionValues();
 		nbttagcompound.setIntArray("values", potionValues);
+		nbttagcompound.setIntArray("durations", potionDurations);
 	}
 	
 	public void checkPotionValues() {
@@ -53,7 +55,6 @@ public class UnmarkedPotionData extends WorldSavedData {
 				//if(skip) {continue;}
 						
 				potionValues[i] = i2;// break;
-				potionDurations[i] = 5 + ModjamMod.r.nextInt(26);
 			}
 		} else {
 			for(int i = 0; i < 12; i++) {
@@ -63,6 +64,11 @@ public class UnmarkedPotionData extends WorldSavedData {
 					potionValues[i] = i2;
 				}
 			}
+		}
+		
+		if(potionDurations == null) {
+			potionDurations = new int[12];
+			for(int i = 0; i < 12; i++) {potionDurations[i] = 5 + ModjamMod.r.nextInt(26);}
 		}
 	}
 }

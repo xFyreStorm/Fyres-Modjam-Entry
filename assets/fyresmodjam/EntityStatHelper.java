@@ -144,5 +144,7 @@ public class EntityStatHelper {
 				}
 			}
 		}
+		
+		if(ModjamMod.r.nextInt(20) == 0) {event.entity.dropItem(ModjamMod.mysteryPotion.itemID, ModjamMod.r.nextInt(12));}
 	}
 }

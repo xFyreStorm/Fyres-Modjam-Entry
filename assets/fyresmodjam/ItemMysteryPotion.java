@@ -11,6 +11,7 @@ import net.minecraft.entity.projectile.EntityPotion;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
@@ -62,7 +63,16 @@ public class ItemMysteryPotion extends Item {
 	
 	public ItemStack onEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
         if(!par3EntityPlayer.capabilities.isCreativeMode) {--par1ItemStack.stackSize;}
-        if(!par2World.isRemote) {par3EntityPlayer.addPotionEffect(new PotionEffect(UnmarkedPotionData.potionValues[par1ItemStack.getItemDamage()], 100, 1, true));}
+        
+        if(!par2World.isRemote) {
+        	int value = UnmarkedPotionData.potionValues[par1ItemStack.getItemDamage()];
+        	if(!Potion.potionTypes[value].isInstant()) {
+        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, UnmarkedPotionData.potionDurations[par1ItemStack.getItemDamage()] * 20, 1, true));
+        	} else {
+        		Potion.potionTypes[value].affectEntity(par3EntityPlayer, par3EntityPlayer, 1, 1);
+        	}
+        }
+        
         return par1ItemStack;
     }
 	
