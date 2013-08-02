@@ -1,7 +1,9 @@
 package assets.fyresmodjam;
 
+import java.util.Properties;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,6 +26,8 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 import assets.fyresmodjam.ItemStatHelper.*;
 import assets.fyresmodjam.EntityStatHelper.*;
@@ -38,15 +42,37 @@ public class ModjamMod  {
     @Instance("fyresmodjam")
     public static ModjamMod instance;
     
+    public static int itemID = 2875;
+    public static int blockID = 2875;
+    
+    static {
+    	loadProperties();
+    }
+    
     public static Random r = new Random();
+    public static Block blockPillar = new BlockPillar(blockID);
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		
 	}
 	
+	public static void loadProperties() {
+		Properties prop = new Properties();
+		
+		try {
+            prop.load(ModjamMod.class.getResourceAsStream("/FyresModJamMod.properties"));
+        } catch (Exception e) {e.printStackTrace();}
+		
+		itemID = Integer.parseInt(prop.getProperty("itemID", "" + itemID));
+		blockID = Integer.parseInt(prop.getProperty("blockID", "" + blockID));
+	}
+
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		
+		//Registering
+		
 		proxy.register();
 		
 		MinecraftForge.EVENT_BUS.register(this);
@@ -55,6 +81,12 @@ public class ModjamMod  {
 		new EntityStatHelper().register();
 		
 		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
+		
+		//Item and Block loading
+		
+		GameRegistry.registerBlock(blockPillar, "blockPillar");
+		GameRegistry.registerTileEntity(TileEntityPillar.class, "Pillar Tile Entity");;
+		LanguageRegistry.addName(blockPillar, "Pillar");
 		
 		//Entity Trackers
 		

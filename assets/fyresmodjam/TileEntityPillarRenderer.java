@@ -40,7 +40,6 @@ public class TileEntityPillarRenderer extends TileEntitySpecialRenderer
         int l2 = l / 65536;
         tessellator.setColorOpaque_F(f, f, f);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)l1, (float)l2);
-        int dir = world.getBlockMetadata(i, j, k) % 4;
        
         GL11.glPushMatrix();
         this.tileEntityRenderer.renderEngine.func_110577_a(tl.getBlockMetadata() % 2 == 0 ? textures[0] : textures[2]);
