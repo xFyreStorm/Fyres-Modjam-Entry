@@ -29,37 +29,14 @@ public class ItemPillar extends Item
     {
         Block block = ModjamMod.blockPillar;
 
-        if (par7 == 0)
-        {
-            par5 -= 2;
-        }
-
-        if (par7 == 1)
-        {
-            ++par5;
-        }
-
-        if (par7 == 2)
-        {
-            --par6;
-        }
-
-        if (par7 == 3)
-        {
-            ++par6;
-        }
-
-        if (par7 == 4)
-        {
-            --par4;
-        }
-
-        if (par7 == 5)
-        {
-            ++par4;
-        }
+        if(par7 == 0) {par5 -= 2;}
+        if(par7 == 1) {++par5;}
+        if(par7 == 2) {--par6;}
+        if(par7 == 3) {++par6;}
+        if(par7 == 4) {--par4;}
+        if(par7 == 5) {++par4;}
         
-        if (!block.canPlaceBlockAt(par3World, par4, par5, par6)) {
+        if(!block.canPlaceBlockAt(par3World, par4, par5, par6)) {
             return false;
         } else {
             par3World.setBlock(par4, par5, par6, block.blockID);

@@ -120,7 +120,12 @@ public class ModjamMod implements IPlayerTracker {
 		EntityStatTracker mobTracker = new EntityStatTracker(new Class[] {EntityBlaze.class, EntityCaveSpider.class, EntityCreeper.class, EntityEnderman.class, EntityGhast.class, EntityIronGolem.class, EntityMagmaCube.class, EntityPigZombie.class, EntitySilverfish.class, EntitySkeleton.class, EntitySlime.class, EntitySpider.class, EntityWitch.class, EntityZombie.class});
 		
 		mobTracker.addStat(new EntityStat("Level", "") {
-			public Object getNewValue(Random r) {return 1 + r.nextInt(5);}
+			public Object getNewValue(Random r) {
+				int i = 1;
+				for(; i < 5; i++) {if(ModjamMod.r.nextInt(5) == 0) {break;}}
+				return i;
+			}
+			
 			public String getAlteredEntityName(EntityLiving entity) {return entity.getEntityName() + ", Level " + entity.getEntityData().getString(name);}
 			
 			public void modifyEntity(Entity entity) {
@@ -130,7 +135,10 @@ public class ModjamMod implements IPlayerTracker {
 				((EntityLivingBase) entity).func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(((EntityLivingBase) entity).func_110138_aP() + healthGain);
 				((EntityLivingBase) entity).setEntityHealth(((EntityLivingBase) entity).func_110143_aJ() + healthGain);
 			
-				if(entity instanceof IRangedAttackMob && level == 5) {entity.getEntityData().setString("Blessing", "Hunter");}
+				if(level == 5) {
+					if(entity instanceof IRangedAttackMob) {entity.getEntityData().setString("Blessing", "Hunter");}
+					else {entity.getEntityData().setString("Blessing", "Warrior");}
+				}
 			}
 		});
 		
