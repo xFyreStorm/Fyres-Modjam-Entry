@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.Side;
 public class PacketHandler implements IPacketHandler {
 
 	//Packet types
-	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2;
+	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3;
 	
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player playerEntity) {
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
@@ -56,6 +56,7 @@ public class PacketHandler implements IPacketHandler {
 					
 					switch(type) {
 						case UPDATE_BLESSING: player.getEntityData().setString("Blessing", inputStream.readUTF()); return;
+						case UPDATE_POTION_KNOWLEDGE: int[] potionKnowledge = new int[12]; for(int i = 0; i < 12; i++) {potionKnowledge[i] = inputStream.readInt();} player.getEntityData().setIntArray("PotionKnowledge", potionKnowledge); return;
 						default: return;
 					}
 				}
@@ -74,7 +75,9 @@ public class PacketHandler implements IPacketHandler {
             if(data != null) {
                 for(int i = 0; i < data.length; i++) {
                 	if(data[i] instanceof Integer) {outputStream.writeInt((Integer) data[i]);}
-                	else if(data[i] instanceof Boolean) {outputStream.writeBoolean((Boolean) data[i]);}
+                	else if(data[i] instanceof int[]) {
+                		for(int i2 = 0; i2 < ((int[]) data[i]).length; i2++) {outputStream.writeInt(((int[]) data[i])[i2]);}
+                	} else if(data[i] instanceof Boolean) {outputStream.writeBoolean((Boolean) data[i]);}
                 	else if(data[i] instanceof String) {outputStream.writeUTF((String) data[i]);}
                 	else if(data[i] instanceof Byte) {outputStream.writeByte((Byte) data[i]);}
                 	else if(data[i] instanceof Float) {outputStream.writeDouble((Double) data[i]);}
