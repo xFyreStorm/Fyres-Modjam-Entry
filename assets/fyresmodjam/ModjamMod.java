@@ -141,8 +141,12 @@ public class ModjamMod implements IPlayerTracker {
 				}
 				
 				if(level == 5) {
-					if(entity instanceof IRangedAttackMob) {entity.getEntityData().setString("Blessing", "Hunter");}
-					else {entity.getEntityData().setString("Blessing", "Warrior");}
+					if(ModjamMod.r.nextBoolean()) {
+						if(entity instanceof IRangedAttackMob) {entity.getEntityData().setString("Blessing", "Hunter");}
+						else {entity.getEntityData().setString("Blessing", "Warrior");}
+					} else {
+						entity.getEntityData().setString("Blessing", "Swamp");
+					}
 					
 					if(entity instanceof EntityCreeper) {
 						((EntityCreeper) entity).getDataWatcher().updateObject(17, (byte) 1);
