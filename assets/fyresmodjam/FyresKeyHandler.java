@@ -39,7 +39,13 @@ public class FyresKeyHandler extends KeyHandler {
 			EntityPlayer player = minecraft.thePlayer;
 			
 			if(player != null && minecraft.objectMouseOver != null) {
-				TileEntity te = minecraft.theWorld.getBlockTileEntity(minecraft.objectMouseOver.blockX, minecraft.objectMouseOver.blockY, minecraft.objectMouseOver.blockZ);
+				int x = minecraft.objectMouseOver.blockX;
+				int y = minecraft.objectMouseOver.blockY;
+				int z = minecraft.objectMouseOver.blockZ; 
+				
+				if(minecraft.theWorld.getBlockId(x, y, z) == ModjamMod.blockPillar.blockID && minecraft.theWorld.getBlockMetadata(x, y, z) == 1) {y--;}
+				
+				TileEntity te = minecraft.theWorld.getBlockTileEntity(x, y, z);
 				
 				if(te != null && te instanceof TileEntityPillar) {
 					int index = 0;

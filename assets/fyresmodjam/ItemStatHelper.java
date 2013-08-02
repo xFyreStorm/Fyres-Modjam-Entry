@@ -15,6 +15,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import assets.fyresmodjam.ItemStatHelper.ItemStat;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -74,6 +75,7 @@ public class ItemStatHelper implements ICraftingHandler {
 		public Object getNewValue(Random r) {return value;}
 		public String getLore(ItemStack stack) {return null;}
 		public String getAlteredStackName(ItemStack stack) {return stack.getDisplayName();}
+		public void modifyItemStack(ItemStack stack) {}
 	}
 	
 	public static HashMap<Class, ItemStatTracker> statTrackersByClass = new HashMap<Class, ItemStatTracker>();
@@ -201,6 +203,8 @@ public class ItemStatHelper implements ICraftingHandler {
 						if(lore != null) {addLore(stack, lore);}
 						
 						setName(stack, s.getAlteredStackName(stack));
+						
+						s.modifyItemStack(stack);
 					}
 				}
 				
@@ -210,6 +214,10 @@ public class ItemStatHelper implements ICraftingHandler {
 						
 						String lore = s.getLore(stack);
 						if(lore != null) {addLore(stack, lore);}
+						
+						setName(stack, s.getAlteredStackName(stack));
+						
+						s.modifyItemStack(stack);
 					}
 				}
 				

@@ -168,17 +168,24 @@ public class ModjamMod implements IPlayerTracker {
 			public String getAlteredStackName(ItemStack stack) {return "\u00A7f" + stack.getTagCompound().getString(name) + " " + stack.getDisplayName();}
 		});
 		
-		swordTracker.addStat(new ItemStat("BonusDamage", "") {
-			public Object getNewValue(Random r) {return r.nextInt(7);}
+		/*swordTracker.addStat(new ItemStat("BonusDamage", "") {
+			public Object getNewValue(Random r) {
+				return r.nextInt(7);
+			}
 			
 			public String getLore(ItemStack stack) {
 				int damage = Integer.parseInt(stack.getTagCompound().getString(name));
 				return damage > 0 ? "\u00A77\u00A7o  +" + damage + " bonus damage" : null;
 			}
-		});
+		});*/
 		
 		swordTracker.addStat(new ItemStat("Rank", "") {
-			public Object getNewValue(Random r) {return 1 + r.nextInt(5);}
+			public Object getNewValue(Random r) {
+				int i = 1;
+				for(; i < 5; i++) {if(ModjamMod.r.nextBoolean()) {break;}}
+				return i;
+			}
+			
 			public String getLore(ItemStack stack) {return "\u00A7eRank: "+ Integer.parseInt(stack.getTagCompound().getString(name));}
 		});
 		

@@ -14,7 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileEntityPillar extends TileEntity {
 
 	public static String[] validBlessings = {"Miner", "Lumberjack", "Warrior", "Hunter", "Swamp"};
-	public static String[] blessingDescriptions = {"+25% mine speed on stone and iron blocks", "+25% mine speed on wooden blocks", "+25% melee damage", "+25% projectile damage", "attacks slow enemies for short period of time"};
+	public static String[] blessingDescriptions = {"+25% mine speed on stone and iron blocks", "+25% mine speed on wooden blocks", "+25% melee damage", "+25% projectile damage", "attacks will slow enemies"};
 	
 	public String blessing = null;
 	
