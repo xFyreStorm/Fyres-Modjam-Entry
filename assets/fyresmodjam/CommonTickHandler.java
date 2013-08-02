@@ -12,8 +12,6 @@ public class CommonTickHandler implements ITickHandler {
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
-		System.out.println(true);
-		
 		if(type.equals(EnumSet.of(TickType.WORLDLOAD))){
 			World world = null;
 
@@ -40,6 +38,6 @@ public class CommonTickHandler implements ITickHandler {
 
 	@Override
 	public String getLabel() {
-		return null;
+		return "FyresModJamCommonTicker";
 	}
 }

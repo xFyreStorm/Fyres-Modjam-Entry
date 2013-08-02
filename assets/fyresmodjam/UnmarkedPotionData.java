@@ -11,6 +11,7 @@ public class UnmarkedPotionData extends WorldSavedData {
 	public static String key = "FyresWorldData";
 	
 	public static int[] potionValues = null;
+	public static int[] potionDurations = null;
 
 	public UnmarkedPotionData() {
 		super(key);
@@ -30,41 +31,38 @@ public class UnmarkedPotionData extends WorldSavedData {
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		if(nbttagcompound.hasKey("values")) {potionValues = nbttagcompound.getIntArray("values");}
-		else {
-			potionValues = new int[12];
-			
-			for(int i = 0; i < 12; i++) {
-				for(int i2 = ModjamMod.r.nextInt(Potion.potionTypes.length); ; i2 = ModjamMod.r.nextInt(Potion.potionTypes.length)) {
-					if(Potion.potionTypes[i2] != null) {
-						boolean skip = false;
-						for(int i3 = 0; i3 < potionValues.length; i3++) {if(potionValues[i] == i3) {skip = true;}}
-						if(skip) {continue;}
-						
-						potionValues[i] = i2; break;
-					}
-				}
-			}
-		}
+		checkPotionValues();
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
+		checkPotionValues();
+		nbttagcompound.setIntArray("values", potionValues);
+	}
+	
+	public void checkPotionValues() {
 		if(potionValues == null) {
 			potionValues = new int[12];
 			
 			for(int i = 0; i < 12; i++) {
-				for(int i2 = ModjamMod.r.nextInt(Potion.potionTypes.length); ; i2 = ModjamMod.r.nextInt(Potion.potionTypes.length)) {
-					if(Potion.potionTypes[i2] != null) {
-						boolean skip = false;
-						for(int i3 = 0; i3 < potionValues.length; i3++) {if(potionValues[i] == i3) {skip = true;}}
-						if(skip) {continue;}
+				int i2 = ModjamMod.r.nextInt(Potion.potionTypes.length);
+				while(Potion.potionTypes[i2] == null) {i2 = ModjamMod.r.nextInt(Potion.potionTypes.length);}
+				
+				//boolean skip = false;
+				//for(int i3 = 0; i3 < potionValues.length; i3++) {if(potionValues[i] == i3) {skip = true; break;}}
+				//if(skip) {continue;}
 						
-						potionValues[i] = i2; break;
-					}
+				potionValues[i] = i2;// break;
+				potionDurations[i] = 5 + ModjamMod.r.nextInt(26);
+			}
+		} else {
+			for(int i = 0; i < 12; i++) {
+				if(Potion.potionTypes[potionValues[i]] == null) {
+					int i2 = ModjamMod.r.nextInt(Potion.potionTypes.length);
+					while(Potion.potionTypes[i2] == null) {i2 = ModjamMod.r.nextInt(Potion.potionTypes.length);}
+					potionValues[i] = i2;
 				}
 			}
 		}
-		
-		nbttagcompound.setIntArray("values", potionValues);
 	}
 }

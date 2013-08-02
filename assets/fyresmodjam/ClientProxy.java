@@ -19,7 +19,7 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override
 	public void register() {
-		 TickRegistry.registerTickHandler(new CommonTickHandler(), Side.SERVER);
+		 //TickRegistry.registerTickHandler(new CommonTickHandler(), Side.SERVER);
 		 TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
 		 
 	     KeyBindingRegistry.registerKeyBinding(new FyresKeyHandler());
