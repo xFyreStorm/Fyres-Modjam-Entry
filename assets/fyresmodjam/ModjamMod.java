@@ -71,6 +71,8 @@ public class ModjamMod implements IPlayerTracker {
     
     public static Block blockPillar = new BlockPillar(blockID).setBlockUnbreakable().setResistance(6000000.0F);
     public static Item itemPillar = new ItemPillar(itemID);
+    
+    public static PillarGen pillarGen = new PillarGen();
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -102,6 +104,8 @@ public class ModjamMod implements IPlayerTracker {
 		new EntityStatHelper().register();
 		
 		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
+		
+		GameRegistry.registerWorldGenerator(pillarGen);
 		
 		//Item and Block loading
 		
