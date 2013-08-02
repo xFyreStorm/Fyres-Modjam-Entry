@@ -208,6 +208,7 @@ public class ItemStatHelper implements ICraftingHandler {
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
 		if(player != null && !player.worldObj.isRemote) {
 			processItemStack(item, ModjamMod.r);
+			player.openContainer.detectAndSendChanges(); //Please work :P
 			//Not what I'm looking for. :P PacketDispatcher.sendPacketToPlayer(new Packet5PlayerInventory(player.entityId, 0, item), (Player) player);
 		}
 	}
