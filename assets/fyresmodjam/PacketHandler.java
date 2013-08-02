@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
@@ -18,7 +19,7 @@ import cpw.mods.fml.relauncher.Side;
 public class PacketHandler implements IPacketHandler {
 
 	//Packet types
-	public static final byte UPDATE_BLESSING = 1;
+	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2;
 	
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player playerEntity) {
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
@@ -37,6 +38,17 @@ public class PacketHandler implements IPacketHandler {
 					EntityPlayerMP player = (EntityPlayerMP) playerEntity;
 					
 					switch(type) {
+						case PLAY_SOUND: 
+							
+							String sound = inputStream.readUTF();
+							
+							int x = inputStream.readInt();
+							int y = inputStream.readInt();
+							int z = inputStream.readInt();
+							
+							Minecraft.getMinecraft().theWorld.playSound(x, y, z, "fyresmodjam:" + sound, 1.0F, 1.0F, false);
+							return;
+						
 						default: return;
 					}
 				} else if (side == Side.CLIENT) {

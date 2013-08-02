@@ -10,7 +10,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	
-	public static String[] sounds = {"pillarActivated"};
+	public static String[] sounds = {"pillarActivated", "coin"};
 
     @ForgeSubscribe
     public void onSound(SoundLoadEvent event) {
