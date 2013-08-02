@@ -126,15 +126,20 @@ public class ModjamMod implements IPlayerTracker {
 				return i;
 			}
 			
-			public String getAlteredEntityName(EntityLiving entity) {return entity.getEntityName() + ", Level " + entity.getEntityData().getString(name);}
+			public String getAlteredEntityName(EntityLiving entity) {
+				int level = Integer.parseInt(entity.getEntityData().getString(name));
+				return (level == 5 ? "\u00A7c" : "") + entity.getEntityName() + ", Level " + level;
+			}
 			
 			public void modifyEntity(Entity entity) {
 				int level = Integer.parseInt(entity.getEntityData().getString(name));
-				int healthGain = level * 2;
+				int healthGain = (level - 1) * 5;
 				
-				((EntityLivingBase) entity).func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(((EntityLivingBase) entity).func_110138_aP() + healthGain);
-				((EntityLivingBase) entity).setEntityHealth(((EntityLivingBase) entity).func_110143_aJ() + healthGain);
-			
+				if(healthGain != 0) {
+					((EntityLivingBase) entity).func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(((EntityLivingBase) entity).func_110138_aP() + healthGain);
+					((EntityLivingBase) entity).setEntityHealth(((EntityLivingBase) entity).func_110143_aJ() + healthGain);
+				}
+				
 				if(level == 5) {
 					if(entity instanceof IRangedAttackMob) {entity.getEntityData().setString("Blessing", "Hunter");}
 					else {entity.getEntityData().setString("Blessing", "Warrior");}
