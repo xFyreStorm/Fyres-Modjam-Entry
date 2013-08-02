@@ -20,6 +20,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
@@ -142,7 +143,7 @@ public class ItemStatHelper implements ICraftingHandler {
 			
 			ItemStack held = entity.getCurrentItemOrArmor(0);
 			
-			if(held != null) {
+			if(held != null && (event.source.getDamageType().equals("player") || held.getItem().itemID == Item.bow.itemID)) {
 				String s = getStat(held, "BonusDamage");
 				if(s != null) {event.ammount += Integer.parseInt(s);}
 			}
