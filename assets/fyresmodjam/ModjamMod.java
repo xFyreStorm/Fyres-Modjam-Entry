@@ -11,20 +11,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCaveSpider;
 import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
@@ -128,7 +116,7 @@ public class ModjamMod implements IPlayerTracker {
 		
 		//Entity Trackers
 		
-		EntityStatTracker mobTracker = new EntityStatTracker(new Class[] {EntityBlaze.class, EntityCaveSpider.class, EntityCreeper.class, EntityEnderman.class, EntityGhast.class, EntityIronGolem.class, EntityMagmaCube.class, EntityPigZombie.class, EntitySilverfish.class, EntitySkeleton.class, EntitySlime.class, EntitySpider.class, EntityWitch.class, EntityZombie.class});
+		EntityStatTracker mobTracker = new EntityStatTracker(EntityMob.class, true);
 		
 		mobTracker.addStat(new EntityStat("Level", "") {
 			public Object getNewValue(Random r) {

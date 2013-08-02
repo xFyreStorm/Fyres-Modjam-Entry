@@ -45,8 +45,10 @@ public class EntityStatHelper {
 	public static class EntityStatTracker {
 		public Class[] classes;
 		
-		public EntityStatTracker(Class[] classes) {this.classes = classes;}
-		public EntityStatTracker(Class c) {this(new Class[] {c});}
+		private boolean instanceAllowed = false;
+		
+		public EntityStatTracker(Class[] classes, boolean instancesAllowed) {this.classes = classes; this.instanceAllowed = instancesAllowed;}
+		public EntityStatTracker(Class c, boolean instancesAllowed) {this(new Class[] {c}, instancesAllowed);}
 
 		//public HashMap<String, String> stats = new HashMap<String, String>();
 		public ArrayList<EntityStat> stats = new ArrayList<EntityStat>();
@@ -72,9 +74,13 @@ public class EntityStatHelper {
 	}
 	
 	public static HashMap<Class, EntityStatTracker> statTrackersByClass = new HashMap<Class, EntityStatTracker>();
+	public static ArrayList<EntityStatTracker> genericTrackers = new ArrayList<EntityStatTracker>();
 	
 	public static void addStatTracker(EntityStatTracker statTracker) {
-		if(statTracker.classes != null) {for(Class c : statTracker.classes) {statTrackersByClass.put(c, statTracker);}}
+		if(statTracker.classes != null) {
+			for(Class c : statTracker.classes) {statTrackersByClass.put(c, statTracker);}
+			if(statTracker.instanceAllowed) {genericTrackers.add(statTracker);}
+		}
 	}
 	
 	public static Entity giveStat(Entity entity, String name, Object value) {
@@ -103,19 +109,31 @@ public class EntityStatHelper {
 		if(!event.world.isRemote) {processEntity(event.entity, ModjamMod.r);}
 	}
 	
+	public static ArrayList<EntityStatTracker> temp = new ArrayList<EntityStatTracker>();
+	
 	public static void processEntity(Entity entity, Random r) {
-		if(entity != null && statTrackersByClass.containsKey(entity.getClass())) {
-			Class c = entity.getClass();
+		
+		if(entity == null) {return;}
+		
+		String processed = EntityStatHelper.getStat(entity, "processed");
+		
+		if(processed == null || processed.equals("false")) {
 			
-			String processed = EntityStatHelper.getStat(entity, "processed");
-			if(processed == null || processed.equals("false")) {
+			temp.clear();
+			
+			if(statTrackersByClass.containsKey(entity.getClass())) {temp.add(statTrackersByClass.get(entity.getClass()));}
+			
+			for(EntityStatTracker e : genericTrackers) {
+				if(!temp.contains(e)) {
+					for(Class c : e.classes) {if(c.isInstance(entity) || c.isAssignableFrom(entity.getClass())) {temp.add(e); break;}}
+				}
+			}
+			
+			EntityStatHelper.giveStat(entity, "processed", "true");
+			for(EntityStatTracker statTracker : temp) {
 				
-				EntityStatTracker statTrackerClass = statTrackersByClass.get(c);
-				
-				EntityStatHelper.giveStat(entity, "processed", "true");
-				
-				if(statTrackerClass != null) {
-					for(EntityStat s : statTrackerClass.stats) {
+				if(statTracker != null && !temp.contains(statTracker)) {
+					for(EntityStat s : statTracker.stats) {
 						giveStat(entity, s.name, s.getNewValue(r).toString());
 						if(entity instanceof EntityLiving) {setName((EntityLiving) entity, s.getAlteredEntityName((EntityLiving) entity));}
 						s.modifyEntity(entity);
