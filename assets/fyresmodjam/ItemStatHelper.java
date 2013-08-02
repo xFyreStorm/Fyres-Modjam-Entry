@@ -10,6 +10,7 @@ import java.util.Stack;
 
 import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import assets.fyresmodjam.ItemStatHelper.ItemStat;
@@ -25,6 +26,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.network.packet.Packet5PlayerInventory;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -202,7 +205,10 @@ public class ItemStatHelper implements ICraftingHandler {
 
 	@Override
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
-		if(player != null && !player.worldObj.isRemote) {processItemStack(item, ModjamMod.r);}
+		if(player != null && !player.worldObj.isRemote) {
+			processItemStack(item, ModjamMod.r);
+			//Not what I'm looking for. :P PacketDispatcher.sendPacketToPlayer(new Packet5PlayerInventory(player.entityId, 0, item), (Player) player);
+		}
 	}
 
 	@Override
