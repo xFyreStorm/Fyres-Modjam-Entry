@@ -28,6 +28,11 @@ public class ItemStatHelper {
 	public static HashMap<Class, StatTracker> statTrackersByClass = new HashMap<Class, StatTracker>();
 	public static HashMap<Integer, StatTracker> statTrackersByID = new HashMap<Integer, StatTracker>();
 	
+	public static void addStatTracker(StatTracker statTracker, Class c, int id) {
+		if(c != null) {statTrackersByClass.put(c, statTracker);}
+		if(id >= 0) {statTrackersByID.put(id, statTracker);}
+	}
+	
 	public static ItemStack giveStat(ItemStack stack, String name, String value) {
 		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
 		NBTTagCompound data = stack.stackTagCompound;
@@ -39,6 +44,14 @@ public class ItemStatHelper {
 		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
 		if(!stack.getTagCompound().hasKey("display")) {stack.getTagCompound().setTag("display", new NBTTagCompound());}
 		stack.getTagCompound().getCompoundTag("display").setString("Name", name);
+		return stack;
+	}
+	
+	public static ItemStack addLore(ItemStack stack, String lore) {
+		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
+		if(!stack.getTagCompound().hasKey("display")) {stack.getTagCompound().setTag("display", new NBTTagCompound());}
+		if(!stack.getTagCompound().getCompoundTag("display").hasKey("Lore")) {stack.getTagCompound().getCompoundTag("display").setTag("Lore", new NBTTagCompound());}
+		stack.getTagCompound().getCompoundTag("display").getCompoundTag("Lore").setString(lore, "");
 		return stack;
 	}
 	
@@ -98,7 +111,15 @@ public class ItemStatHelper {
 				ItemStatHelper.giveStat(stack, "processed", "true");
 				
 				if(statTrackerClass != null) {
-					for(String s : statTrackerClass.stats.keySet()) {giveStat(stack, s, statTrackerClass.stats.get(s));}
+					for(String s : statTrackerClass.stats.keySet()) {
+						String[] value = statTrackerClass.stats.get(s).split(",");
+						if(value.length == 3 && value[0].equals("#i")) {value[0] = "" + (Integer.parseInt(value[1]) + ModjamMod.r.nextInt(Integer.parseInt(value[2])));}
+						String[] data = s.replace("%v", value[0]).split(",");
+						
+						giveStat(stack, data[0], value[0]);
+						
+						if(value.length > 1) {addLore(stack, value[1]);}
+					}
 				}
 				
 				if(statTrackerID != null) {

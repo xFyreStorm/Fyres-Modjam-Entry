@@ -20,6 +20,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import assets.fyresmodjam.ItemStatHelper.StatTracker;
 
 @Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.0a")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
@@ -46,6 +47,8 @@ public class ModjamMod  {
 		MinecraftForge.EVENT_BUS.register(new ItemStatHelper());
 		
 		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
+		
+		ItemStatHelper.addStatTracker(new StatTracker().giveStat("BonusDamage,+%v damage.", "#i"), ItemSword.class, -1);
 	}
 	
 	@EventHandler
