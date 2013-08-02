@@ -53,7 +53,7 @@ public class ModjamMod  {
 		swordTracker.addStat(new ItemStat("Prefix", "") {
 			public String[] prefixes = new String[] {"Old", "Sharp", "Average"};
 			public Object getNewValue(Random r) {return prefixes[r.nextInt(prefixes.length)];}
-			public String getAlteredStackName(ItemStack stack) {return stack.getTagCompound().getString(name) + " " + stack.getDisplayName();}
+			public String getAlteredStackName(ItemStack stack) {return "\u00A7f" + stack.getTagCompound().getString(name) + " " + stack.getDisplayName();}
 		});
 		
 		swordTracker.addStat(new ItemStat("BonusDamage", "") {

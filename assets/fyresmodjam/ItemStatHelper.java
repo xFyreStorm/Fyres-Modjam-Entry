@@ -18,6 +18,7 @@ import assets.fyresmodjam.ItemStatHelper.ItemStat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -208,14 +209,18 @@ public class ItemStatHelper implements ICraftingHandler {
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
 		if(player != null && !player.worldObj.isRemote) {
 			processItemStack(item, ModjamMod.r);
-			player.openContainer.detectAndSendChanges(); //Please work :P
+			((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+			//player.openContainer.detectAndSendChanges();
 			//Not what I'm looking for. :P PacketDispatcher.sendPacketToPlayer(new Packet5PlayerInventory(player.entityId, 0, item), (Player) player);
 		}
 	}
 
 	@Override
 	public void onSmelting(EntityPlayer player, ItemStack item) {
-		if(player != null && !player.worldObj.isRemote) {processItemStack(item, ModjamMod.r);}
+		if(player != null && !player.worldObj.isRemote) {
+			processItemStack(item, ModjamMod.r);
+			((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+		}
 	}
 	
 	public void register() {
