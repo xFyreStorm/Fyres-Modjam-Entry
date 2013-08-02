@@ -5,6 +5,6 @@ import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy {
 	public void register() {
-		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.SERVER);
+		TickRegistry.registerTickHandler(new CommonTickHandler(), Side.SERVER);
 	}
 }

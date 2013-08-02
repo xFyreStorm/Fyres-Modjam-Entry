@@ -56,9 +56,9 @@ public class ClientTickHandler implements ITickHandler {
 	}
 
 	@Override
-	public EnumSet<TickType> ticks() {
-		return null;
-	}
+    public EnumSet<TickType> ticks() {
+        return EnumSet.of(TickType.RENDER, TickType.CLIENT);
+    }
 	
 	@Override
 	public String getLabel() {

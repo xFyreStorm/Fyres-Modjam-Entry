@@ -12,6 +12,8 @@ public class CommonTickHandler implements ITickHandler {
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
+		System.out.println(true);
+		
 		if(type.equals(EnumSet.of(TickType.WORLDLOAD))){
 			World world = null;
 
@@ -32,9 +34,9 @@ public class CommonTickHandler implements ITickHandler {
 	}
 
 	@Override
-	public EnumSet<TickType> ticks() {
-		return null;
-	}
+	public EnumSet ticks() {
+        return EnumSet.of(TickType.SERVER, TickType.WORLDLOAD);
+    }
 
 	@Override
 	public String getLabel() {

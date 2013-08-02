@@ -61,8 +61,8 @@ public class ItemMysteryPotion extends Item {
     }
 	
 	public ItemStack onEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
-        if (!par3EntityPlayer.capabilities.isCreativeMode) {--par1ItemStack.stackSize;}
-        par3EntityPlayer.addPotionEffect(new PotionEffect(UnmarkedPotionData.potionValues[par1ItemStack.getItemDamage()], 100, 1, true));
+        if(!par3EntityPlayer.capabilities.isCreativeMode) {--par1ItemStack.stackSize;}
+        if(!par2World.isRemote) {par3EntityPlayer.addPotionEffect(new PotionEffect(UnmarkedPotionData.potionValues[par1ItemStack.getItemDamage()], 100, 1, true));}
         return par1ItemStack;
     }
 	
