@@ -179,11 +179,9 @@ public class ModjamMod implements IPlayerTracker {
     		String blessing = event.entityPlayer.getEntityData().getString("Blessing");
     		
     		if(blessing.equals("Miner")) {
-    			if(event.block.blockMaterial == Material.rock || event.block.blockMaterial == Material.iron) {
-    				//event.
-    			}
+    			if(event.block.blockMaterial == Material.rock || event.block.blockMaterial == Material.iron) {event.newSpeed = event.originalSpeed * 1.25F;}
     		} else if(blessing.equals("Lumberjack")) {
-    			
+    			if(event.block.blockMaterial == Material.wood) {event.newSpeed = event.originalSpeed * 1.25F;}
     		}
     	}
     }

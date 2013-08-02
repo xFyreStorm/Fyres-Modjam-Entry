@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityPillar extends TileEntity {
 
-	public static String[] validBlessings = {"Miner", "Lumberjack"};
+	public static String[] validBlessings = {"Miner", "Lumberjack", "Warrior", "Hunter"};
 	public String blessing = null;
 	
     public TileEntityPillar() {}

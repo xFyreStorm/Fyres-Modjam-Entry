@@ -2,15 +2,12 @@ Idea: Rougelike mod! (Need to think of a name)
 
 To do:
 
-Pillars (randomly spawn around world, give blessing when right clicked, i.e. Blessing of the Miner, +25% Mining Speed)
+Add more blessings to pillars
 Unmarked potions
 Figure out what mobs I want to give levels and attribute bonuses
 Figure out what items I want give stats and variation
 
-Started:
-
-Pillars model.
-
 Done:
 
 Basic stat system for mobs and items
+Pillars (randomly spawn around world, give blessing when right clicked, i.e. Blessing of the Miner, +25% Mining Speed)

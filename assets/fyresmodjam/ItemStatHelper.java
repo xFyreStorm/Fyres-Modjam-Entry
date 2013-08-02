@@ -140,14 +140,26 @@ public class ItemStatHelper implements ICraftingHandler {
 	
 	@ForgeSubscribe
 	public void livingHurt(LivingHurtEvent event) {
-		if(event.source != null && event.source.getEntity() != null && event.source.getEntity() instanceof EntityLivingBase) {
-			EntityLivingBase entity = (EntityLivingBase) event.source.getEntity();
+		if(event.source != null && event.source.getEntity() != null) {
+			if(event.source.getEntity() instanceof EntityLivingBase) {
+				EntityLivingBase entity = (EntityLivingBase) event.source.getEntity();
+				
+				ItemStack held = entity.getCurrentItemOrArmor(0);
+				
+				if(held != null && (event.source.getDamageType().equals("player") || held.getItem().itemID == Item.bow.itemID)) {
+					String s = getStat(held, "BonusDamage");
+					if(s != null) {event.ammount += Integer.parseInt(s);}
+				}
+			}
 			
-			ItemStack held = entity.getCurrentItemOrArmor(0);
-			
-			if(held != null && (event.source.getDamageType().equals("player") || held.getItem().itemID == Item.bow.itemID)) {
-				String s = getStat(held, "BonusDamage");
-				if(s != null) {event.ammount += Integer.parseInt(s);}
+			if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
+				String blessing = event.source.getEntity().getEntityData().getString("Blessing");
+				
+				if(blessing.equals("Warrior") && (event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob"))) {
+					event.ammount *= 1.25F;
+				} else if(blessing.equals("Hunter") && event.source.isProjectile()) {
+					event.ammount *= 1.25F;
+				}
 			}
 		}
 	}
