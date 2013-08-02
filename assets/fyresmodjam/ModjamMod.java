@@ -44,7 +44,7 @@ public class ModjamMod  {
 		proxy.register();
 		
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(new ItemStatHelper());
+		new ItemStatHelper().register();
 		
 		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
 		
@@ -55,7 +55,7 @@ public class ModjamMod  {
 			
 			public String getLore(ItemStack stack) {
 				int damage = Integer.parseInt(stack.getTagCompound().getString(name));
-				return damage > 0 ? "\u00A77\u00A7o - +" + damage + " bonus damage" : null;
+				return damage > 0 ? "\u00A77\u00A7o  +" + damage + " bonus damage" : null;
 			}
 		});
 		

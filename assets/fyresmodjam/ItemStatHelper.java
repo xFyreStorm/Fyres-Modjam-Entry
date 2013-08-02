@@ -8,12 +8,16 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
 
+import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 import assets.fyresmodjam.ItemStatHelper.ItemStat;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,12 +25,13 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 
-public class ItemStatHelper {
+public class ItemStatHelper implements ICraftingHandler {
 	
 	//There's probably a better way of doing all of this. :P Oh well.
 	
@@ -193,5 +198,20 @@ public class ItemStatHelper {
 	            } catch (IOException ioexception) {ioexception.printStackTrace();}*/
 			}
 		}
+	}
+
+	@Override
+	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
+		if(player != null && !player.worldObj.isRemote) {processItemStack(item, ModjamMod.r);}
+	}
+
+	@Override
+	public void onSmelting(EntityPlayer player, ItemStack item) {
+		if(player != null && !player.worldObj.isRemote) {processItemStack(item, ModjamMod.r);}
+	}
+	
+	public void register() {
+		MinecraftForge.EVENT_BUS.register(this);
+		GameRegistry.registerCraftingHandler(this);
 	}
 }
