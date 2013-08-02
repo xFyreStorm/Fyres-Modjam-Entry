@@ -55,13 +55,13 @@ public class ModjamMod  {
 			
 			public String getLore(ItemStack stack) {
 				int damage = Integer.parseInt(stack.getTagCompound().getString(name));
-				return damage > 0 ? "+" + damage + " bonues damage" : null;
+				return damage > 0 ? "\u00A77\u00A7o - +" + damage + " bonus damage" : null;
 			}
 		});
 		
 		swordTracker.addStat(new ItemStat("Rank", "") {
 			public Object getNewValue(Random r) {return 1 + r.nextInt(5);}
-			public String getLore(ItemStack stack) {return "Rank: "+ Integer.parseInt(stack.getTagCompound().getString(name));}
+			public String getLore(ItemStack stack) {return "\u00A7eRank: "+ Integer.parseInt(stack.getTagCompound().getString(name));}
 		});
 		
 		//swordTracker.giveStat("BonusDamage,+%v bonus damage", "#i,0,6");

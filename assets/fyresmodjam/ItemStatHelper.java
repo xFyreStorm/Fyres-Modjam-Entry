@@ -1,9 +1,14 @@
 package assets.fyresmodjam;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 import assets.fyresmodjam.ItemStatHelper.ItemStat;
 
@@ -14,6 +19,8 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -122,8 +129,8 @@ public class ItemStatHelper {
 	
 	@ForgeSubscribe
 	public void livingHurt(LivingHurtEvent event) {
-		if(event.entity instanceof EntityLivingBase) {
-			EntityLivingBase entity = (EntityLivingBase) event.entity;
+		if(event.source != null && event.source.getEntity() != null && event.source.getEntity() instanceof EntityLivingBase) {
+			EntityLivingBase entity = (EntityLivingBase) event.source.getEntity();
 			
 			ItemStack held = entity.getCurrentItemOrArmor(0);
 			
@@ -175,11 +182,15 @@ public class ItemStatHelper {
 					}
 				}
 				
-				/*if(stack.getItem() instanceof ItemSword) {
-					int i = r.nextInt(swordPrefixes.length);
-					ItemStatHelper.giveStat(stack, "namePrefix", "" + i);
-					ItemStatHelper.setName(stack, swordPrefixes[i] + " " + stack.getDisplayName());
-				}*/
+				//Apparently is was syncing fine. :P
+				
+				/*try {
+	                ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
+	                DataOutputStream dataoutputstream = new DataOutputStream(bytearrayoutputstream);
+	                //dataoutputstream.writeInt(this.currentWindowId);
+	                Packet.writeItemStack(stack, dataoutputstream);
+	                //PacketDispatcher.sendPacketToAllPlayers(new Packet250CustomPayload("MC|TrList", bytearrayoutputstream.toByteArray()));
+	            } catch (IOException ioexception) {ioexception.printStackTrace();}*/
 			}
 		}
 	}
