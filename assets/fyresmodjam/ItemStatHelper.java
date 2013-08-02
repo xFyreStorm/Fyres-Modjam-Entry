@@ -67,9 +67,9 @@ public class ItemStatHelper implements ICraftingHandler {
 		public String name;
 		public String value;
 		
-		public ItemStat(String name, String value) {
+		public ItemStat(String name, Object value) {
 			this.name = name;
-			this.value = value;
+			this.value = value.toString();
 		}
 		
 		public Object getNewValue(Random r) {return value;}

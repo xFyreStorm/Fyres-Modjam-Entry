@@ -56,7 +56,7 @@ public class BlockPillar extends BlockContainer
     				double xDiff = par2 - e.posX;
     				double yDiff = par3 - e.posY;
     				double zDiff = par4 - e.posZ;
-    				double dist = Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
+    				double dist = Math.sqrt(xDiff * xDiff + (yDiff > 6 ? yDiff * yDiff : 0) + zDiff * zDiff);
     				
     				if(dist <= 14) {skip = true;}
     			}

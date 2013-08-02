@@ -26,6 +26,7 @@ import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraftforge.common.MinecraftForge;
@@ -168,7 +169,7 @@ public class ModjamMod implements IPlayerTracker {
 			public String getAlteredStackName(ItemStack stack) {return "\u00A7f" + stack.getTagCompound().getString(name) + " " + stack.getDisplayName();}
 		});
 		
-		/*swordTracker.addStat(new ItemStat("BonusDamage", "") {
+		swordTracker.addStat(new ItemStat("BonusDamage", "") {
 			public Object getNewValue(Random r) {
 				return r.nextInt(7);
 			}
@@ -177,7 +178,7 @@ public class ModjamMod implements IPlayerTracker {
 				int damage = Integer.parseInt(stack.getTagCompound().getString(name));
 				return damage > 0 ? "\u00A77\u00A7o  +" + damage + " bonus damage" : null;
 			}
-		});*/
+		});
 		
 		swordTracker.addStat(new ItemStat("Rank", "") {
 			public Object getNewValue(Random r) {
@@ -189,10 +190,11 @@ public class ModjamMod implements IPlayerTracker {
 			public String getLore(ItemStack stack) {return "\u00A7eRank: "+ Integer.parseInt(stack.getTagCompound().getString(name));}
 		});
 		
-		//swordTracker.giveStat("BonusDamage,+%v bonus damage", "#i,0,6");
-		//swordTracker.giveStat("Rank,Rank: %v", "#i,1,5");
-		
 		ItemStatHelper.addStatTracker(swordTracker);
+		
+		ItemStatTracker foodTracker = new ItemStatTracker(ItemFood.class, -1);
+		foodTracker.addStat(new ItemStat("Spoiled", false));
+		ItemStatHelper.addStatTracker(foodTracker);
 	}
 	
 	@EventHandler
