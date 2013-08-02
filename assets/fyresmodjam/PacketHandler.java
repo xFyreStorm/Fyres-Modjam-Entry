@@ -8,6 +8,7 @@ import java.io.DataOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
@@ -17,7 +18,7 @@ import cpw.mods.fml.relauncher.Side;
 public class PacketHandler implements IPacketHandler {
 
 	//Packet types
-	public static final int UPDATE_BlESSING = 1;
+	public static final byte UPDATE_BLESSING = 1;
 	
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player playerEntity) {
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
@@ -26,17 +27,29 @@ public class PacketHandler implements IPacketHandler {
 		byte type = 0;
 
 		try {
+			
 			inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
-			type = inputStream.readByte();
-		} catch (Exception e) {e.printStackTrace();}
-
-		if(inputStream != null) {
-			if (side == Side.SERVER) {
-				EntityPlayerMP player = (EntityPlayerMP) playerEntity;
-			} else if (side == Side.CLIENT) {
-				EntityPlayer player = (EntityPlayer) playerEntity;
+			
+			if(inputStream != null) {
+				type = inputStream.readByte();
+				
+				if (side == Side.SERVER) {
+					EntityPlayerMP player = (EntityPlayerMP) playerEntity;
+					
+					switch(type) {
+						default: return;
+					}
+				} else if (side == Side.CLIENT) {
+					EntityPlayer player = (EntityPlayer) playerEntity;
+					
+					switch(type) {
+						case UPDATE_BLESSING: player.getEntityData().setString("Blessing", inputStream.readUTF()); return;
+						default: return;
+					}
+				}
 			}
-		}
+			
+		} catch (Exception e) {e.printStackTrace();}
 	}
 	
 	public static Packet250CustomPayload newPacket(byte type, Object[] data) {
@@ -65,8 +78,6 @@ public class PacketHandler implements IPacketHandler {
         packet.length = bos.size();
         return packet;
     }
-
-    public static Packet250CustomPayload newPacket(byte type, Object data) {return newPacket(type, new Object[] {data}); }
 
     public static Packet250CustomPayload newPacket(byte type) {return newPacket(type, null);}
 

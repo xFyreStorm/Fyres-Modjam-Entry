@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -17,6 +18,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -26,6 +28,8 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -34,7 +38,7 @@ import assets.fyresmodjam.EntityStatHelper.*;
 
 @Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.0a")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
-public class ModjamMod  {
+public class ModjamMod implements IPlayerTracker {
 	
 	@SidedProxy(clientSide = "assets.fyresmodjam.ClientProxy", serverSide = "assets.fyresmodjam.CommonProxy")
     public static CommonProxy proxy;
@@ -78,6 +82,7 @@ public class ModjamMod  {
 		proxy.register();
 		
 		MinecraftForge.EVENT_BUS.register(this);
+		GameRegistry.registerPlayerTracker(this);
 		
 		new ItemStatHelper().register();
 		new EntityStatHelper().register();
@@ -141,6 +146,28 @@ public class ModjamMod  {
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+		
+	}
+
+	@Override
+	public void onPlayerLogin(EntityPlayer player) {
+		if(!player.worldObj.isRemote && player.getEntityData().hasKey("Blessing")) {
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_BLESSING, new Object[] {player.getEntityData().getString("Blessing")}), (Player) player);
+		}
+	}
+
+	@Override
+	public void onPlayerLogout(EntityPlayer player) {
+		
+	}
+
+	@Override
+	public void onPlayerChangedDimension(EntityPlayer player) {
+		
+	}
+
+	@Override
+	public void onPlayerRespawn(EntityPlayer player) {
 		
 	}
 }
