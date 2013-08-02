@@ -72,8 +72,8 @@ public class EntityStatHelper {
 		for(Class c : statTracker.classes) {statTrackersByClass.put(c, statTracker);}
 	}
 	
-	public static Entity giveStat(Entity entity, String name, String value) {
-		entity.getEntityData().setString(name, value);
+	public static Entity giveStat(Entity entity, String name, Object value) {
+		entity.getEntityData().setString(name, value.toString());
 		return entity;
 	}
 	

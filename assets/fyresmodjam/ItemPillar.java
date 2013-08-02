@@ -66,7 +66,7 @@ public class ItemPillar extends Item
             par3World.setBlockMetadataWithNotify(par4, par5, par6, 0, 0);
             
             par3World.setBlock(par4, par5 + 1, par6, block.blockID);
-            par3World.setBlockMetadataWithNotify(par4, par5 + 1, par6, 2, 0);
+            par3World.setBlockMetadataWithNotify(par4, par5 + 1, par6, 1, 0);
             
             --par1ItemStack.stackSize;
             

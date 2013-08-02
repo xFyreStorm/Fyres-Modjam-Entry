@@ -82,10 +82,10 @@ public class ItemStatHelper implements ICraftingHandler {
 		for(int i : statTracker.ids) {if(i < 0) {continue;} statTrackersByID.put(i, statTracker);}
 	}
 	
-	public static ItemStack giveStat(ItemStack stack, String name, String value) {
+	public static ItemStack giveStat(ItemStack stack, String name, Object value) {
 		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
 		NBTTagCompound data = stack.stackTagCompound;
-		data.setString(name, value);
+		data.setString(name, value.toString());
 		return stack;
 	}
 	

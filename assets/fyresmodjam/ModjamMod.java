@@ -51,7 +51,7 @@ public class ModjamMod  {
     
     public static Random r = new Random();
     
-    public static Block blockPillar = new BlockPillar(blockID);
+    public static Block blockPillar = new BlockPillar(blockID).setBlockUnbreakable().setResistance(6000000.0F);
     public static Item itemPillar = new ItemPillar(itemID);
 	
 	@EventHandler
