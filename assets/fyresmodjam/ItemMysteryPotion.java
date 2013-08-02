@@ -39,7 +39,7 @@ public class ItemMysteryPotion extends Item {
     }
 	
 	public String getItemDisplayName(ItemStack par1ItemStack) {
-        return "Mystery Potion #" + par1ItemStack.getItemDamage();
+        return "Mystery Potion #" + (par1ItemStack.getItemDamage() + 1);
     }
 
 }
