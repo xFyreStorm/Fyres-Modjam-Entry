@@ -31,7 +31,7 @@ public class BlockPillar extends BlockContainer
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister) {
-        this.blockIcon = par1IconRegister.registerIcon("pillar");
+        this.blockIcon = par1IconRegister.registerIcon("fyresmodjam:pillar");
     }
 
     public int idDropped(int par1, Random par2Random, int par3) {
@@ -39,7 +39,7 @@ public class BlockPillar extends BlockContainer
     }
 
     public int idPicked(World par1World, int par2, int par3, int par4) {
-        return 0; //ModjamMod.itemPillar.itemID;
+        return ModjamMod.itemPillar.itemID;
     }
 
     public boolean canHarvestBlock(EntityPlayer par1EntityPlayer, int par2) {
@@ -69,8 +69,9 @@ public class BlockPillar extends BlockContainer
         }
     }
 
+    @Override
     public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4) {
-        return par3 >= 255 ? false : super.canPlaceBlockAt(par1World, par2, par3, par4) && super.canPlaceBlockAt(par1World, par2, par3 + 1, par4);
+        return par3 >= 255 ? false : (super.canPlaceBlockAt(par1World, par2, par3, par4) && super.canPlaceBlockAt(par1World, par2, par3 + 1, par4));
     }
 
     public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4) {

@@ -50,7 +50,9 @@ public class ModjamMod  {
     }
     
     public static Random r = new Random();
+    
     public static Block blockPillar = new BlockPillar(blockID);
+    public static Item itemPillar = new ItemPillar(itemID);
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -85,8 +87,10 @@ public class ModjamMod  {
 		//Item and Block loading
 		
 		GameRegistry.registerBlock(blockPillar, "blockPillar");
-		GameRegistry.registerTileEntity(TileEntityPillar.class, "Pillar Tile Entity");;
+		GameRegistry.registerTileEntity(TileEntityPillar.class, "Pillar Tile Entity");
 		LanguageRegistry.addName(blockPillar, "Pillar");
+		
+		LanguageRegistry.addName(itemPillar, "Pillar");
 		
 		//Entity Trackers
 		

@@ -12,9 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class ItemBlockPillar extends Item
+public class ItemPillar extends Item
 {
-    public ItemBlockPillar(int par1) {
+    public ItemPillar(int par1) {
         super(par1);
         this.maxStackSize = 1;
         this.setCreativeTab(CreativeTabs.tabBlock);
@@ -29,6 +29,36 @@ public class ItemBlockPillar extends Item
     {
         Block block = ModjamMod.blockPillar;
 
+        if (par7 == 0)
+        {
+            par5 -= 2;
+        }
+
+        if (par7 == 1)
+        {
+            ++par5;
+        }
+
+        if (par7 == 2)
+        {
+            --par6;
+        }
+
+        if (par7 == 3)
+        {
+            ++par6;
+        }
+
+        if (par7 == 4)
+        {
+            --par4;
+        }
+
+        if (par7 == 5)
+        {
+            ++par4;
+        }
+        
         if (!block.canPlaceBlockAt(par3World, par4, par5, par6)) {
             return false;
         } else {
