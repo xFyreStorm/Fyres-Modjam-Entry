@@ -7,6 +7,9 @@ Unmarked potions
 Figure out what mobs I want to give levels and attribute bonuses
 Figure out what items I want give stats and variation
 
+Started:
+
+Pillars model.
 
 Done:
 
