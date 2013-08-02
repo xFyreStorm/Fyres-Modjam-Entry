@@ -2,6 +2,7 @@ package assets.fyresmodjam;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -135,5 +136,25 @@ public class BlockPillar extends BlockContainer
         } else {
             super.onBlockHarvested(par1World, par2, par3, par4, par5, par6EntityPlayer);
         }
+    }
+    
+    @Override
+    public int getLightValue(IBlockAccess world, int x, int y, int z) {
+        Block block = blocksList[world.getBlockId(x, y, z)];
+        TileEntity te = world.getBlockTileEntity(x, y, z);
+        
+        if(block != null && block != this)  {
+            return block.getLightValue(world, x, y, z);
+        }
+        
+        if(Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().theWorld.isRemote) {
+        	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        	
+        	if(player != null && te != null && te instanceof TileEntityPillar && ((TileEntityPillar) te).blessing.equals(player.getEntityData().getString("Blessing"))) {
+        		return 7;
+        	}
+        }
+        
+        return 0;
     }
 }

@@ -192,9 +192,9 @@ public class ModjamMod implements IPlayerTracker {
 		
 		ItemStatHelper.addStatTracker(swordTracker);
 		
-		ItemStatTracker foodTracker = new ItemStatTracker(ItemFood.class, -1);
-		foodTracker.addStat(new ItemStat("Spoiled", false));
-		ItemStatHelper.addStatTracker(foodTracker);
+		//ItemStatTracker foodTracker = new ItemStatTracker(ItemFood.class, -1);
+		//foodTracker.addStat(new ItemStat("Spoiled", false));
+		//ItemStatHelper.addStatTracker(foodTracker);
 	}
 	
 	@EventHandler
