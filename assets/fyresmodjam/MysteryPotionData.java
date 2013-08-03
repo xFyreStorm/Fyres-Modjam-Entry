@@ -8,8 +8,8 @@ import net.minecraft.world.storage.MapStorage;
 
 public class MysteryPotionData extends WorldSavedData {
 
-	public static String[] validDisadvantages = {};
-	public static String[] disadvantageDescriptions = {};
+	public static String[] validDisadvantages = {"Illiterate", "Tougher Mobs", "Weak"};
+	public static String[] disadvantageDescriptions = {"Item names are unreadable.", "-25% damage to hostile enemies", "-25% melee damage"};
 	
 	public static String key = "FyresWorldData";
 	
