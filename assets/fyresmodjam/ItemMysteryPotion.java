@@ -91,7 +91,7 @@ public class ItemMysteryPotion extends Item {
 	        	int value = MysteryPotionData.potionValues[par1ItemStack.getItemDamage()];
 	        	
 	        	if(!Potion.potionTypes[value].isInstant()) {
-	        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, MysteryPotionData.potionDurations[par1ItemStack.getItemDamage()] * 20, 1, true));
+	        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, MysteryPotionData.potionDurations[par1ItemStack.getItemDamage()] * 20, 1, false));
 	        	} else {
 	        		Potion.potionTypes[value].affectEntity(par3EntityPlayer, par3EntityPlayer, 1, 1);
 	        	}
@@ -112,10 +112,10 @@ public class ItemMysteryPotion extends Item {
 	        }
         } else if(!par2World.isRemote) {
         	int value = ModjamMod.r.nextInt(Potion.potionTypes.length);
-        	while(Potion.potionTypes[value] == null) {ModjamMod.r.nextInt(Potion.potionTypes.length);}
+        	while(Potion.potionTypes[value] == null) {value = ModjamMod.r.nextInt(Potion.potionTypes.length);}
         	
         	if(!Potion.potionTypes[value].isInstant()) {
-        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, (5 + ModjamMod.r.nextInt(26)) * 20, 1, true));
+        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, (5 + ModjamMod.r.nextInt(26)) * 20, 1, false));
         	} else {
         		Potion.potionTypes[value].affectEntity(par3EntityPlayer, par3EntityPlayer, 1, 1);
         	}
