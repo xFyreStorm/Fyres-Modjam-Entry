@@ -8,6 +8,9 @@ import net.minecraft.world.storage.MapStorage;
 
 public class MysteryPotionData extends WorldSavedData {
 
+	public static String[] validDisadvantages = {};
+	public static String[] disadvantageDescriptions = {};
+	
 	public static String key = "FyresWorldData";
 	
 	public static int[] potionValues = null;
