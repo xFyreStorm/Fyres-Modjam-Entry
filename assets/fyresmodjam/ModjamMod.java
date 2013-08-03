@@ -5,6 +5,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -20,6 +21,7 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -35,6 +37,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -46,7 +49,7 @@ import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.0a")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
-public class ModjamMod implements IPlayerTracker {
+public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	
 	@SidedProxy(clientSide = "assets.fyresmodjam.ClientProxy", serverSide = "assets.fyresmodjam.CommonProxy")
     public static CommonProxy proxy;
@@ -100,8 +103,6 @@ public class ModjamMod implements IPlayerTracker {
 		
 		GameRegistry.registerWorldGenerator(pillarGen);
 		
-		ServerCommandManager.registerCommand(new CommandCurrentBlessing());
-		
 		//Item and Block loading
 		
 		blockPillar = new BlockPillar(blockID).setBlockUnbreakable().setResistance(6000000.0F);
@@ -116,6 +117,8 @@ public class ModjamMod implements IPlayerTracker {
 		
 		LanguageRegistry.addName(itemPillar, "Pillar");
 		LanguageRegistry.addName(mysteryPotion, "Mystery Potion");
+		
+		LanguageRegistry.instance().addStringLocalization("commands.currentBlessing.usage", "/currentBlessing - used to check your current blessing");
 		
 		//Entity Trackers
 		
@@ -234,5 +237,14 @@ public class ModjamMod implements IPlayerTracker {
     			if(event.block.blockMaterial == Material.wood) {event.newSpeed = event.originalSpeed * 1.25F;}
     		}
     	}
+    }
+	
+	@EventHandler
+	public void serverStarting(FMLServerStartingEvent event) {
+		this.initCommands(event);
+	}
+	
+	public void initCommands(FMLServerStartingEvent event) {
+        event.registerServerCommand(new CommandCurrentBlessing());
     }
 }

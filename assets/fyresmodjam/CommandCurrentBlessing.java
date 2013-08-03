@@ -24,7 +24,7 @@ public class CommandCurrentBlessing implements ICommand {
 		if(icommandsender instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer) icommandsender;
 			String blessing = entityplayer.getEntityData().hasKey("Blessing") ? entityplayer.getEntityData().getString("Blessing") : null;
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {blessing != null ? "\u00A7eCurrent Blessing: \u00A7oBlessing of the " + blessing + "." : "You don't currently have a blessing."}), (Player) entityplayer);
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {blessing != null ? "\u00A7eCurrent Blessing: \u00A7oBlessing of the " + blessing : "You don't currently have a blessing."}), (Player) entityplayer);
 		}
 	}
 
