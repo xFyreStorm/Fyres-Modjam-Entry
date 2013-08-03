@@ -161,8 +161,10 @@ public class EntityStatHelper {
 			}
 		}
 		
-		int level = 0;
-		if(event.entity.getEntityData().hasKey("Level")) {level = Integer.parseInt(event.entity.getEntityData().getString("Level"));}
-		if(ModjamMod.r.nextInt(20) == 0 || level == 5) {event.entity.entityDropItem(new ItemStack(ModjamMod.mysteryPotion.itemID, 1, ModjamMod.r.nextInt(13)), event.entity.height/2);}
+		if(!event.entity.worldObj.isRemote) {
+			int level = 0;
+			if(event.entity.getEntityData().hasKey("Level")) {level = Integer.parseInt(event.entity.getEntityData().getString("Level"));}
+			if(ModjamMod.r.nextInt(20) == 0 || level == 5) {event.entity.entityDropItem(new ItemStack(ModjamMod.mysteryPotion.itemID, 1, ModjamMod.r.nextInt(13)), event.entity.height/2);}
+		}
 	}
 }

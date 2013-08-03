@@ -86,7 +86,7 @@ public class BlockTrap extends BlockContainer
     }
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
-    	par5Entity.attackEntityFrom(DamageSource.cactus, 0.5F);
+    	if(par5Entity instanceof EntityPlayer || par5Entity instanceof EntityMob) {par5Entity.attackEntityFrom(DamageSource.cactus, 1.0F);}
     }
     
     public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {

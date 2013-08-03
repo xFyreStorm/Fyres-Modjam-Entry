@@ -78,7 +78,7 @@ public class ItemStatHelper implements ICraftingHandler {
 			this.value = value.toString();
 		}
 		
-		public Object getNewValue(Random r) {return value;}
+		public Object getNewValue(ItemStack stack, Random r) {return value;}
 		public String getLore(ItemStack stack) {return null;}
 		public String getAlteredStackName(ItemStack stack) {return stack.getDisplayName();}
 		public void modifyStack(ItemStack stack) {}
@@ -159,7 +159,7 @@ public class ItemStatHelper implements ICraftingHandler {
 				
 				ItemStack held = entity.getCurrentItemOrArmor(0);
 				
-				if(held != null && (event.source.getDamageType().equals("player") || held.getItem().itemID == Item.bow.itemID)) {
+				if(held != null && (event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob") || (held.getItem().itemID == Item.bow.itemID && event.source.isProjectile()))) {
 					String s = getStat(held, "BonusDamage");
 					if(s != null) {event.ammount += Integer.parseInt(s);}
 				}
@@ -209,7 +209,7 @@ public class ItemStatHelper implements ICraftingHandler {
 			
 			for(ItemStatTracker statTracker : temp) {
 				for(ItemStat s : statTracker.stats) {
-					giveStat(stack, s.name, s.getNewValue(r).toString());
+					giveStat(stack, s.name, s.getNewValue(stack, r).toString());
 					
 					String lore = s.getLore(stack);
 					if(lore != null) {addLore(stack, lore);}

@@ -18,6 +18,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -137,12 +138,22 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 			} 
 			
 			public String getAlteredEntityName(EntityLiving entity) {
-				int level = Integer.parseInt(entity.getEntityData().getString(name));
+				int level = 1;
+				
+				try {
+					level = Integer.parseInt(entity.getEntityData().getString(name));
+				} catch (Exception e) {e.printStackTrace();}
+				
 				return (level == 5 ? "\u00A7c" : "") + entity.getEntityName() + ", Level " + level;
 			}
 			
 			public void modifyEntity(Entity entity) {
-				int level = Integer.parseInt(entity.getEntityData().getString(name));
+				int level = 1;
+				
+				try {
+					level = Integer.parseInt(entity.getEntityData().getString(name));
+				} catch (Exception e) {e.printStackTrace();}
+				
 				int healthGain = (level - 1) * 5 + (level == 5 ? 5 : 0);
 				
 				if(healthGain != 0) {
@@ -170,16 +181,18 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 		//Item Trackers
 		
-		ItemStatTracker weaponTracker = new ItemStatTracker(new Class[] {ItemSword.class, ItemAxe.class}, null, false);
+		ItemStatTracker weaponTracker = new ItemStatTracker(new Class[] {ItemSword.class, ItemAxe.class, ItemBow.class}, null, true);
 		
 		weaponTracker.addStat(new ItemStat("Prefix", "") {
 			public String[] prefixes = new String[] {"Old", "Sharp", "Average"};
-			public Object getNewValue(Random r) {return prefixes[r.nextInt(prefixes.length)];}
+			public String[] prefixesBow = new String[] {"Old", "Long", "Average"};
+			
+			public Object getNewValue(ItemStack stack, Random r) {return stack.getItem() instanceof ItemBow ? prefixesBow[r.nextInt(prefixesBow.length)] : prefixes[r.nextInt(prefixes.length)];}
 			public String getAlteredStackName(ItemStack stack) {return "\u00A7f" + stack.getTagCompound().getString(name) + " " + stack.getDisplayName();}
 		});
 		
 		weaponTracker.addStat(new ItemStat("Rank", "") {
-			public Object getNewValue(Random r) {
+			public Object getNewValue(ItemStack stack, Random r) {
 				int i = 1;
 				for(; i < 5; i++) {if(ModjamMod.r.nextInt(10) < 3) {break;}}
 				return i;
