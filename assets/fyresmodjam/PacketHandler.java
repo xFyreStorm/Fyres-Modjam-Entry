@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.Side;
 public class PacketHandler implements IPacketHandler {
 
 	//Packet types
-	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3, SEND_MESSAGE = 4, UPDATE_POTION_DATA = 5;
+	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3, SEND_MESSAGE = 4, UPDATE_POTION_DATA = 5, UPDATE_PLAYER_ITEM = 6;
 	
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player playerEntity) {
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
@@ -48,6 +48,8 @@ public class PacketHandler implements IPacketHandler {
 							
 							Minecraft.getMinecraft().theWorld.playSound(x, y, z, "fyresmodjam:" + sound, 1.0F, 1.0F, false);
 							return;
+							
+						case UPDATE_PLAYER_ITEM: int slot = inputStream.readInt(); ItemStatHelper.processItemStack(player.inventory.mainInventory[slot], ModjamMod.r); return;
 						
 						default: return;
 					}

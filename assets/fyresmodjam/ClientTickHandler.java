@@ -4,9 +4,12 @@ import java.util.EnumSet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class ClientTickHandler implements ITickHandler {
 
@@ -35,7 +38,21 @@ public class ClientTickHandler implements ITickHandler {
 	}
 
 	private void onClientTick() {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		
+		if(player != null) {
+			/*if(player.openContainer != null) {
+				
+			}*/
+			
+			for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+				ItemStack stack = player.inventory.mainInventory[i];
+				
+				if(stack != null && stack.getTagCompound() != null && !stack.getTagCompound().hasKey("processed")) {
+					PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.UPDATE_PLAYER_ITEM, new Object[] {i}));
+				}
+			}
+		}
 	}
 
 	private void onTickInGame() {

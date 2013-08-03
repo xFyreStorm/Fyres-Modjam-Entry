@@ -11,12 +11,12 @@ import cpw.mods.fml.common.IWorldGenerator;
 public class PillarGen implements IWorldGenerator {
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-        if(world.provider.dimensionId == 0 && random.nextInt(25) == 0) {
+        if(world.provider.dimensionId == 0 && random.nextInt(50) == 0) {
         	boolean placed = false;
         	
-        	for(int x = chunkX * 16; x < chunkX * 16 + 16 && !placed; x++) {
-        		for(int y = 30; y < 254 && !placed; y++) {
-        			for(int z = chunkZ * 16; z < chunkZ * 16 + 16 && !placed; z++) {
+        	for(int y = 30, added = 0; y < 254 && !placed && added < 3; y++) {
+        		for(int x = chunkX * 16; x < chunkX * 16 + 16 && !placed && added < 3; x++) {
+        			for(int z = chunkZ * 16; z < chunkZ * 16 + 16 && !placed && added < 3; z++) {
         				if(random.nextInt(10) != 0 || world.isAirBlock(x, y, z) || Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z)) {continue;}
         				
         				Block block = ModjamMod.blockPillar;
@@ -29,6 +29,9 @@ public class PillarGen implements IWorldGenerator {
         		        	world.setBlockMetadataWithNotify(x, y + 2, z, 1, 0);
         		        	
         		        	placed = random.nextBoolean();
+        		        	
+        		        	y += 10;
+        		        	added++;
         		        	
         		        	System.out.println(x + ", " + y + ", " + z);
         		        }
