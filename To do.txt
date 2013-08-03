@@ -12,14 +12,17 @@ Figure out what items I want give stats and variation
 Done:
 
 Traps (Can only be seen within 5 block radius while crouching, does damage to players and hostile mobs that touch it, has small chance to poison, can be disarmed by right clicking)
+Can disable traps in the properties file
 
 Dungeons spawn 13x as often
 
 Hostile mobs get levels (+5 hp per level, +5 additional for level 5)
+Level 5 mobs get a blessing (Ranged mobs: Hunter or Swamp, Non-ranged Mobs: Warrior or Swamp)
 
 Bows, Axes, and Swords get a random rank and bonus damage, along with a random prefix
 
-Pillars (randomly spawn around world, give blessing when right clicked, i.e. Blessing of the Miner, +25% Mining Speed)
+Pillars (randomly spawn around world, give blessing when right clicked, i.e. Blessing of the Miner, +25% Mining Speed, pillars of your current blessing will slightly glow and emit particles)
+Use x button on pillar to see what blessing they have.
 
 Blessings:
 
@@ -30,5 +33,7 @@ Blessings:
     Swamp - Attacks will slow enemies,
     Thief - Enemies have a chance to drop gold nuggets,
     Ninja - While sneaking you are invisible and attacks on enemies with full health do double damage
+    
+/currentBlessing command shows your current blessing
     
 Unmarked potions (Each new world you make selects 12 potion types and durations. Drink a mystery potion to find out what it does permanently in that world! Wildcard potion always give a random effect)
