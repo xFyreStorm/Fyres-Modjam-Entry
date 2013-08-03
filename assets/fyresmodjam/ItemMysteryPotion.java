@@ -50,7 +50,7 @@ public class ItemMysteryPotion extends Item {
 	public String getItemDisplayName(ItemStack par1ItemStack) {
 		String name = "Mystery Potion #" + (par1ItemStack.getItemDamage() + 1);
 		
-		String blessing = (Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.getEntityData().hasKey("Blessing")) ? Minecraft.getMinecraft().thePlayer.getEntityData().getString("Blessing") : null;
+		String blessing = Side.CLIENT.isClient() ? getBlessing() : null;
 		
 		if(par1ItemStack.getItemDamage() < 12 && Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().theWorld.isRemote) {
 			if(Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.getEntityData().hasKey("PotionKnowledge")) {
@@ -68,7 +68,7 @@ public class ItemMysteryPotion extends Item {
 			name = "Wildcard Potion";
 		}
 		
-		if(blessing.equals("Alchemist")) {name = "\u00A7k" + name;}
+		if(blessing != null && blessing.equals("Alchemist")) {name = "\u00A7k" + name;}
 		
         return name;
     }
@@ -142,6 +142,11 @@ public class ItemMysteryPotion extends Item {
         
         return par1ItemStack;
     }
+	
+	@SideOnly(Side.CLIENT)
+	public String getBlessing() {
+		return (Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.getEntityData().hasKey("Blessing")) ? Minecraft.getMinecraft().thePlayer.getEntityData().getString("Blessing") : null;
+	}
 	
 	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
         return false;
