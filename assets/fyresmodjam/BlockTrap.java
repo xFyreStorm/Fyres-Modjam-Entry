@@ -15,6 +15,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -97,7 +99,10 @@ public class BlockTrap extends BlockContainer
     }
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
-    	if(par5Entity instanceof EntityPlayer || par5Entity instanceof EntityMob) {par5Entity.attackEntityFrom(DamageSource.cactus, 1.0F);}
+    	if((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob) {
+    		par5Entity.attackEntityFrom(DamageSource.cactus, 1.0F);
+    		if(ModjamMod.r.nextInt(100) == 0) {((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.poison.id, 100, 1));}
+    	}
     }
     
     public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {

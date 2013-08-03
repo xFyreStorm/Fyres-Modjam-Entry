@@ -1,17 +1,34 @@
-Idea: Rougelike mod! (Need to think of a name)
+Idea: Rougelike mod!
+Name: You Will Die Mod
 
 To do:
+
 
 Add more blessings to pillars
 Figure out what mobs I want to give levels and attribute bonuses
 Figure out what items I want give stats and variation
-Give items stats when taken from creative inventory
+
 
 Done:
 
-Traps (Can only be seen within 5 block radius while crouching, does damage to players and hostile mobs that touch it, can be disarmed by right clicking)
+Traps (Can only be seen within 5 block radius while crouching, does damage to players and hostile mobs that touch it, has small chance to poison, can be disarmed by right clicking)
+
 Dungeons spawn 13x as often
-Basic stat system for mobs and items
+
 Hostile mobs get levels (+5 hp per level, +5 additional for level 5)
+
+Bows, Axes, and Swords get a random rank and bonus damage, along with a random prefix
+
 Pillars (randomly spawn around world, give blessing when right clicked, i.e. Blessing of the Miner, +25% Mining Speed)
-Unmarked potions (Each new world you make selects 12 potion types and durations. Drink a mystery potion to find out what it does permanently in that world!)
+
+Blessings:
+
+    Miner - +25% mine speed on stone and iron blocks,
+    Lumberjack - +25% mine speed on wooden blocks,
+    Warrior - +25% melee damage,
+    Hunter - +25% projectile damage,
+    Swamp - Attacks will slow enemies,
+    Thief - Enemies have a chance to drop gold nuggets,
+    Ninja - While sneaking you are invisible and attacks on enemies with full health do double damage
+    
+Unmarked potions (Each new world you make selects 12 potion types and durations. Drink a mystery potion to find out what it does permanently in that world! Wildcard potion always give a random effect)

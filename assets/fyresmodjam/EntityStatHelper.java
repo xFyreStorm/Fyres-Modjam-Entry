@@ -147,24 +147,23 @@ public class EntityStatHelper {
 	
 	@ForgeSubscribe
 	public void livingDeath(LivingDeathEvent event) {
-		
-		if(event.entity instanceof EntityLivingBase && event.source != null && event.source.getEntity() != null) {
-			if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
-				String blessing = event.source.getEntity().getEntityData().getString("Blessing");
-				
-				if(blessing.equals("Thief")) {
-					if(event.entity.worldObj.getGameRules().getGameRuleBooleanValue("doMobLoot") && ModjamMod.r.nextInt(5) == 0) {
+		if(!event.entity.worldObj.isRemote && event.entity.worldObj.getGameRules().getGameRuleBooleanValue("doMobLoot")) {
+			
+			if(event.entity instanceof EntityLivingBase && event.source != null && event.source.getEntity() != null) {
+				if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
+					String blessing = event.source.getEntity().getEntityData().getString("Blessing");
+					
+					if(blessing.equals("Thief") && ModjamMod.r.nextInt(10) == 0) {
 						if(!event.entity.worldObj.isRemote) {event.entity.dropItem(Item.goldNugget.itemID, 1);}
 						event.entity.worldObj.playSoundAtEntity(event.entity, "fyresmodjam:coin", 1.0F, 1.0F);
 					}
 				}
 			}
-		}
-		
-		if(!event.entity.worldObj.isRemote) {
+			
 			int level = 0;
 			if(event.entity.getEntityData().hasKey("Level")) {level = Integer.parseInt(event.entity.getEntityData().getString("Level"));}
 			if(ModjamMod.r.nextInt(20) == 0 || level == 5) {event.entity.entityDropItem(new ItemStack(ModjamMod.mysteryPotion.itemID, 1, ModjamMod.r.nextInt(13)), event.entity.height/2);}
+		
 		}
 	}
 }
