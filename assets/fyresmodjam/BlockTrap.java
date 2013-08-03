@@ -34,7 +34,7 @@ public class BlockTrap extends BlockContainer
     protected BlockTrap(int par1) {
         super(par1, Material.circuits);
         this.setLightOpacity(0);
-        this.setCreativeTab(CreativeTabs.tabCombat);
+        this.setCreativeTab(CreativeTabs.tabBlock);
         //this.setTickRandomly(true);
         //this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
     }
