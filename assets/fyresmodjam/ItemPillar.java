@@ -30,7 +30,7 @@ public class ItemPillar extends Item
         Block block = ModjamMod.blockPillar;
 
         if(par7 == 0) {par5 -= 2;}
-        if(par7 == 1) {++par5;}
+        if(par7 == 1 && !Block.blocksList[par3World.getBlockId(par4, par5, par6)].isBlockReplaceable(par3World, par4, par5, par6)) {++par5;}
         if(par7 == 2) {--par6;}
         if(par7 == 3) {++par6;}
         if(par7 == 4) {--par4;}

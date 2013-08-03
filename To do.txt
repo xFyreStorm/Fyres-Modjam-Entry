@@ -9,6 +9,9 @@ Give items stats when taken from creative inventory
 
 Done:
 
+Traps (Can only be seen within 5 block radius while crouching, does damage to players and hostile mobs that touch it, can be disarmed by right clicking)
+Dungeons spawn 13x as often
 Basic stat system for mobs and items
+Hostile mobs get levels (+5 hp per level, +5 additional for level 5)
 Pillars (randomly spawn around world, give blessing when right clicked, i.e. Blessing of the Miner, +25% Mining Speed)
 Unmarked potions (Each new world you make selects 12 potion types and durations. Drink a mystery potion to find out what it does permanently in that world!)
