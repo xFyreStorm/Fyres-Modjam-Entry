@@ -66,13 +66,15 @@ public class BlockPillar extends BlockContainer
     		}
     		
     		if(!skip) {
-    			EntityStatHelper.giveStat(par5EntityPlayer, "Blessing", ((TileEntityPillar) te).blessing);
-    			
-    			if(par1World.isRemote) {
-    				//Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("Activated blessing of the " + ((TileEntityPillar) te).blessing + ".");
-    			} else {
-    				par1World.playSoundAtEntity(par5EntityPlayer, "fyresmodjam:pillarActivated", 1.0F, 1.0F);
-    				PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"Activated blessing of the " + ((TileEntityPillar) te).blessing + "."}), (Player) par5EntityPlayer);
+    			if(((TileEntityPillar) te).blessing != null) {
+	    			EntityStatHelper.giveStat(par5EntityPlayer, "Blessing", ((TileEntityPillar) te).blessing);
+	    			
+	    			if(par1World.isRemote) {
+	    				//Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("Activated blessing of the " + ((TileEntityPillar) te).blessing + ".");
+	    			} else {
+	    				par1World.playSoundAtEntity(par5EntityPlayer, "fyresmodjam:pillarActivated", 1.0F, 1.0F);
+	    				PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"Activated blessing of the " + ((TileEntityPillar) te).blessing + "."}), (Player) par5EntityPlayer);
+	    			}
     			}
     		} else {
     			if(!par1World.isRemote) {

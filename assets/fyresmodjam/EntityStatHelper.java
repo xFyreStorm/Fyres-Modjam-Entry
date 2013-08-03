@@ -84,7 +84,7 @@ public class EntityStatHelper {
 	}
 	
 	public static Entity giveStat(Entity entity, String name, Object value) {
-		entity.getEntityData().setString(name, value.toString());
+		if(entity != null && name != null && value != null) {entity.getEntityData().setString(name, value.toString());}
 		return entity;
 	}
 	
