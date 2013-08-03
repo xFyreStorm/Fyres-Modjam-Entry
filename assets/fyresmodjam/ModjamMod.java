@@ -100,7 +100,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
 		
 		GameRegistry.registerWorldGenerator(new PillarGen());
-		for(int i = 0; i < 3; i++) {GameRegistry.registerWorldGenerator(new WorldGenMoreDungeons());}
+		GameRegistry.registerWorldGenerator(new WorldGenMoreDungeons());
 		
 		//Item and Block loading
 		
