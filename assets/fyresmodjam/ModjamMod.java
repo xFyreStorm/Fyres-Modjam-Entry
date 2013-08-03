@@ -126,7 +126,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		mobTracker.addStat(new EntityStat("Level", "") {
 			public Object getNewValue(Random r) {
 				int i = 1;
-				for(; i < 5; i++) {if(ModjamMod.r.nextInt(10) < 4) {break;}}
+				for(; i < 5; i++) {if(ModjamMod.r.nextInt(10) < 3) {break;}}
 				return i;
 			}
 			
@@ -175,7 +175,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		weaponTracker.addStat(new ItemStat("Rank", "") {
 			public Object getNewValue(Random r) {
 				int i = 1;
-				for(; i < 5; i++) {if(ModjamMod.r.nextInt(10) < 4) {break;}}
+				for(; i < 5; i++) {if(ModjamMod.r.nextInt(10) < 3) {break;}}
 				return i;
 			}
 			
