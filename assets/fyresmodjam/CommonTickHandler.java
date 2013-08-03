@@ -47,7 +47,7 @@ public class CommonTickHandler implements ITickHandler {
 				if(o == null || !(o instanceof EntityPlayer)) {continue;}
 				EntityPlayer player = (EntityPlayer) o;
 				if(player.isSneaking() && player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Ninja")) {
-					player.addPotionEffect(new PotionEffect(Potion.invisibility.id, 20, 1, false));
+					if(player.getActivePotionEffect(Potion.invisibility).getDuration() < 10) {player.addPotionEffect(new PotionEffect(Potion.invisibility.id, 10, 1, false));}
 				}
 			}
 		}

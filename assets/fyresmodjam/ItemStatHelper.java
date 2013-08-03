@@ -172,6 +172,8 @@ public class ItemStatHelper implements ICraftingHandler {
 					event.ammount *= 1.25F;
 				} else if(blessing.equals("Hunter") && event.source.isProjectile()) {
 					event.ammount *= 1.25F;
+				} else if(event.entityLiving != null && blessing.equals("Ninja") && event.source.getEntity().isSneaking() && event.entityLiving.func_110143_aJ() == event.entityLiving.func_110138_aP()) {
+					event.ammount *= 2.0F;
 				} else if(blessing.equals("Swamp") && event.entityLiving != null) {
 					event.entityLiving.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1, false));
 				}

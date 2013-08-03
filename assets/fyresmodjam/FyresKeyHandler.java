@@ -50,7 +50,7 @@ public class FyresKeyHandler extends KeyHandler {
 				if(te != null && te instanceof TileEntityPillar) {
 					int index = 0;
 					for(int i = 0; i < TileEntityPillar.validBlessings.length; i++) {if(TileEntityPillar.validBlessings[i].equals(((TileEntityPillar) te).blessing)) {index = i; break;}}
-					Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("Blessing of the " + ((TileEntityPillar) te).blessing + ": " + TileEntityPillar.blessingDescriptions[index] + ".");
+					Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eBlessing of the " + ((TileEntityPillar) te).blessing + ": " + TileEntityPillar.blessingDescriptions[index] + ".");
 				}
 			}
 		}
