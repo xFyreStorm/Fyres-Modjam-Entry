@@ -14,13 +14,14 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
 public class PacketHandler implements IPacketHandler {
 
 	//Packet types
-	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3, SEND_MESSAGE = 4, UPDATE_POTION_DATA = 5, UPDATE_PLAYER_ITEMS = 6;
+	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3, SEND_MESSAGE = 4, UPDATE_POTION_DATA = 5, UPDATE_PLAYER_ITEMS = 6, DISARM_TRAP = 7;
 	
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player playerEntity) {
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
@@ -62,6 +63,11 @@ public class PacketHandler implements IPacketHandler {
 								//((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
 							//}
 							
+							return;
+							
+						case DISARM_TRAP: 
+							player.worldObj.setBlockToAir(inputStream.readInt(), inputStream.readInt(), inputStream.readInt());
+							PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7oYou disarmed the trap."}), (Player) player);
 							return;
 						
 						default: return;
