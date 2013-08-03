@@ -41,4 +41,9 @@ public class TileEntityTrap extends TileEntity {
     	//fixes rendering bug, but on downside, always renders, even off screen
         return INFINITE_EXTENT_AABB;
     }
+    
+    @SideOnly(Side.CLIENT)
+    public double getMaxRenderDistanceSquared() {
+        return 49.0D;
+    }
 }

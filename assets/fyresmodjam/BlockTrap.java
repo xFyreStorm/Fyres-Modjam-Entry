@@ -1,16 +1,21 @@
 package assets.fyresmodjam;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -28,10 +33,10 @@ public class BlockTrap extends BlockContainer
         //this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
     }
 
-    /*@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister) {
         this.blockIcon = par1IconRegister.registerIcon("fyresmodjam:trap");
-    }*/
+    }
 
     public int idDropped(int par1, Random par2Random, int par3) {
         return 0;
@@ -71,7 +76,24 @@ public class BlockTrap extends BlockContainer
         return 2;
     }
     
-    /*public boolean isCollidable() {
-        return false;
-    }*/
+    public void addCollisionBoxesToList(World par1World, int par2, int par3, int par4, AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity) {}
+    
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
+        return null;
+    }
+    
+    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
+    	par5Entity.attackEntityFrom(DamageSource.cactus, 0.5F);
+    }
+    
+    public boolean isCollidable() {
+    	boolean b = false;
+    	if(Side.CLIENT.isClient()) {b = getPlayerSneaking();}
+        return b;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public boolean getPlayerSneaking() {
+    	return Minecraft.getMinecraft().thePlayer == null ? false : Minecraft.getMinecraft().thePlayer.isSneaking();
+    }
 }
