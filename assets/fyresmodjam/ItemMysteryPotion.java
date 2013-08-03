@@ -88,6 +88,7 @@ public class ItemMysteryPotion extends Item {
         
         if(par1ItemStack.getItemDamage() < 12) {
 	        if(!par2World.isRemote) {
+	        	
 	        	int value = MysteryPotionData.potionValues[par1ItemStack.getItemDamage()];
 	        	
 	        	if(!Potion.potionTypes[value].isInstant()) {
@@ -97,19 +98,24 @@ public class ItemMysteryPotion extends Item {
 	        	}
 	        	
 	        	if(!par3EntityPlayer.getEntityData().hasKey("PotionKnowledge")) {par3EntityPlayer.getEntityData().setIntArray("PotionKnowledge", new int[] {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});}
-	        	par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] = 1;
-	        	PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")}), (Player) par3EntityPlayer);
-	        } else if(!par3EntityPlayer.getEntityData().hasKey("PotionKnowledge") || par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] == -1) {
-	        	Potion potion = Potion.potionTypes[MysteryPotionData.potionValues[par1ItemStack.getItemDamage()]];
-				String name = I18n.func_135053_a(potion.getName()) + " Potion";
-				
-				if(!potion.isInstant()) {
-					int time = MysteryPotionData.potionDurations[par1ItemStack.getItemDamage()];
-					name += " (" + time + " seconds)";
-				}
-				
-	        	Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7oYou learnt Mystery Potion #" + (par1ItemStack.getItemDamage() + 1) + " was a " + name + "!");
+		        
+	        	if(par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] == -1) {
+	        		par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] = 1;
+		        	
+		        	PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")}), (Player) par3EntityPlayer);
+		        
+		        	Potion potion = Potion.potionTypes[MysteryPotionData.potionValues[par1ItemStack.getItemDamage()]];
+					String name = StatCollector.translateToLocal(potion.getName()) + " Potion";
+					
+					if(!potion.isInstant()) {
+						int time = MysteryPotionData.potionDurations[par1ItemStack.getItemDamage()];
+						name += " (" + time + " seconds)";
+					}
+					
+					PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7oYou learnt Mystery Potion #" + (par1ItemStack.getItemDamage() + 1) + " was a " + name + "!"}), (Player) par3EntityPlayer);
+	        	}
 	        }
+	        
         } else if(!par2World.isRemote) {
         	int value = ModjamMod.r.nextInt(Potion.potionTypes.length);
         	while(Potion.potionTypes[value] == null) {value = ModjamMod.r.nextInt(Potion.potionTypes.length);}
