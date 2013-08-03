@@ -61,7 +61,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Random r = new Random();
     
     public static int itemID = 2875, blockID = 2875;
-    public static boolean pillarGlow = true;
+    public static boolean pillarGlow = true, spawnTraps = true;
     
     public static Block blockPillar;
     public static Block blockTrap;
@@ -79,7 +79,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		itemID = Integer.parseInt(prop.getProperty("itemID", "" + itemID));
 		blockID = Integer.parseInt(prop.getProperty("blockID", "" + blockID));
 		pillarGlow = Boolean.parseBoolean(prop.getProperty("pillarGlow", "" + pillarGlow));
-	}
+		spawnTraps = Boolean.parseBoolean(prop.getProperty("spawnTraps", "" + spawnTraps));
+    }
     
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {loadProperties();}
@@ -102,7 +103,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
 		
 		GameRegistry.registerWorldGenerator(new PillarGen());
-		GameRegistry.registerWorldGenerator(new WorldGenTraps());
+		if(spawnTraps) {GameRegistry.registerWorldGenerator(new WorldGenTraps());}
 		for(int i = 0; i < 3; i++) {GameRegistry.registerWorldGenerator(new WorldGenMoreDungeons());}
 		
 		//Item and Block loading

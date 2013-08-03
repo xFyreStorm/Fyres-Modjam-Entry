@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -38,7 +39,12 @@ public class BlockTrap extends BlockContainer
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister) {
-        this.blockIcon = par1IconRegister.registerIcon("fyresmodjam:trap");
+        this.blockIcon = par1IconRegister.registerIcon("fyresmodjam:spikes");
+    }
+
+    @SideOnly(Side.CLIENT)
+    public String getItemIconName() {
+        return "fyresmodjam:spikes";
     }
 
     public int idDropped(int par1, Random par2Random, int par3) {
