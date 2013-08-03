@@ -52,15 +52,15 @@ public class PacketHandler implements IPacketHandler {
 							
 						case UPDATE_PLAYER_ITEMS:
 							
-							if(player.openContainer != null) {
-								for(Object stack : player.openContainer.inventoryItemStacks) {
+							//if(player.openContainer != null) {
+								for(Object stack : player.inventory.mainInventory) {
 									if(stack == null || !(stack instanceof ItemStack)) {continue;}
 									ItemStatHelper.processItemStack((ItemStack) stack, ModjamMod.r);
 								}
 								
 								//player.openContainer.detectAndSendChanges();
-								((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
-							}
+								//((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+							//}
 							
 							return;
 						
