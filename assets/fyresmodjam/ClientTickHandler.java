@@ -54,8 +54,6 @@ public class ClientTickHandler implements ITickHandler {
 			}
 			
 			if(sendPacket) {PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.UPDATE_PLAYER_ITEMS));}
-		
-			System.out.println(sendPacket);
 		}
 	}
 

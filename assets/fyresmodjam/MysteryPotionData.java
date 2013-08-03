@@ -66,9 +66,7 @@ public class MysteryPotionData extends WorldSavedData {
 			}
 		}
 		
-		if(potionDurations == null) {
-			potionDurations = new int[12];
-			for(int i = 0; i < 12; i++) {potionDurations[i] = 5 + ModjamMod.r.nextInt(26);}
-		}
+		if(potionDurations == null) {potionDurations = new int[12];}
+		for(int i = 0; i < 12; i++) {if(potionDurations[i] != 0) {continue;} potionDurations[i] = 5 + ModjamMod.r.nextInt(26);}
 	}
 }

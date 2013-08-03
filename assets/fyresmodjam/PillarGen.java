@@ -33,7 +33,7 @@ public class PillarGen implements IWorldGenerator {
         		        	y += 10;
         		        	added++;
         		        	
-        		        	System.out.println(x + ", " + y + ", " + z);
+        		        	//System.out.println(x + ", " + y + ", " + z);
         		        }
                 	}
             	}
