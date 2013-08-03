@@ -13,9 +13,12 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import assets.fyresmodjam.EntityStatHelper.EntityStat;
+import assets.fyresmodjam.EntityStatHelper.EntityStatTracker;
 import assets.fyresmodjam.ItemStatHelper.ItemStat;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,12 +50,15 @@ public class ItemStatHelper implements ICraftingHandler {
 		public Class[] classes;
 		public int[] ids;
 		
-		public ItemStatTracker(Class[] classes, int[] ids) {
+		public boolean instanceAllowed = false;
+		
+		public ItemStatTracker(Class[] classes, int[] ids, boolean instanceAllowed) {
 			this.classes = classes;
 			this.ids = ids;
+			this.instanceAllowed = instanceAllowed;
 		}
 		
-		public ItemStatTracker(Class c, int id) {this(new Class[] {c}, new int[] {id});}
+		public ItemStatTracker(Class c, int id, boolean instanceAllowed) {this(new Class[] {c}, new int[] {id}, instanceAllowed);}
 
 		//public HashMap<String, String> stats = new HashMap<String, String>();
 		public ArrayList<ItemStat> stats = new ArrayList<ItemStat>();
@@ -81,9 +87,12 @@ public class ItemStatHelper implements ICraftingHandler {
 	public static HashMap<Class, ItemStatTracker> statTrackersByClass = new HashMap<Class, ItemStatTracker>();
 	public static HashMap<Integer, ItemStatTracker> statTrackersByID = new HashMap<Integer, ItemStatTracker>();
 	
+	public static ArrayList<ItemStatTracker> genericTrackers = new ArrayList<ItemStatTracker>();
+	
 	public static void addStatTracker(ItemStatTracker statTracker) {
 		if(statTracker.classes != null) {for(Class c : statTracker.classes) {statTrackersByClass.put(c, statTracker);}}
 		if(statTracker.ids != null) {for(int i : statTracker.ids) {if(i < 0) {continue;} statTrackersByID.put(i, statTracker);}}
+		if(statTracker.instanceAllowed) {genericTrackers.add(statTracker);}
 	}
 	
 	public static ItemStack giveStat(ItemStack stack, String name, Object value) {
@@ -170,70 +179,43 @@ public class ItemStatHelper implements ICraftingHandler {
 		}
 	}
 	
+	public static ArrayList<ItemStatTracker> temp = new ArrayList<ItemStatTracker>();
+	
 	public static void processItemStack(ItemStack stack, Random r) {
+		if(stack == null) {return;}
+		
 		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
 		
-		if(stack != null && (statTrackersByClass.containsKey(stack.getItem().getClass()) || statTrackersByID.containsKey(stack.getItem().itemID))) {
+		String processed = ItemStatHelper.getStat(stack, "processed");
+		
+		if(processed == null || processed.equals("false")) {
 			
-			Class c = stack.getItem().getClass();
-			int id = stack.getItem().itemID;
+			temp.clear();
 			
-			String processed = ItemStatHelper.getStat(stack, "processed");
+			stack.getTagCompound().setTag("Lore", new NBTTagList());
 			
-			if(processed == null || processed.equals("false")) {
-				
-				stack.getTagCompound().setTag("Lore", new NBTTagList());
-				
-				ItemStatTracker statTrackerClass = statTrackersByClass.get(c);
-				ItemStatTracker statTrackerID = statTrackersByID.get(c);
-				
-				ItemStatHelper.giveStat(stack, "processed", "true");
-				
-				if(statTrackerClass != null) {
-					for(ItemStat s : statTrackerClass.stats) {
-						/*String[] value = statTrackerClass.stats.get(s).split(",");
-						if(value.length == 3 && value[0].equals("#i")) {value[0] = "" + (Integer.parseInt(value[1]) + ModjamMod.r.nextInt(Integer.parseInt(value[2])));}
-						String[] data = s.replace("%v", value[0]).split(",");
-						
-						System.out.println(data + ", " + value);
-						
-						giveStat(stack, data[0], value[0]);
-						
-						if(data.length > 1) {addLore(stack, data[1]);}*/
-						
-						giveStat(stack, s.name, s.getNewValue(r).toString());
-						
-						String lore = s.getLore(stack);
-						if(lore != null) {addLore(stack, lore);}
-						
-						setName(stack, s.getAlteredStackName(stack));
-						
-						s.modifyStack(stack);
-					}
+			if(statTrackersByClass.containsKey(stack.getItem().getClass())) {temp.add(statTrackersByClass.get(stack.getItem().getClass()));}
+			if(statTrackersByID.containsKey(stack.getItem().itemID)) {temp.add(statTrackersByID.get(stack.getItem().itemID));}
+			
+			for(ItemStatTracker e : genericTrackers) {
+				if(!temp.contains(e)) {
+					for(Class c : e.classes) {if(c.isAssignableFrom(stack.getItem().getClass())) {temp.add(e); break;}}
 				}
-				
-				if(statTrackerID != null) {
-					for(ItemStat s : statTrackerID.stats) {
-						giveStat(stack, s.name, s.getNewValue(r).toString());
-						
-						String lore = s.getLore(stack);
-						if(lore != null) {addLore(stack, lore);}
-						
-						setName(stack, s.getAlteredStackName(stack));
-						
-						s.modifyStack(stack);
-					}
+			}
+			
+			ItemStatHelper.giveStat(stack, "processed", "true");
+			
+			for(ItemStatTracker statTracker : temp) {
+				for(ItemStat s : statTracker.stats) {
+					giveStat(stack, s.name, s.getNewValue(r).toString());
+					
+					String lore = s.getLore(stack);
+					if(lore != null) {addLore(stack, lore);}
+					
+					setName(stack, s.getAlteredStackName(stack));
+					
+					s.modifyStack(stack);
 				}
-				
-				//Apparently is was syncing fine. :P
-				
-				/*try {
-	                ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
-	                DataOutputStream dataoutputstream = new DataOutputStream(bytearrayoutputstream);
-	                //dataoutputstream.writeInt(this.currentWindowId);
-	                Packet.writeItemStack(stack, dataoutputstream);
-	                //PacketDispatcher.sendPacketToAllPlayers(new Packet250CustomPayload("MC|TrList", bytearrayoutputstream.toByteArray()));
-	            } catch (IOException ioexception) {ioexception.printStackTrace();}*/
 			}
 		}
 	}

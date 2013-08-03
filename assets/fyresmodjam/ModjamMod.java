@@ -159,7 +159,7 @@ public class ModjamMod implements IPlayerTracker {
 		
 		//Item Trackers
 		
-		ItemStatTracker weaponTracker = new ItemStatTracker(new Class[] {ItemSword.class, ItemAxe.class}, null);
+		ItemStatTracker weaponTracker = new ItemStatTracker(new Class[] {ItemSword.class, ItemAxe.class}, null, false);
 		
 		weaponTracker.addStat(new ItemStat("Prefix", "") {
 			public String[] prefixes = new String[] {"Old", "Sharp", "Average"};
@@ -176,10 +176,10 @@ public class ModjamMod implements IPlayerTracker {
 			
 			public void modifyStack(ItemStack stack) {
 				int rank = Integer.parseInt(stack.getTagCompound().getString(name));
-				int bonusDamage = (-2 + (rank - 1)) + (int) (ModjamMod.r.nextFloat() * rank * 1.5F);
+				int bonusDamage = (rank - 1)/2 + (int) (ModjamMod.r.nextInt(rank + 1));
 				
 				ItemStatHelper.giveStat(stack, "BonusDamage", bonusDamage);
-				ItemStatHelper.addLore(stack, bonusDamage != 0 ? "\u00A77\u00A7o  " + (bonusDamage > 0 ? "+" : "") + bonusDamage + " damage" : null);
+				ItemStatHelper.addLore(stack, bonusDamage != 0 ? "\u00A77\u00A7o  " + (bonusDamage > 0 ? "+" : "") + bonusDamage + " bonus damage" : null);
 				
 				ItemStatHelper.addLore(stack, "\u00A7eRank: "+ rank);
 			}

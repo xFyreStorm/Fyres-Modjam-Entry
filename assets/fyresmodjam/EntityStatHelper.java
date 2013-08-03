@@ -45,7 +45,7 @@ public class EntityStatHelper {
 	public static class EntityStatTracker {
 		public Class[] classes;
 		
-		private boolean instanceAllowed = false;
+		public boolean instanceAllowed = false;
 		
 		public EntityStatTracker(Class[] classes, boolean instancesAllowed) {this.classes = classes; this.instanceAllowed = instancesAllowed;}
 		public EntityStatTracker(Class c, boolean instancesAllowed) {this(new Class[] {c}, instancesAllowed);}
