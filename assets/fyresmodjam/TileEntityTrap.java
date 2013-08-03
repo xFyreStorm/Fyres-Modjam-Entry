@@ -44,6 +44,6 @@ public class TileEntityTrap extends TileEntity {
     
     @SideOnly(Side.CLIENT)
     public double getMaxRenderDistanceSquared() {
-        return 49.0D;
+        return 25.0D;
     }
 }

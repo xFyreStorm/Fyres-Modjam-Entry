@@ -1,5 +1,7 @@
 package assets.fyresmodjam;
 
+import static net.minecraftforge.common.ForgeDirection.SOUTH;
+
 import java.util.List;
 import java.util.Random;
 
@@ -18,6 +20,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
@@ -26,7 +29,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockTrap extends BlockContainer
 {
     protected BlockTrap(int par1) {
-        super(par1, Material.iron);
+        super(par1, Material.circuits);
         this.setLightOpacity(0);
         this.setCreativeTab(CreativeTabs.tabCombat);
         //this.setTickRandomly(true);
@@ -84,6 +87,14 @@ public class BlockTrap extends BlockContainer
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
     	par5Entity.attackEntityFrom(DamageSource.cactus, 0.5F);
+    }
+    
+    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
+    	super.onNeighborBlockChange(par1World, par2, par3, par4, par5);
+    	
+    	if (!par1World.isBlockSolidOnSide(par2, par3 -1, par4, ForgeDirection.SOUTH, true)) {
+    		par1World.setBlockToAir(par2, par3, par4);
+    	}
     }
     
     public boolean isCollidable() {
