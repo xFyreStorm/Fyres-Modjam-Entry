@@ -1,5 +1,6 @@
 package assets.fyresmodjam;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
@@ -30,9 +31,21 @@ public class TileEntityPillar extends TileEntity {
     			for(int i = 0; i < 2; i++) {this.worldObj.spawnParticle("portal", this.xCoord + ModjamMod.r.nextDouble(), this.yCoord + ModjamMod.r.nextDouble() * 2, this.zCoord + ModjamMod.r.nextDouble(), (ModjamMod.r.nextDouble() - 0.5D) * 2.0D, -ModjamMod.r.nextDouble(), (ModjamMod.r.nextDouble() - 0.5D) * 2.0D);}
     		}*/
     		
+    		spawnParticles();
+    		
     		if(ModjamMod.pillarGlow) {this.worldObj.updateAllLightTypes(this.xCoord, this.yCoord, this.zCoord);}
     	}
     }
+    
+    @SideOnly(Side.CLIENT)
+    public void spawnParticles() {
+    	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		
+		if(player != null && player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals(blessing)) {
+			for(int i = 0; i < 2; i++) {this.worldObj.spawnParticle("portal", this.xCoord + ModjamMod.r.nextDouble(), this.yCoord + ModjamMod.r.nextDouble() * 2, this.zCoord + ModjamMod.r.nextDouble(), (ModjamMod.r.nextDouble() - 0.5D) * 2.0D, -ModjamMod.r.nextDouble(), (ModjamMod.r.nextDouble() - 0.5D) * 2.0D);}
+		}
+    }
+    
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
     	if(blessing == null) {blessing = validBlessings[ModjamMod.r.nextInt(validBlessings.length)];}
