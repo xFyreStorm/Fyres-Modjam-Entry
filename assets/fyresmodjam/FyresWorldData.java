@@ -37,6 +37,7 @@ public class FyresWorldData extends WorldSavedData {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		if(nbttagcompound.hasKey("values")) {potionValues = nbttagcompound.getIntArray("values");}
 		if(nbttagcompound.hasKey("durations")) {potionDurations = nbttagcompound.getIntArray("durations");}
+		if(nbttagcompound.hasKey("currentDisadvantage")) {currentDisadvantage = nbttagcompound.getString("currentDisadvantage");}
 		checkPotionValues();
 	}
 
@@ -45,6 +46,7 @@ public class FyresWorldData extends WorldSavedData {
 		checkPotionValues();
 		nbttagcompound.setIntArray("values", potionValues);
 		nbttagcompound.setIntArray("durations", potionDurations);
+		nbttagcompound.setString("currentDisadvantage", currentDisadvantage);
 	}
 	
 	public void checkPotionValues() {
@@ -74,6 +76,16 @@ public class FyresWorldData extends WorldSavedData {
 		if(potionDurations == null) {potionDurations = new int[12];}
 		for(int i = 0; i < 12; i++) {if(potionDurations[i] != 0) {continue;} potionDurations[i] = 5 + ModjamMod.r.nextInt(26);}
 	
-		if(currentDisadvantage == null) {currentDisadvantage = validDisadvantages[ModjamMod.r.nextInt(validDisadvantages.length)];}
+		boolean changeDisadvantage = currentDisadvantage == null;
+		
+		if(!changeDisadvantage) {
+			boolean valid = false;
+			for(String s : validDisadvantages) {if(s.equals(currentDisadvantage)) {valid = true; break;}}
+			changeDisadvantage = !valid;
+		}
+		
+		if(changeDisadvantage) {currentDisadvantage = validDisadvantages[ModjamMod.r.nextInt(validDisadvantages.length)];}
+	
+		System.out.println(changeDisadvantage);
 	}
 }
