@@ -24,7 +24,7 @@ Bows, Axes, and Swords get a random rank and bonus damage, along with a random p
 Pillars (randomly spawn around world, give blessing when right clicked, i.e. Blessing of the Miner, +25% Mining Speed, pillars of your current blessing will slightly glow and emit particles)
 Use x button on pillar to see what blessing they have.
 
-Blessings:
+Blessings: 
 
     Miner - +25% mine speed on stone and iron blocks,
     Lumberjack - +25% mine speed on wooden blocks,
