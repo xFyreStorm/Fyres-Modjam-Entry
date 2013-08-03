@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -65,9 +66,15 @@ public class PacketHandler implements IPacketHandler {
 							
 							return;
 							
-						case DISARM_TRAP: 
-							player.worldObj.setBlockToAir(inputStream.readInt(), inputStream.readInt(), inputStream.readInt());
-							PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7oYou disarmed the trap."}), (Player) player);
+						case DISARM_TRAP:
+							int blockX = inputStream.readInt();
+							int blockY = inputStream.readInt();
+							int blockZ = inputStream.readInt();
+							
+							player.worldObj.setBlockToAir(blockX, blockY, blockZ);
+							boolean salvage = ModjamMod.r.nextBoolean() && inputStream.readBoolean();
+							PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7o" + (!salvage ? "You disarmed the trap." : "You disarm and salvage the trap.")}), (Player) player);
+							if(salvage) {player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, blockX + 0.5F, blockY, blockZ + 0.5F, new ItemStack(ModjamMod.blockTrap, 1)));}
 							return;
 						
 						default: return;
