@@ -161,6 +161,6 @@ public class EntityStatHelper {
 			}
 		}
 		
-		if(ModjamMod.r.nextInt(20) == 0) {event.entity.dropItem(ModjamMod.mysteryPotion.itemID, ModjamMod.r.nextInt(12));}
+		if(ModjamMod.r.nextInt(20) == 0) {event.entity.entityDropItem(new ItemStack(ModjamMod.mysteryPotion.itemID, 1, ModjamMod.r.nextInt(12)), event.entity.height/2);}
 	}
 }

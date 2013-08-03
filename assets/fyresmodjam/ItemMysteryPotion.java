@@ -8,7 +8,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityPotion;
@@ -55,7 +54,7 @@ public class ItemMysteryPotion extends Item {
 			if(Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.getEntityData().hasKey("PotionKnowledge")) {
 				if(Minecraft.getMinecraft().thePlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] != -1) {
 					Potion potion = Potion.potionTypes[MysteryPotionData.potionValues[par1ItemStack.getItemDamage()]];
-					name = I18n.func_135053_a(potion.getName()) + " Potion";
+					name = StatCollector.translateToLocal(potion.getName()) + " Potion";
 					
 					if(!potion.isInstant()) {
 						int time = MysteryPotionData.potionDurations[par1ItemStack.getItemDamage()];
@@ -128,7 +127,7 @@ public class ItemMysteryPotion extends Item {
         	}
         	
         	Potion potion = Potion.potionTypes[value];
-			String name = I18n.func_135053_a(potion.getName()) + " Potion";
+			String name = StatCollector.translateToLocal(potion.getName()) + " Potion";
 			
 			if(!potion.isInstant()) {name += " (" + time + " seconds)";}
         	

@@ -23,8 +23,12 @@ public class CommandCurrentBlessing implements ICommand {
 	public void processCommand(ICommandSender icommandsender, String[] astring) {
 		if(icommandsender instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer) icommandsender;
+			
 			String blessing = entityplayer.getEntityData().hasKey("Blessing") ? entityplayer.getEntityData().getString("Blessing") : null;
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {blessing != null ? "\u00A7eCurrent Blessing: \u00A7oBlessing of the " + blessing : "You don't currently have a blessing."}), (Player) entityplayer);
+			int index = 0;
+			for(int i = 0; i < TileEntityPillar.validBlessings.length; i++) {if(TileEntityPillar.validBlessings[i].equals(blessing)) {index = i; break;}}
+			
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {blessing != null ? "\u00A7eCurrent Blessing: \u00A7oBlessing of the " + blessing + " (" + TileEntityPillar.blessingDescriptions[index] + ")" : "You don't currently have a blessing."}), (Player) entityplayer);
 		}
 	}
 
