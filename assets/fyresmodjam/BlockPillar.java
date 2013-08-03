@@ -12,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -70,11 +72,12 @@ public class BlockPillar extends BlockContainer
     				//Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("Activated blessing of the " + ((TileEntityPillar) te).blessing + ".");
     			} else {
     				par1World.playSoundAtEntity(par5EntityPlayer, "fyresmodjam:pillarActivated", 1.0F, 1.0F);
-    				//par1World.playSound(te.xCoord, te.yCoord, te.zCoord, "fyresmodjam:pillarActivated", 1.0F, 1.0F, true);
+    				PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"Activated blessing of the " + ((TileEntityPillar) te).blessing + "."}), (Player) par5EntityPlayer);
     			}
     		} else {
     			if(!par1World.isRemote) {
     				//Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7cCannot activate pillar with monsters nearby!");
+    				PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7cCannot activate pillar with monsters nearby!"}), (Player) par5EntityPlayer);
     			}
     		}
     	}
@@ -146,7 +149,7 @@ public class BlockPillar extends BlockContainer
         }
     }
     
-    @Override
+    @SideOnly(Side.CLIENT)
     public int getLightValue(IBlockAccess world, int x, int y, int z) {
         Block block = blocksList[world.getBlockId(x, y, z)];
         TileEntity te = world.getBlockTileEntity(x, y, z);
@@ -155,8 +158,8 @@ public class BlockPillar extends BlockContainer
             return block.getLightValue(world, x, y, z);
         }
         
-        if(ModjamMod.pillarGlow && Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().theWorld.isRemote) {
-        	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        if(ModjamMod.pillarGlow && net.minecraft.client.Minecraft.getMinecraft().theWorld != null && net.minecraft.client.Minecraft.getMinecraft().theWorld.isRemote) {
+        	EntityPlayer player = net.minecraft.client.Minecraft.getMinecraft().thePlayer;
         	
         	if(player != null && te != null && te instanceof TileEntityPillar && ((TileEntityPillar) te).blessing != null && ((TileEntityPillar) te).blessing.equals(player.getEntityData().getString("Blessing"))) {
         		return 4;
