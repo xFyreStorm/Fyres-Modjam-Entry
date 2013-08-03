@@ -128,7 +128,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 				int i = 1;
 				for(; i < 5; i++) {if(ModjamMod.r.nextInt(10) < 3) {break;}}
 				return i;
-			}
+			} 
 			
 			public String getAlteredEntityName(EntityLiving entity) {
 				int level = Integer.parseInt(entity.getEntityData().getString(name));
@@ -137,7 +137,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 			
 			public void modifyEntity(Entity entity) {
 				int level = Integer.parseInt(entity.getEntityData().getString(name));
-				int healthGain = (level - 1) * 5;
+				int healthGain = (level - 1) * 5 + (level == 5 ? 5 : 0);
 				
 				if(healthGain != 0) {
 					((EntityLivingBase) entity).func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(((EntityLivingBase) entity).func_110138_aP() + healthGain);
