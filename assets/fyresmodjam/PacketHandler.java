@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.Side;
 public class PacketHandler implements IPacketHandler {
 
 	//Packet types
-	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3;
+	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3, SEND_MESSAGE = 4;
 	
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player playerEntity) {
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
@@ -57,6 +57,7 @@ public class PacketHandler implements IPacketHandler {
 					switch(type) {
 						case UPDATE_BLESSING: player.getEntityData().setString("Blessing", inputStream.readUTF()); return;
 						case UPDATE_POTION_KNOWLEDGE: int[] potionKnowledge = new int[12]; for(int i = 0; i < 12; i++) {potionKnowledge[i] = inputStream.readInt();} player.getEntityData().setIntArray("PotionKnowledge", potionKnowledge); return;
+						case SEND_MESSAGE: Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(inputStream.readUTF()); return;
 						default: return;
 					}
 				}

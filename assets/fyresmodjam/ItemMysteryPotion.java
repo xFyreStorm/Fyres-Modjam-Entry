@@ -113,12 +113,20 @@ public class ItemMysteryPotion extends Item {
         } else if(!par2World.isRemote) {
         	int value = ModjamMod.r.nextInt(Potion.potionTypes.length);
         	while(Potion.potionTypes[value] == null) {value = ModjamMod.r.nextInt(Potion.potionTypes.length);}
+        	int time = 5 + ModjamMod.r.nextInt(26);
         	
         	if(!Potion.potionTypes[value].isInstant()) {
-        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, (5 + ModjamMod.r.nextInt(26)) * 20, 1, false));
+        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, time * 20, 1, false));
         	} else {
         		Potion.potionTypes[value].affectEntity(par3EntityPlayer, par3EntityPlayer, 1, 1);
         	}
+        	
+        	Potion potion = Potion.potionTypes[value];
+			String name = I18n.func_135053_a(potion.getName()) + " Potion";
+			
+			if(!potion.isInstant()) {name += " (" + time + " seconds)";}
+        	
+        	PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7oYou drank a " + name + "."}), (Player) par3EntityPlayer);
         }
         
         return par1ItemStack;
