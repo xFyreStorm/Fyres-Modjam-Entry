@@ -2,8 +2,14 @@ package assets.fyresmodjam;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -29,7 +35,23 @@ public class CommonTickHandler implements ITickHandler {
 		
 	}
 	
-	public void serverTick() {}
+	public void serverTick() {
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+		
+		for(int i = 0; i < server.worldServers.length; i++) {
+			WorldServer s = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers[i];
+			
+			if(s == null) {continue;}
+			
+			for(Object o : s.playerEntities) {
+				if(o == null || !(o instanceof EntityPlayer)) {continue;}
+				EntityPlayer player = (EntityPlayer) o;
+				if(player.isSneaking() && player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Ninja")) {
+					player.addPotionEffect(new PotionEffect(Potion.invisibility.id, 20, 1, false));
+				}
+			}
+		}
+	}
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
