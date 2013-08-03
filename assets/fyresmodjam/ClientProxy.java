@@ -23,7 +23,10 @@ public class ClientProxy extends CommonProxy {
 		 TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
 		 
 	     KeyBindingRegistry.registerKeyBinding(new FyresKeyHandler());
+	     
 	     ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPillar.class, new TileEntityPillarRenderer());
+	     ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrap.class, new TileEntityTrapRenderer());
+	     
 	     MinecraftForge.EVENT_BUS.register(this);
 	}
 }

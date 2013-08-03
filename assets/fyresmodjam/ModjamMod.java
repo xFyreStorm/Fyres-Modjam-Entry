@@ -63,6 +63,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static boolean pillarGlow = true;
     
     public static Block blockPillar;
+    public static Block blockTrap;
     
     public static Item itemPillar;
     public static Item mysteryPotion;
@@ -105,6 +106,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		//Item and Block loading
 		
 		blockPillar = new BlockPillar(blockID).setBlockUnbreakable().setResistance(6000000.0F);
+		blockTrap = new BlockTrap(blockID + 1).setBlockUnbreakable().setResistance(6000000.0F);
 		
 		itemPillar = new ItemPillar(itemID).setUnlocalizedName("blockPillar");
 		mysteryPotion = new ItemMysteryPotion(itemID + 1).setUnlocalizedName("mysteryPotion").setCreativeTab(CreativeTabs.tabBrewing);
@@ -112,7 +114,11 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		GameRegistry.registerBlock(blockPillar, "blockPillar");
 		GameRegistry.registerTileEntity(TileEntityPillar.class, "Pillar Tile Entity");
 		
+		GameRegistry.registerBlock(blockTrap, "blockTrap");
+		GameRegistry.registerTileEntity(TileEntityTrap.class, "Trap Entity");
+		
 		LanguageRegistry.addName(blockPillar, "Pillar Block");
+		LanguageRegistry.addName(blockTrap, "Trap");
 		
 		LanguageRegistry.addName(itemPillar, "Pillar");
 		LanguageRegistry.addName(mysteryPotion, "Mystery Potion");
