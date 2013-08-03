@@ -39,20 +39,7 @@ public class ClientTickHandler implements ITickHandler {
 
 	private void onClientTick() {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		
-		if(player != null) {
-			/*if(player.openContainer != null) {
-				
-			}*/
-			
-			for(int i = 0; i < player.inventory.mainInventory.length; i++) {
-				ItemStack stack = player.inventory.mainInventory[i];
-				
-				if(stack != null && stack.getTagCompound() != null && !stack.getTagCompound().hasKey("processed")) {
-					PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.UPDATE_PLAYER_ITEM, new Object[] {i}));
-				}
-			}
-		}
+		if(player != null) {PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.UPDATE_PLAYER_ITEMS));}
 	}
 
 	private void onTickInGame() {

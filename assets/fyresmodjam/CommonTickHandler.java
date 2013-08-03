@@ -23,8 +23,13 @@ public class CommonTickHandler implements ITickHandler {
 
 			worldData = MysteryPotionData.forWorld(world);
 			worldData.markDirty();
+		} else if(type.equals(EnumSet.of(TickType.SERVER))) {
+			serverTick();
 		}
+		
 	}
+	
+	public void serverTick() {}
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
