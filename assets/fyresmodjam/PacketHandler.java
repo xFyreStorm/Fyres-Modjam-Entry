@@ -22,7 +22,7 @@ import cpw.mods.fml.relauncher.Side;
 public class PacketHandler implements IPacketHandler {
 
 	//Packet types
-	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3, SEND_MESSAGE = 4, UPDATE_POTION_DATA = 5, UPDATE_PLAYER_ITEMS = 6, DISARM_TRAP = 7;
+	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3, SEND_MESSAGE = 4, UPDATE_WORLD_DATA = 5, UPDATE_PLAYER_ITEMS = 6, DISARM_TRAP = 7;
 	
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player playerEntity) {
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
@@ -82,14 +82,14 @@ public class PacketHandler implements IPacketHandler {
 				} else if (side == Side.CLIENT) {
 					EntityPlayer player = (EntityPlayer) playerEntity;
 					
-					if(MysteryPotionData.potionValues == null) {MysteryPotionData.potionValues = new int[12];}
-					if(MysteryPotionData.potionDurations == null) {MysteryPotionData.potionDurations = new int[12];}
+					if(FyresWorldData.potionValues == null) {FyresWorldData.potionValues = new int[12];}
+					if(FyresWorldData.potionDurations == null) {FyresWorldData.potionDurations = new int[12];}
 					
 					switch(type) {
 						case UPDATE_BLESSING: player.getEntityData().setString("Blessing", inputStream.readUTF()); return;
 						case UPDATE_POTION_KNOWLEDGE: int[] potionKnowledge = new int[12]; for(int i = 0; i < 12; i++) {potionKnowledge[i] = inputStream.readInt();} player.getEntityData().setIntArray("PotionKnowledge", potionKnowledge); return;
 						case SEND_MESSAGE: Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(inputStream.readUTF()); return;
-						case UPDATE_POTION_DATA: for(int i = 0; i < 12; i++) {MysteryPotionData.potionValues[i] = inputStream.readInt();} for(int i = 0; i < 12; i++) {MysteryPotionData.potionDurations[i] = inputStream.readInt();} return;
+						case UPDATE_WORLD_DATA: for(int i = 0; i < 12; i++) {FyresWorldData.potionValues[i] = inputStream.readInt();} for(int i = 0; i < 12; i++) {FyresWorldData.potionDurations[i] = inputStream.readInt();} FyresWorldData.currentDisadvantage = inputStream.readUTF(); return;
 						default: return;
 					}
 				}

@@ -55,11 +55,11 @@ public class ItemMysteryPotion extends Item {
 		if(par1ItemStack.getItemDamage() < 12 && Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().theWorld.isRemote) {
 			if(Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.getEntityData().hasKey("PotionKnowledge")) {
 				if(Minecraft.getMinecraft().thePlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] != -1) {
-					Potion potion = Potion.potionTypes[MysteryPotionData.potionValues[par1ItemStack.getItemDamage()]];
+					Potion potion = Potion.potionTypes[FyresWorldData.potionValues[par1ItemStack.getItemDamage()]];
 					name = StatCollector.translateToLocal(potion.getName()) + " Potion";
 					
 					if(!potion.isInstant()) {
-						int time = MysteryPotionData.potionDurations[par1ItemStack.getItemDamage()];
+						int time = FyresWorldData.potionDurations[par1ItemStack.getItemDamage()];
 						name += " (" + time + " seconds)";
 					}
 				}
@@ -91,13 +91,13 @@ public class ItemMysteryPotion extends Item {
         
         String blessing = (par3EntityPlayer != null && par3EntityPlayer.getEntityData().hasKey("Blessing")) ? par3EntityPlayer.getEntityData().getString("Blessing") : null;
         
-        if(par1ItemStack.getItemDamage() < 12) {
+        if(!blessing.equals("Alchemist") && par1ItemStack.getItemDamage() < 12) {
 	        if(!par2World.isRemote) {
 	        	
-	        	int value = MysteryPotionData.potionValues[par1ItemStack.getItemDamage()];
+	        	int value = FyresWorldData.potionValues[par1ItemStack.getItemDamage()];
 	        	
 	        	if(!Potion.potionTypes[value].isInstant()) {
-	        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, MysteryPotionData.potionDurations[par1ItemStack.getItemDamage()] * 20, 1, false));
+	        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, FyresWorldData.potionDurations[par1ItemStack.getItemDamage()] * 20, 1, false));
 	        	} else {
 	        		Potion.potionTypes[value].affectEntity(par3EntityPlayer, par3EntityPlayer, 1, 1);
 	        	}
@@ -109,11 +109,11 @@ public class ItemMysteryPotion extends Item {
 		        	
 		        	PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")}), (Player) par3EntityPlayer);
 		        
-		        	Potion potion = Potion.potionTypes[MysteryPotionData.potionValues[par1ItemStack.getItemDamage()]];
+		        	Potion potion = Potion.potionTypes[FyresWorldData.potionValues[par1ItemStack.getItemDamage()]];
 					String name = StatCollector.translateToLocal(potion.getName()) + " Potion";
 					
 					if(!potion.isInstant()) {
-						int time = MysteryPotionData.potionDurations[par1ItemStack.getItemDamage()];
+						int time = FyresWorldData.potionDurations[par1ItemStack.getItemDamage()];
 						name += " (" + time + " seconds)";
 					}
 					

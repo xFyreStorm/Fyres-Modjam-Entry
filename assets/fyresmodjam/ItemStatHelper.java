@@ -188,6 +188,9 @@ public class ItemStatHelper implements ICraftingHandler {
 		
 		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
 		
+		String s = getName(stack);
+		if(FyresWorldData.currentDisadvantage.equals("Illiterate") && s != null && !s.startsWith("\u00A7k")) {setName(stack, "\u00A7k" + getName(stack));}
+		
 		String processed = ItemStatHelper.getStat(stack, "processed");
 		
 		if(processed == null || processed.equals("false")) {

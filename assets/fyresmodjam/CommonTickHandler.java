@@ -14,7 +14,7 @@ import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
 public class CommonTickHandler implements ITickHandler {
-	public static MysteryPotionData worldData = null;
+	public static FyresWorldData worldData = null;
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
@@ -27,7 +27,7 @@ public class CommonTickHandler implements ITickHandler {
 
 			if(world == null) {return;}
 
-			worldData = MysteryPotionData.forWorld(world);
+			worldData = FyresWorldData.forWorld(world);
 			worldData.markDirty();
 		} else if(type.equals(EnumSet.of(TickType.SERVER))) {
 			serverTick();

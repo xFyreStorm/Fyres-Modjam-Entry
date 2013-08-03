@@ -6,28 +6,30 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
 
-public class MysteryPotionData extends WorldSavedData {
+public class FyresWorldData extends WorldSavedData {
 
 	public static String[] validDisadvantages = {"Illiterate", "Tougher Mobs", "Weak"};
-	public static String[] disadvantageDescriptions = {"Item names are unreadable.", "-25% damage to hostile enemies", "-25% melee damage"};
+	public static String[] disadvantageDescriptions = {"Item names are unreadable", "-25% damage to hostile enemies", "-25% melee damage"};
 	
 	public static String key = "FyresWorldData";
 	
 	public static int[] potionValues = null;
 	public static int[] potionDurations = null;
+	
+	public static String currentDisadvantage = null;
 
-	public MysteryPotionData() {
+	public FyresWorldData() {
 		super(key);
 	}
 
-	public MysteryPotionData(String key) {
+	public FyresWorldData(String key) {
 		super(key);
 	}
 
-	public static MysteryPotionData forWorld(World world) {
+	public static FyresWorldData forWorld(World world) {
 		MapStorage storage = world.perWorldStorage;
-		MysteryPotionData result = (MysteryPotionData) storage.loadData(MysteryPotionData.class, key);
-		if (result == null) {result = new MysteryPotionData(); storage.setData(key, result); }
+		FyresWorldData result = (FyresWorldData) storage.loadData(FyresWorldData.class, key);
+		if (result == null) {result = new FyresWorldData(); storage.setData(key, result); }
 		return result;
 	}
 
@@ -71,5 +73,7 @@ public class MysteryPotionData extends WorldSavedData {
 		
 		if(potionDurations == null) {potionDurations = new int[12];}
 		for(int i = 0; i < 12; i++) {if(potionDurations[i] != 0) {continue;} potionDurations[i] = 5 + ModjamMod.r.nextInt(26);}
+	
+		if(currentDisadvantage == null) {currentDisadvantage = validDisadvantages[ModjamMod.r.nextInt(validDisadvantages.length)];}
 	}
 }
