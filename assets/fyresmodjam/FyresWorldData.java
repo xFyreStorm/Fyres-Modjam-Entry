@@ -38,18 +38,18 @@ public class FyresWorldData extends WorldSavedData {
 		if(nbttagcompound.hasKey("values")) {potionValues = nbttagcompound.getIntArray("values");}
 		if(nbttagcompound.hasKey("durations")) {potionDurations = nbttagcompound.getIntArray("durations");}
 		if(nbttagcompound.hasKey("currentDisadvantage")) {currentDisadvantage = nbttagcompound.getString("currentDisadvantage");}
-		checkPotionValues();
+		checkWorldData();
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		checkPotionValues();
+		checkWorldData();
 		nbttagcompound.setIntArray("values", potionValues);
 		nbttagcompound.setIntArray("durations", potionDurations);
 		nbttagcompound.setString("currentDisadvantage", currentDisadvantage);
 	}
 	
-	public void checkPotionValues() {
+	public void checkWorldData() {
 		if(potionValues == null) {
 			potionValues = new int[12];
 			
@@ -85,7 +85,5 @@ public class FyresWorldData extends WorldSavedData {
 		}
 		
 		if(changeDisadvantage) {currentDisadvantage = validDisadvantages[ModjamMod.r.nextInt(validDisadvantages.length)];}
-	
-		System.out.println(changeDisadvantage);
 	}
 }

@@ -21,6 +21,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -165,19 +166,27 @@ public class ItemStatHelper implements ICraftingHandler {
 				}
 			}
 			
+			float damageMultiplier = 1.0F;
+			
 			if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
 				String blessing = event.source.getEntity().getEntityData().getString("Blessing");
 				
 				if(blessing.equals("Warrior") && (event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob"))) {
-					event.ammount *= 1.25F;
+					damageMultiplier += 0.25F;
 				} else if(blessing.equals("Hunter") && event.source.isProjectile()) {
-					event.ammount *= 1.25F;
+					damageMultiplier += 0.25F;
 				} else if(event.entityLiving != null && blessing.equals("Ninja") && event.source.getEntity().isSneaking() && event.entityLiving.func_110143_aJ() == event.entityLiving.func_110138_aP()) {
-					event.ammount *= 2.0F;
+					damageMultiplier += 1.0F;
 				} else if(blessing.equals("Swamp") && event.entityLiving != null) {
 					event.entityLiving.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1, false));
 				}
 			}
+			
+			if(FyresWorldData.currentDisadvantage.equals("Weak") || (FyresWorldData.currentDisadvantage.equals("Tougher Mobs") && event.entity instanceof EntityMob)) {
+				damageMultiplier -= 0.25F;
+			}
+			
+			event.ammount *= damageMultiplier;
 		}
 	}
 	
