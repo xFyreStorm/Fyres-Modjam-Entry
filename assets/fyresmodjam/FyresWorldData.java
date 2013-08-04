@@ -163,5 +163,7 @@ public class FyresWorldData extends WorldSavedData {
 			currentTaskID = validItems[ModjamMod.r.nextInt(validItems.length)];
 			currentTaskAmount = 5 + ModjamMod.r.nextInt(28);
 		}
+		
+		markDirty();
 	}
 }
