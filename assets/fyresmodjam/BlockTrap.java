@@ -10,6 +10,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -134,11 +135,11 @@ public class BlockTrap extends BlockContainer
     	if(player != null && Minecraft.getMinecraft().objectMouseOver != null) {
     		MovingObjectPosition mouse = Minecraft.getMinecraft().objectMouseOver;
     		
-    		double xDiff = mouse.blockX + 0.5D - player.posX;
-			double yDiff = mouse.blockY + 0.5D - player.posY;
-			double zDiff = mouse.blockZ + 0.5D - player.posZ;
+    		double xDiff = (double) mouse.blockX + 0.5D - TileEntityRenderer.instance.playerX;
+			double yDiff = (double) mouse.blockY + 0.5D - TileEntityRenderer.instance.playerY;
+			double zDiff = (double) mouse.blockZ + 0.5D - TileEntityRenderer.instance.playerZ;
 			
-			b2 = (xDiff * xDiff + yDiff * yDiff + zDiff * zDiff) < ((player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")) ? 16.0F : 36.0F);
+			b2 = xDiff * xDiff + yDiff * yDiff + zDiff * zDiff < ((player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")) ? 16.0F : 36.0F);
 		}
     	
     	return b2 && (player == null ? false : (player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout"))));
