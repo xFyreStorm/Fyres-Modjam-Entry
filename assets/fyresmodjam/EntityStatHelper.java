@@ -139,6 +139,20 @@ public class EntityStatHelper {
 				}
 			}
 		}
+		
+		if(entity instanceof EntityLiving) {
+			String entityName = ((EntityLiving) entity).hasCustomNameTag() ? ((EntityLiving) entity).getCustomNameTag() : null;
+			
+			System.out.println(entityName);
+			
+			if(FyresWorldData.currentDisadvantage.equals("Illiterate")) {
+				if((entityName == null || !entityName.startsWith("\u00A7k"))) {
+					setName((EntityLiving) entity, "\u00A7k" + (entityName == null ? entity.getEntityName() : entityName));
+				}
+			} else if(entityName != null && entityName.startsWith("\u00A7k")) {
+				setName((EntityLiving) entity, entityName.replace("\u00A7k", ""));
+			}
+		}
 	}
 	
 	public void register() {
