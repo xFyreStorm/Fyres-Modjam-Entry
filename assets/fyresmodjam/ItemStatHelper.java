@@ -156,69 +156,71 @@ public class ItemStatHelper {
 			
 			ItemStack stack = event.item.getDataWatcher().getWatchableObjectItemStack(10);
 			
-			if(FyresWorldData.currentTask.equals("Collect") && stack.getItem().itemID == FyresWorldData.currentTaskID) {
-				FyresWorldData.progress += stack.stackSize;
+			if(CommonTickHandler.worldData.currentTask.equals("Collect") && stack.getItem().itemID == CommonTickHandler.worldData.currentTaskID) {
+				CommonTickHandler.worldData.progress += stack.stackSize;
 				
-				if(FyresWorldData.progress > FyresWorldData.currentTaskAmount) {
-					FyresWorldData.progress = 0;
-					FyresWorldData.tasksCompleted++;
+				if(CommonTickHandler.worldData.progress > CommonTickHandler.worldData.currentTaskAmount) {
+					CommonTickHandler.worldData.progress = 0;
+					CommonTickHandler.worldData.tasksCompleted++;
 					
-					FyresWorldData.giveNewTask();
+					CommonTickHandler.worldData.giveNewTask();
 					
-					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!" + (!FyresWorldData.currentDisadvantage.equals("None") ? " World disadvantage has been lifted!": "")}));
-					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA new world goal has been set: " + (FyresWorldData.currentTask + " " + FyresWorldData.currentTaskAmount + " " + (FyresWorldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[FyresWorldData.currentTaskID] : new ItemStack(Item.itemsList[FyresWorldData.currentTaskID], 1).getDisplayName()) + "s. (" + FyresWorldData.progress + " " + FyresWorldData.currentTask + "ed)")}));
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!" + (!CommonTickHandler.worldData.currentDisadvantage.equals("None") ? " World disadvantage has been lifted!": "")}));
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA new world goal has been set: " + (CommonTickHandler.worldData.currentTask + " " + CommonTickHandler.worldData.currentTaskAmount + " " + (CommonTickHandler.worldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[CommonTickHandler.worldData.currentTaskID] : new ItemStack(Item.itemsList[CommonTickHandler.worldData.currentTaskID], 1).getDisplayName()) + "s. (" + CommonTickHandler.worldData.progress + " " + CommonTickHandler.worldData.currentTask + "ed)")}));
 					
-					FyresWorldData.currentDisadvantage = "None";
+					CommonTickHandler.worldData.currentDisadvantage = "None";
 				}
 				
-				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {FyresWorldData.potionValues, FyresWorldData.potionDurations, FyresWorldData.currentDisadvantage, FyresWorldData.currentTask, FyresWorldData.currentTaskID, FyresWorldData.currentTaskAmount, FyresWorldData.progress, FyresWorldData.tasksCompleted}));
+				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted}));
 			}
 		}
 	}
 	
 	@ForgeSubscribe
 	public void livingHurt(LivingHurtEvent event) {
-		if(event.source != null && event.source.getEntity() != null) {
-			if(event.source.getEntity() instanceof EntityLivingBase) {
-				EntityLivingBase entity = (EntityLivingBase) event.source.getEntity();
-				
-				ItemStack held = entity.getCurrentItemOrArmor(0);
-				
-				if(held != null && (event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob") || (held.getItem().itemID == Item.bow.itemID && event.source.isProjectile()))) {
-					String s = getStat(held, "BonusDamage");
-					if(s != null) {event.ammount += Integer.parseInt(s);}
+		if(!event.entity.worldObj.isRemote) {
+			if(event.source != null && event.source.getEntity() != null) {
+				if(event.source.getEntity() instanceof EntityLivingBase) {
+					EntityLivingBase entity = (EntityLivingBase) event.source.getEntity();
+					
+					ItemStack held = entity.getCurrentItemOrArmor(0);
+					
+					if(held != null && (event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob") || (held.getItem().itemID == Item.bow.itemID && event.source.isProjectile()))) {
+						String s = getStat(held, "BonusDamage");
+						if(s != null) {event.ammount += Integer.parseInt(s);}
+					}
 				}
-			}
-			
-			float damageMultiplier = 1.0F;
-			
-			if(FyresWorldData.currentDisadvantage.equals("Weak") || (FyresWorldData.currentDisadvantage.equals("Tougher Mobs") && event.entity instanceof EntityMob)) {
-				damageMultiplier -= 0.25F;
-			}
-			
-			if(event.entity.getEntityData().hasKey("Blessing")) {
-				if(event.entity.getEntityData().getString("Blessing").equals("Guardian")) {
+				
+				float damageMultiplier = 1.0F;
+				
+				if(CommonTickHandler.worldData.currentDisadvantage.equals("Weak") || (CommonTickHandler.worldData.currentDisadvantage.equals("Tougher Mobs") && event.entity instanceof EntityMob)) {
 					damageMultiplier -= 0.25F;
 				}
-			}
-			
-			if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
-				String blessing = event.source.getEntity().getEntityData().getString("Blessing");
 				
-				if(blessing.equals("Warrior") && (event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob"))) {
-					damageMultiplier += 0.25F;
-				} else if(blessing.equals("Hunter") && event.source.isProjectile()) {
-					damageMultiplier += 0.25F;
-				} else if(event.entityLiving != null && blessing.equals("Ninja") && event.source.getEntity().isSneaking() && event.entityLiving.func_110143_aJ() == event.entityLiving.func_110138_aP()) {
-					damageMultiplier += 1.0F;
-				} else if(blessing.equals("Swamp") && event.entityLiving != null) {
-					event.entityLiving.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1, false));
-				} else if(blessing.equals("Vampire") && event.source.getEntity() instanceof EntityLivingBase) {
-					((EntityLivingBase) event.source.getEntity()).heal(event.ammount * damageMultiplier * 0.1F);
+				if(event.entity.getEntityData().hasKey("Blessing")) {
+					if(event.entity.getEntityData().getString("Blessing").equals("Guardian")) {
+						damageMultiplier -= 0.25F;
+					}
 				}
+				
+				if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
+					String blessing = event.source.getEntity().getEntityData().getString("Blessing");
+					
+					if(blessing.equals("Warrior") && (event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob"))) {
+						damageMultiplier += 0.25F;
+					} else if(blessing.equals("Hunter") && event.source.isProjectile()) {
+						damageMultiplier += 0.25F;
+					} else if(event.entityLiving != null && blessing.equals("Ninja") && event.source.getEntity().isSneaking() && event.entityLiving.func_110143_aJ() == event.entityLiving.func_110138_aP()) {
+						damageMultiplier += 1.0F;
+					} else if(blessing.equals("Swamp") && event.entityLiving != null) {
+						event.entityLiving.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1, false));
+					} else if(blessing.equals("Vampire") && event.source.getEntity() instanceof EntityLivingBase) {
+						((EntityLivingBase) event.source.getEntity()).heal(event.ammount * damageMultiplier * 0.1F);
+					}
+				}
+				
+				event.ammount *= damageMultiplier;
 			}
-			
-			event.ammount *= damageMultiplier;
 		}
 	}
 	

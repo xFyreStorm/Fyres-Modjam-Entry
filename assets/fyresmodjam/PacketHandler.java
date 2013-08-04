@@ -26,6 +26,17 @@ public class PacketHandler implements IPacketHandler {
 	//Packet types
 	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3, SEND_MESSAGE = 4, UPDATE_WORLD_DATA = 5, UPDATE_PLAYER_ITEMS = 6, DISARM_TRAP = 7;
 	
+	public static int[] potionValues = null;
+	public static int[] potionDurations = null;
+	
+	public static String currentDisadvantage = null;
+	
+	public static String currentTask = null;
+	public static int currentTaskID = -1;
+	public static int currentTaskAmount = 0;
+	public static int progress = 0;
+	public static int tasksCompleted = 0;
+	
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player playerEntity) {
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
 
@@ -83,7 +94,7 @@ public class PacketHandler implements IPacketHandler {
 							} else {
 								player.attackEntityFrom(DamageSource.cactus, 1.0F);
 								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7c\u00A7oYou failed to disarm the trap."}), (Player) player);
-								if(FyresWorldData.currentDisadvantage.equals("Explosive Traps")) {player.worldObj.setBlockToAir(blockX, blockY, blockZ); player.worldObj.createExplosion(null, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, 1.33F, true);}
+								if(CommonTickHandler.worldData.currentDisadvantage.equals("Explosive Traps")) {player.worldObj.setBlockToAir(blockX, blockY, blockZ); player.worldObj.createExplosion(null, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, 1.33F, true);}
 							}
 							
 							return;
@@ -93,14 +104,14 @@ public class PacketHandler implements IPacketHandler {
 				} else if (side == Side.CLIENT) {
 					EntityPlayer player = (EntityPlayer) playerEntity;
 					
-					if(FyresWorldData.potionValues == null) {FyresWorldData.potionValues = new int[12];}
-					if(FyresWorldData.potionDurations == null) {FyresWorldData.potionDurations = new int[12];}
+					if(potionValues == null) {potionValues = new int[12];}
+					if(potionDurations == null) {potionDurations = new int[12];}
 					
 					switch(type) {
 						case UPDATE_BLESSING: player.getEntityData().setString("Blessing", inputStream.readUTF()); return;
 						case UPDATE_POTION_KNOWLEDGE: int[] potionKnowledge = new int[12]; for(int i = 0; i < 12; i++) {potionKnowledge[i] = inputStream.readInt();} player.getEntityData().setIntArray("PotionKnowledge", potionKnowledge); return;
 						case SEND_MESSAGE: Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(inputStream.readUTF()); return;
-						case UPDATE_WORLD_DATA: for(int i = 0; i < 12; i++) {FyresWorldData.potionValues[i] = inputStream.readInt();} for(int i = 0; i < 12; i++) {FyresWorldData.potionDurations[i] = inputStream.readInt();} FyresWorldData.currentDisadvantage = inputStream.readUTF(); FyresWorldData.currentTask = inputStream.readUTF(); FyresWorldData.currentTaskID = inputStream.readInt(); FyresWorldData.currentTaskAmount = inputStream.readInt(); FyresWorldData.progress = inputStream.readInt(); FyresWorldData.tasksCompleted = inputStream.readInt(); return;
+						case UPDATE_WORLD_DATA: for(int i = 0; i < 12; i++) {potionValues[i] = inputStream.readInt();} for(int i = 0; i < 12; i++) {potionDurations[i] = inputStream.readInt();} currentDisadvantage = inputStream.readUTF(); currentTask = inputStream.readUTF(); currentTaskID = inputStream.readInt(); currentTaskAmount = inputStream.readInt(); progress = inputStream.readInt(); tasksCompleted = inputStream.readInt(); return;
 						default: return;
 					}
 				}

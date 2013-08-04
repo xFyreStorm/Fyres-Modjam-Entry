@@ -26,8 +26,8 @@ public class CommandCurrentWorldTask implements ICommand {
 		if(icommandsender instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer) icommandsender;
 			
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eWorld goal: " + FyresWorldData.currentTask + " " + FyresWorldData.currentTaskAmount + " " + (FyresWorldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[FyresWorldData.currentTaskID] : new ItemStack(Item.itemsList[FyresWorldData.currentTaskID], 1).getDisplayName()) + (FyresWorldData.currentTaskAmount > 1 ? "s" : "") + ". (" + FyresWorldData.progress + " " + FyresWorldData.currentTask + "ed)"}), (Player) entityplayer);
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eGoals completed: " + FyresWorldData.tasksCompleted}), (Player) entityplayer);
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eWorld goal: " + CommonTickHandler.worldData.currentTask + " " + CommonTickHandler.worldData.currentTaskAmount + " " + (CommonTickHandler.worldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[CommonTickHandler.worldData.currentTaskID] : new ItemStack(Item.itemsList[CommonTickHandler.worldData.currentTaskID], 1).getDisplayName()) + (CommonTickHandler.worldData.currentTaskAmount > 1 ? "s" : "") + ". (" + CommonTickHandler.worldData.progress + " " + CommonTickHandler.worldData.currentTask + "ed)"}), (Player) entityplayer);
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eGoals completed: " + CommonTickHandler.worldData.tasksCompleted}), (Player) entityplayer);
 		}
 	}
 

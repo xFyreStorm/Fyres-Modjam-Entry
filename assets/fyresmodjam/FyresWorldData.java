@@ -44,13 +44,6 @@ public class FyresWorldData extends WorldSavedData {
 
 	public FyresWorldData() {
 		super(key);
-		
-		potionValues = null;
-		potionDurations = null;
-		currentDisadvantage = null;
-		currentTask = null;
-		
-		checkWorldData();
 	}
 
 	public FyresWorldData(String key) {
@@ -58,9 +51,12 @@ public class FyresWorldData extends WorldSavedData {
 	}
 
 	public static FyresWorldData forWorld(World world) {
+		
 		MapStorage storage = world.perWorldStorage;
 		FyresWorldData result = (FyresWorldData) storage.loadData(FyresWorldData.class, key);
-		if (result == null) {result = new FyresWorldData(); storage.setData(key, result); }
+		
+		if(result == null) {result = new FyresWorldData(); storage.setData(key, result);}
+		
 		return result;
 	}
 
@@ -150,7 +146,7 @@ public class FyresWorldData extends WorldSavedData {
 			giveNewTask();
 		} else {
 			boolean changeTask = true;
-			for(String s : validTasks) {if(s.equals(validTasks)) {changeTask = false; break;}}
+			for(String s : validTasks) {if(s.equals(currentTask)) {changeTask = false; break;}}
 			if(changeTask) {giveNewTask();} else {if(currentTask.equals("Kill")) {currentTaskID %= validMobs.length;}}
 		}
 	}
