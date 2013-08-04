@@ -14,8 +14,8 @@ import net.minecraft.world.storage.MapStorage;
 
 public class FyresWorldData extends WorldSavedData {
 
-	public static String[] validDisadvantages = {"Illiterate", "Tougher Mobs", "Weak"};
-	public static String[] disadvantageDescriptions = {"Item names are unreadable", "-25% damage to hostile enemies", "-25% melee damage"};
+	public static String[] validDisadvantages = {/*"Illiterate",*/ "Tougher Mobs", "Weak"};
+	public static String[] disadvantageDescriptions = {/*"Item names are unreadable",*/ "-25% damage to hostile enemies", "-25% melee damage"};
 	
 	public static String key = "FyresWorldData";
 	
@@ -57,7 +57,7 @@ public class FyresWorldData extends WorldSavedData {
 		nbttagcompound.setString("currentDisadvantage", currentDisadvantage);
 	}
 	
-	public void checkWorldData() {
+	private void checkWorldData() {
 		if(potionValues == null) {
 			potionValues = new int[12];
 			
@@ -85,7 +85,6 @@ public class FyresWorldData extends WorldSavedData {
 		for(int i = 0; i < 12; i++) {if(potionDurations[i] != 0) {continue;} potionDurations[i] = 5 + ModjamMod.r.nextInt(26);}
 		
 		boolean changeDisadvantage = currentDisadvantage == null;
-		changeDisadvantage = true;
 		
 		if(!changeDisadvantage) {
 			boolean valid = false;
@@ -96,7 +95,7 @@ public class FyresWorldData extends WorldSavedData {
 		if(changeDisadvantage) {
 			currentDisadvantage = validDisadvantages[ModjamMod.r.nextInt(validDisadvantages.length)];
 			
-			MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+			/*MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 			
 			for(int i = 0; i < server.worldServers.length; i++) {
 				WorldServer s = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers[i];
@@ -107,7 +106,7 @@ public class FyresWorldData extends WorldSavedData {
 					if(o == null || o instanceof EntityPlayer) {continue;}
 					EntityStatHelper.processEntity((Entity) o, ModjamMod.r);
 				}
-			}
+			}*/
 		}
 	}
 }

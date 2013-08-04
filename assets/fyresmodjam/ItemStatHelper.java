@@ -109,9 +109,7 @@ public class ItemStatHelper implements ICraftingHandler {
 		if(!stack.getTagCompound().hasKey("display")) {stack.getTagCompound().setTag("display", new NBTTagCompound());}
 		stack.getTagCompound().getCompoundTag("display").setString("Name", name);
 		
-		if(getName(stack).equals(StatCollector.translateToLocal(stack.getItemName()))) {
-			stack.getTagCompound().getCompoundTag("display").removeTag("Name");
-		}
+		//if(getName(stack).equals(StatCollector.translateToLocal(stack.getItemName()))) {stack.getTagCompound().getCompoundTag("display").removeTag("Name");}
 		
 		return stack;
 	}
@@ -201,8 +199,6 @@ public class ItemStatHelper implements ICraftingHandler {
 	public static void processItemStack(ItemStack stack, Random r) {
 		if(stack == null) {return;}
 		
-		CommonTickHandler.worldData.checkWorldData();
-		
 		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
 		
 		String processed = ItemStatHelper.getStat(stack, "processed");
@@ -238,12 +234,12 @@ public class ItemStatHelper implements ICraftingHandler {
 			}
 		}
 		
-		String stackName = getName(stack);
+		/*String stackName = getName(stack);
 		if(FyresWorldData.currentDisadvantage.equals("Illiterate")) {
 			if((stackName == null || !stackName.startsWith("\u00A7k"))) {
 				setName(stack, "\u00A7k" + (stackName == null ? stack.getDisplayName() : stackName));
 			}
-		}/* else if(stackName != null && stackName.startsWith("\u00A7k")) {
+		} else if(stackName != null && stackName.startsWith("\u00A7k")) {
 			setName(stack, stackName.replace("\u00A7k", ""));
 		}*/
 	}

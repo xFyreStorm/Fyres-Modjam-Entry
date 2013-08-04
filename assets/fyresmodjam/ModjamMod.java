@@ -226,7 +226,6 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	@Override
 	public void onPlayerLogin(EntityPlayer player) {
 		if(!player.worldObj.isRemote) {
-			CommonTickHandler.worldData.checkWorldData();
 			if(player.getEntityData().hasKey("Blessing")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_BLESSING, new Object[] {player.getEntityData().getString("Blessing")}), (Player) player);}
 			if(player.getEntityData().hasKey("PotionKnowledge")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {player.getEntityData().getIntArray("PotionKnowledge")}), (Player) player);}
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {FyresWorldData.potionValues, FyresWorldData.potionDurations, FyresWorldData.currentDisadvantage}), (Player) player);

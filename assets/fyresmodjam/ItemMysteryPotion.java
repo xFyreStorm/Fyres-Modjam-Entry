@@ -72,7 +72,7 @@ public class ItemMysteryPotion extends Item {
 			name = "Wildcard Potion";
 		}
 		
-		if((blessing != null && blessing.equals("Alchemist")) || FyresWorldData.currentDisadvantage.equals("Illiterate")) {name = "\u00A7k" + name;}
+		if((blessing != null && blessing.equals("Alchemist")) /*|| FyresWorldData.currentDisadvantage.equals("Illiterate")*/) {name = "\u00A7k" + name;}
 		
         return name;
     }
