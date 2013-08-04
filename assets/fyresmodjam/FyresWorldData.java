@@ -14,8 +14,8 @@ import net.minecraft.world.storage.MapStorage;
 
 public class FyresWorldData extends WorldSavedData {
 
-	public static String[] validDisadvantages = {/*"Illiterate",*/ "Tougher Mobs", "Weak"};
-	public static String[] disadvantageDescriptions = {/*"Item names are unreadable",*/ "-25% damage to hostile enemies", "-25% melee damage"};
+	public static String[] validDisadvantages = {/*"Illiterate",*/ "Tougher Mobs", "Weak", "Tougher Mobs", "Weak"};
+	public static String[] disadvantageDescriptions = {/*"Item names are unreadable",*/ "-25% damage to hostile enemies", "-25% melee damage", "-25% damage to hostile enemies", "-25% melee damage"};
 	
 	public static String key = "FyresWorldData";
 	

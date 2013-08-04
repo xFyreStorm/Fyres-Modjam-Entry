@@ -44,7 +44,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 
-public class ItemStatHelper implements ICraftingHandler {
+public class ItemStatHelper {
 	
 	//There's probably a better way of doing all of this. :P Oh well.
 	
@@ -245,7 +245,7 @@ public class ItemStatHelper implements ICraftingHandler {
 		}*/
 	}
 
-	@Override
+	/*@Override
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
 		if(player != null && !player.worldObj.isRemote) {
 			processItemStack(item, ModjamMod.r);
@@ -261,10 +261,10 @@ public class ItemStatHelper implements ICraftingHandler {
 			processItemStack(item, ModjamMod.r);
 			((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
 		}
-	}
+	}*/
 	
 	public void register() {
 		MinecraftForge.EVENT_BUS.register(this);
-		GameRegistry.registerCraftingHandler(this);
+		//GameRegistry.registerCraftingHandler(this);
 	}
 }
