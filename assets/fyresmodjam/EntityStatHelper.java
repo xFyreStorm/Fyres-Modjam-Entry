@@ -163,23 +163,43 @@ public class EntityStatHelper {
 	
 	@ForgeSubscribe
 	public void livingDeath(LivingDeathEvent event) {
-		if(!event.entity.worldObj.isRemote && event.entity.worldObj.getGameRules().getGameRuleBooleanValue("doMobLoot")) {
-			
-			if(event.entity instanceof EntityLivingBase && event.source != null && event.source.getEntity() != null) {
-				if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
-					String blessing = event.source.getEntity().getEntityData().getString("Blessing");
-					
-					if(blessing.equals("Thief") && ModjamMod.r.nextInt(10) == 0) {
-						if(!event.entity.worldObj.isRemote) {event.entity.dropItem(Item.goldNugget.itemID, 1);}
-						event.entity.worldObj.playSoundAtEntity(event.entity, "fyresmodjam:coin", 1.0F, 1.0F);
+		if(!event.entity.worldObj.isRemote) {
+			if(event.entity.worldObj.getGameRules().getGameRuleBooleanValue("doMobLoot")) {
+				
+				if(event.entity instanceof EntityLivingBase && event.source != null && event.source.getEntity() != null) {
+					if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
+						String blessing = event.source.getEntity().getEntityData().getString("Blessing");
+						
+						if(blessing.equals("Thief") && ModjamMod.r.nextInt(10) == 0) {
+							if(!event.entity.worldObj.isRemote) {event.entity.dropItem(Item.goldNugget.itemID, 1);}
+							event.entity.worldObj.playSoundAtEntity(event.entity, "fyresmodjam:coin", 1.0F, 1.0F);
+						}
 					}
 				}
+				
+				int level = 0;
+				if(event.entity.getEntityData().hasKey("Level")) {level = Integer.parseInt(event.entity.getEntityData().getString("Level"));}
+				if(ModjamMod.r.nextInt(10) == 0 || level == 5) {event.entity.entityDropItem(new ItemStack(ModjamMod.mysteryPotion.itemID, 1, ModjamMod.r.nextInt(13)), event.entity.height/2);}
+			
 			}
 			
-			int level = 0;
-			if(event.entity.getEntityData().hasKey("Level")) {level = Integer.parseInt(event.entity.getEntityData().getString("Level"));}
-			if(ModjamMod.r.nextInt(10) == 0 || level == 5) {event.entity.entityDropItem(new ItemStack(ModjamMod.mysteryPotion.itemID, 1, ModjamMod.r.nextInt(13)), event.entity.height/2);}
-		
+			if(CommonTickHandler.worldData.currentTask.equals("Kill") && CommonTickHandler.worldData.validMobs[CommonTickHandler.worldData.currentTaskID].isAssignableFrom(event.entity.getClass())) {
+				CommonTickHandler.worldData.progress++;
+				
+				if(CommonTickHandler.worldData.progress >= CommonTickHandler.worldData.currentTaskAmount) {
+					CommonTickHandler.worldData.progress = 0;
+					CommonTickHandler.worldData.tasksCompleted++;
+					
+					CommonTickHandler.worldData.giveNewTask();
+					
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!" + (!CommonTickHandler.worldData.currentDisadvantage.equals("None") ? " World disadvantage has been lifted!": "")}));
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA new world goal has been set: " + (CommonTickHandler.worldData.currentTask + " " + CommonTickHandler.worldData.currentTaskAmount + " " + (CommonTickHandler.worldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[CommonTickHandler.worldData.currentTaskID] : new ItemStack(Item.itemsList[CommonTickHandler.worldData.currentTaskID], 1).getDisplayName()) + "s. (" + CommonTickHandler.worldData.progress + " " + CommonTickHandler.worldData.currentTask + "ed)")}));
+					
+					CommonTickHandler.worldData.currentDisadvantage = "None";
+				}
+				
+				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted}));
+			}
 		}
 	}
 }

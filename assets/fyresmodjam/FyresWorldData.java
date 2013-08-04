@@ -55,7 +55,7 @@ public class FyresWorldData extends WorldSavedData {
 		MapStorage storage = world.perWorldStorage;
 		FyresWorldData result = (FyresWorldData) storage.loadData(FyresWorldData.class, key);
 		
-		if(result == null) {result = new FyresWorldData(); storage.setData(key, result);}
+		if(result == null) {result = new FyresWorldData(); storage.setData(key, result); result.checkWorldData();}
 		
 		return result;
 	}

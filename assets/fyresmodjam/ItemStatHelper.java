@@ -159,7 +159,7 @@ public class ItemStatHelper {
 			if(CommonTickHandler.worldData.currentTask.equals("Collect") && stack.getItem().itemID == CommonTickHandler.worldData.currentTaskID) {
 				CommonTickHandler.worldData.progress += stack.stackSize;
 				
-				if(CommonTickHandler.worldData.progress > CommonTickHandler.worldData.currentTaskAmount) {
+				if(CommonTickHandler.worldData.progress >= CommonTickHandler.worldData.currentTaskAmount) {
 					CommonTickHandler.worldData.progress = 0;
 					CommonTickHandler.worldData.tasksCompleted++;
 					
