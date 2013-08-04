@@ -111,7 +111,20 @@ public class PacketHandler implements IPacketHandler {
 						case UPDATE_BLESSING: player.getEntityData().setString("Blessing", inputStream.readUTF()); return;
 						case UPDATE_POTION_KNOWLEDGE: int[] potionKnowledge = new int[12]; for(int i = 0; i < 12; i++) {potionKnowledge[i] = inputStream.readInt();} player.getEntityData().setIntArray("PotionKnowledge", potionKnowledge); return;
 						case SEND_MESSAGE: Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(inputStream.readUTF()); return;
-						case UPDATE_WORLD_DATA: for(int i = 0; i < 12; i++) {potionValues[i] = inputStream.readInt();} for(int i = 0; i < 12; i++) {potionDurations[i] = inputStream.readInt();} currentDisadvantage = inputStream.readUTF(); currentTask = inputStream.readUTF(); currentTaskID = inputStream.readInt(); currentTaskAmount = inputStream.readInt(); progress = inputStream.readInt(); tasksCompleted = inputStream.readInt(); return;
+						
+						case UPDATE_WORLD_DATA: 
+							
+							for(int i = 0; i < 12; i++) {potionValues[i] = inputStream.readInt();} 
+							for(int i = 0; i < 12; i++) {potionDurations[i] = inputStream.readInt();} 
+							currentDisadvantage = inputStream.readUTF(); 
+							currentTask = inputStream.readUTF(); 
+							currentTaskID = inputStream.readInt(); 
+							currentTaskAmount = inputStream.readInt(); 
+							progress = inputStream.readInt(); 
+							tasksCompleted = inputStream.readInt();
+							
+							return;
+						
 						default: return;
 					}
 				}
