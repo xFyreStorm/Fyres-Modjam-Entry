@@ -27,6 +27,11 @@ public class FyresWorldData extends WorldSavedData {
 	public FyresWorldData() {
 		super(key);
 		
+		potionValues = null;
+		potionDurations = null;
+		
+		currentDisadvantage = null;
+		
 		checkWorldData();
 	}
 

@@ -13,8 +13,13 @@ More disadvantages
 
 Done:
 
-Traps (Can only be seen within 6 block radius while crouching, does damage to players and hostile mobs that touch it, has small chance to poison, can be disarmed by right clicking)
+Traps (Can only be seen within 6 block radius while crouching, does damage to players and hostile mobs that touch it, has small chance to poison, can be disarmed by right clicking, if disarm fails, you take half a heart damage)
 Can disable traps in the properties file
+
+Trap types:
+    
+    Spike Trap - Does 1 heart of damage while touching, 1% chance to poison
+    Flame Trap - Sets on fire for 5 seconds
 
 Dungeons spawn 13x as often 
 
