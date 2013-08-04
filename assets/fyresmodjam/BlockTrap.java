@@ -63,12 +63,13 @@ public class BlockTrap extends BlockContainer
     
     public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)  {	
     	if(par1World.isRemote && par5EntityPlayer.isSneaking()) {
-    		if((par5EntityPlayer.getEntityData().hasKey("Blessing") && par5EntityPlayer.getEntityData().getString("Blessing").equals("Mechanic")) ? ModjamMod.r.nextInt(4) != 0 : ModjamMod.r.nextInt(4) == 0) {PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.DISARM_TRAP, new Object[] {par2, par3, par4, par5EntityPlayer.getEntityData().hasKey("Blessing") && par5EntityPlayer.getEntityData().getString("Blessing").equals("Mechanic")}));}
-    		else {
+    		//if((par5EntityPlayer.getEntityData().hasKey("Blessing") && par5EntityPlayer.getEntityData().getString("Blessing").equals("Mechanic")) ? ModjamMod.r.nextInt(4) != 0 : ModjamMod.r.nextInt(4) == 0) {
+    			PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.DISARM_TRAP, new Object[] {par2, par3, par4, par5EntityPlayer.getEntityData().hasKey("Blessing") && par5EntityPlayer.getEntityData().getString("Blessing").equals("Mechanic")}));
+    		/*} else {
     			//PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7c\u00A7oYou failed to disarm the trap."}), (Player) par5EntityPlayer);
     			par5EntityPlayer.attackEntityFrom(DamageSource.cactus, 1.0F);
     			Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7c\u00A7oYou failed to disarm the trap.");
-    		}
+    		}*/
     		
     		return false;
     	}
@@ -105,7 +106,7 @@ public class BlockTrap extends BlockContainer
     }
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
-    	if((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob) {
+    	if(!par1World.isRemote && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
     		par5Entity.attackEntityFrom(DamageSource.cactus, 1.0F);
     		if(ModjamMod.r.nextInt(100) == 0) {((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.poison.id, 100, 1));}
     	}

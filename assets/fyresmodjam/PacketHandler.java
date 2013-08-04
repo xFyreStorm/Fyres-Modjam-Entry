@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.DamageSource;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -71,10 +72,19 @@ public class PacketHandler implements IPacketHandler {
 							int blockY = inputStream.readInt();
 							int blockZ = inputStream.readInt();
 							
-							player.worldObj.setBlockToAir(blockX, blockY, blockZ);
-							boolean salvage = ModjamMod.r.nextBoolean() && inputStream.readBoolean();
-							PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7o" + (!salvage ? "You disarmed the trap." : "You disarm and salvage the trap.")}), (Player) player);
-							if(salvage) {player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, blockX + 0.5F, blockY, blockZ + 0.5F, new ItemStack(ModjamMod.blockTrap, 1)));}
+							boolean mechanic = inputStream.readBoolean();
+							
+							if(mechanic ? ModjamMod.r.nextInt(4) != 0 : ModjamMod.r.nextInt(4) == 0) {
+								player.worldObj.setBlockToAir(blockX, blockY, blockZ);
+								boolean salvage = ModjamMod.r.nextBoolean() && mechanic;
+								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7o" + (!salvage ? "You disarmed the trap." : "You disarm and salvage the trap.")}), (Player) player);
+								if(salvage) {player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, blockX + 0.5F, blockY, blockZ + 0.5F, new ItemStack(ModjamMod.blockTrap, 1)));}
+							} else {
+								player.attackEntityFrom(DamageSource.cactus, 1.0F);
+								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7c\u00A7oYou failed to disarm the trap."}), (Player) player);
+								if(FyresWorldData.currentDisadvantage.equals("Explosive Traps")) {player.worldObj.setBlockToAir(blockX, blockY, blockZ); player.worldObj.createExplosion(null, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, 3.0F, true);}
+							}
+							
 							return;
 						
 						default: return;
