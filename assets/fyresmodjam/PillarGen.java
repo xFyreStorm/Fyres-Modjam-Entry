@@ -21,7 +21,7 @@ public class PillarGen implements IWorldGenerator {
         				
         				Block block = ModjamMod.blockPillar;
         		        
-        		        if(block.canPlaceBlockAt(world, x, y + 1, z)) {
+        		        if(block.canPlaceBlockAt(world, x, y + 1, z)) { 
         		        	world.setBlock(x, y + 1, z, block.blockID, 0, 0);
         		            
         		        	world.setBlock(x, y + 2, z, block.blockID, 1, 0);
