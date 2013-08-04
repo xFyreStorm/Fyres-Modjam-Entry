@@ -134,13 +134,13 @@ public class BlockTrap extends BlockContainer
     	if(player != null && Minecraft.getMinecraft().objectMouseOver != null) {
     		MovingObjectPosition mouse = Minecraft.getMinecraft().objectMouseOver;
     		
-    		double xDiff = mouse.blockX + 0.5F - player.posX;
-			double yDiff = mouse.blockY + 0.5F - player.posY;
-			double zDiff = mouse.blockZ + 0.5F - player.posZ;
+    		double xDiff = mouse.blockX + 0.5D - player.posX;
+			double yDiff = mouse.blockY + 0.5D - player.posY;
+			double zDiff = mouse.blockZ + 0.5D - player.posZ;
 			
-			b2 = xDiff * xDiff + yDiff * yDiff + zDiff * zDiff < ((player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")) ? 16.0F : 36.0F);
+			b2 = (xDiff * xDiff + yDiff * yDiff + zDiff * zDiff) < ((player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")) ? 16.0F : 36.0F);
 		}
     	
-    	return player == null ? false : (player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")));
+    	return b2 && (player == null ? false : (player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout"))));
     }
 }
