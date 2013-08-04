@@ -41,6 +41,11 @@ public class BlockTrap extends BlockContainer
         super(par1, Material.circuits);
         this.setLightOpacity(0);
     }
+    
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister par1IconRegister) {
+        this.blockIcon = par1IconRegister.registerIcon("fyresmodjam:spikes2");
+    }
 
     public int idDropped(int par1, Random par2Random, int par3) {
         return 0;
@@ -148,10 +153,10 @@ public class BlockTrap extends BlockContainer
         return par1 % trapTypes;
     }
 
-    /*@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {
-        for (int i = 0; i < trapTypes; i++) {par3List.add(new ItemStack(par1, 1, i));}
-    }*/
+        for(int i = 0; i < trapTypes; i++) {par3List.add(new ItemStack(par1, 1, i));}
+    }
     
     public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
     	super.onBlockPlacedBy(par1World, par2, par3, par4, par5EntityLivingBase, par6ItemStack);
