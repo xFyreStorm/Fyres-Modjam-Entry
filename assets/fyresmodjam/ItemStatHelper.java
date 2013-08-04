@@ -163,7 +163,7 @@ public class ItemStatHelper {
 					FyresWorldData.progress = 0;
 					FyresWorldData.tasksCompleted++;
 					
-					CommonTickHandler.worldData.giveNewTask();
+					FyresWorldData.giveNewTask();
 					
 					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!" + (!FyresWorldData.currentDisadvantage.equals("None") ? " World disadvantage has been lifted!": "")}));
 					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA new world goal has been set: " + (FyresWorldData.currentTask + " " + FyresWorldData.currentTaskAmount + " " + (FyresWorldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[FyresWorldData.currentTaskID] : new ItemStack(Item.itemsList[FyresWorldData.currentTaskID], 1).getDisplayName()) + "s. (" + FyresWorldData.progress + " " + FyresWorldData.currentTask + "ed)")}));

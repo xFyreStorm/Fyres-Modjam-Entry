@@ -48,11 +48,17 @@ public class TileEntityTrapRenderer extends TileEntitySpecialRenderer {
 		if(active) {
 	        GL11.glPushMatrix();
 	        
+	        GL11.glEnable(GL11.GL_BLEND);
+	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	        
 	        GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 	        GL11.glTranslatef(0.5F, -1.5F, -0.5F);
 	        
 	        this.tileEntityRenderer.renderEngine.func_110577_a(textures[type % BlockTrap.trapTypes]);
 	        this.models[type % BlockTrap.trapTypes].render((Entity) null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+	        
+	        GL11.glDisable(GL11.GL_BLEND);
+	        
 	        GL11.glPopMatrix();
 		}
     }

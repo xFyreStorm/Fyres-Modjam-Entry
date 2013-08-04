@@ -153,7 +153,7 @@ public class FyresWorldData extends WorldSavedData {
 		}
 	}
 
-	public void giveNewTask() {
+	public static void giveNewTask() {
 		progress = 0;
 		
 		currentTask = validTasks[ModjamMod.r.nextInt(validTasks.length)];
