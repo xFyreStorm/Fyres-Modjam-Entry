@@ -89,12 +89,30 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     }
     
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		loadProperties();
+	public void preInit(FMLPreInitializationEvent event) {loadProperties();}
+
+	@EventHandler
+	public void init(FMLInitializationEvent event) {
+		
+		//Registering
 		
 		proxy.register();
 		
-		//Item, Block, and Language loading
+		TickRegistry.registerTickHandler(new CommonTickHandler(), Side.SERVER);
+		
+		MinecraftForge.EVENT_BUS.register(this);
+		GameRegistry.registerPlayerTracker(this);
+		
+		new ItemStatHelper().register();
+		new EntityStatHelper().register();
+		
+		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
+		
+		GameRegistry.registerWorldGenerator(new PillarGen());
+		if(spawnTraps) {GameRegistry.registerWorldGenerator(new WorldGenTraps());}
+		for(int i = 0; i < 3; i++) {GameRegistry.registerWorldGenerator(new WorldGenMoreDungeons());}
+		
+		//Item and Block loading
 		
 		blockPillar = new BlockPillar(blockID).setBlockUnbreakable().setResistance(6000000.0F);
 		blockTrap = new BlockTrap(blockID + 1).setBlockUnbreakable().setResistance(6000000.0F);
@@ -119,35 +137,6 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		LanguageRegistry.instance().addStringLocalization("commands.currentBlessing.usage", "/currentBlessing - used to check your current blessing");
 		LanguageRegistry.instance().addStringLocalization("commands.currentDisadvantage.usage", "/currentDisadvantage - used to check your current world disadvantage");
 		LanguageRegistry.instance().addStringLocalization("commands.currentGoal.usage", "/currentGoal - used to check your current world goal");
-		
-		//Achievements
-		
-		startTheGame = getNewAchievement(achievementID, 0, 0, new ItemStack(Item.swordIron, 1), "startTheGame", "You Will Die", "Join a world with this mod installed", null, true);
-		losingIsFun = getNewAchievement(achievementID + 1, -2, 0, new ItemStack(itemTrap, 1), "losingIsFun", "Losing Is Fun", "Experience \"fun\"", startTheGame, false);
-		whoops = getNewAchievement(achievementID + 2, 2, 0, new ItemStack(itemTrap, 1, 1), "whoops", "Whoops", "Fail to disarm a trap", startTheGame, false);
-		page = new AchievementPage("The \"You Will Die\" Mod", startTheGame, losingIsFun, whoops);
-				
-		AchievementPage.registerAchievementPage(page);
-	}
-
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		
-		//Registering
-		
-		TickRegistry.registerTickHandler(new CommonTickHandler(), Side.SERVER);
-		
-		MinecraftForge.EVENT_BUS.register(this);
-		GameRegistry.registerPlayerTracker(this);
-		
-		new ItemStatHelper().register();
-		new EntityStatHelper().register();
-		
-		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
-		
-		GameRegistry.registerWorldGenerator(new PillarGen());
-		if(spawnTraps) {GameRegistry.registerWorldGenerator(new WorldGenTraps());}
-		for(int i = 0; i < 3; i++) {GameRegistry.registerWorldGenerator(new WorldGenMoreDungeons());}
 		
 		//Entity Trackers
 		
@@ -237,6 +226,15 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		//ItemStatTracker foodTracker = new ItemStatTracker(ItemFood.class, -1);
 		//foodTracker.addStat(new ItemStat("Spoiled", false));
 		//ItemStatHelper.addStatTracker(foodTracker);
+		
+		//Achievements
+		
+		startTheGame = getNewAchievement(achievementID, 0, 0, new ItemStack(Item.swordIron, 1), "startTheGame", "You Will Die", "Join a world with this mod installed", null, true);
+		losingIsFun = getNewAchievement(achievementID + 1, -2, 0, new ItemStack(itemTrap, 1), "losingIsFun", "Losing Is Fun", "Experience \"fun\"", startTheGame, false);
+		whoops = getNewAchievement(achievementID + 2, 2, 0, new ItemStack(itemTrap, 1, 1), "whoops", "Whoops", "Fail to disarm a trap", startTheGame, false);
+		page = new AchievementPage("The \"You Will Die\" Mod", startTheGame, losingIsFun, whoops);
+		
+		AchievementPage.registerAchievementPage(page);
 	}
 	
 	@EventHandler
