@@ -100,7 +100,7 @@ public class PacketHandler implements IPacketHandler {
 						case UPDATE_BLESSING: player.getEntityData().setString("Blessing", inputStream.readUTF()); return;
 						case UPDATE_POTION_KNOWLEDGE: int[] potionKnowledge = new int[12]; for(int i = 0; i < 12; i++) {potionKnowledge[i] = inputStream.readInt();} player.getEntityData().setIntArray("PotionKnowledge", potionKnowledge); return;
 						case SEND_MESSAGE: Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(inputStream.readUTF()); return;
-						case UPDATE_WORLD_DATA: for(int i = 0; i < 12; i++) {FyresWorldData.potionValues[i] = inputStream.readInt();} for(int i = 0; i < 12; i++) {FyresWorldData.potionDurations[i] = inputStream.readInt();} FyresWorldData.currentDisadvantage = inputStream.readUTF(); return;
+						case UPDATE_WORLD_DATA: for(int i = 0; i < 12; i++) {FyresWorldData.potionValues[i] = inputStream.readInt();} for(int i = 0; i < 12; i++) {FyresWorldData.potionDurations[i] = inputStream.readInt();} FyresWorldData.currentDisadvantage = inputStream.readUTF(); FyresWorldData.currentTask = inputStream.readUTF(); FyresWorldData.currentTaskID = inputStream.readInt(); FyresWorldData.currentTaskAmount = inputStream.readInt(); FyresWorldData.progress = inputStream.readInt(); FyresWorldData.tasksCompleted = inputStream.readInt(); return;
 						default: return;
 					}
 				}

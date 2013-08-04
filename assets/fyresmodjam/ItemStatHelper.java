@@ -153,8 +153,18 @@ public class ItemStatHelper {
 	public void itemPickUp(EntityItemPickupEvent event) {
 		if(!event.entityPlayer.worldObj.isRemote) {
 			//processItemStack(event.item.getDataWatcher().getWatchableObjectItemStack(10), ModjamMod.r);
-			if(FyresWorldData.currentTask.equals("Collect") && event.item.getDataWatcher().getWatchableObjectItemStack(10).getItem().itemID == FyresWorldData.currentTaskID) {
+			
+			ItemStack stack = event.item.getDataWatcher().getWatchableObjectItemStack(10);
+			if(FyresWorldData.currentTask.equals("Collect") && stack.getItem().itemID == FyresWorldData.currentTaskID) {
+				FyresWorldData.progress += stack.stackSize;
 				
+				if(FyresWorldData.progress > FyresWorldData.currentTaskAmount) {
+					FyresWorldData.tasksCompleted++;
+					CommonTickHandler.worldData.giveNewTask(); CommonTickHandler.worldData.markDirty();
+					
+					FyresWorldData.currentDisadvantage = "None";
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!"}));
+				}
 			}
 		}
 	}

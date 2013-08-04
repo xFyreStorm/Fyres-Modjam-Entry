@@ -34,6 +34,7 @@ public class FyresWorldData extends WorldSavedData {
 	public static int currentTaskID = -1;
 	public static int currentTaskAmount = 0;
 	public static int progress = 0;
+	public static int tasksCompleted = 0;
 	
 	public static Class[] validMobs = {EntityDragon.class, EntityWither.class};
 	public static String[] validMobNames = {"Ender Dragon", "Wither"};
@@ -73,6 +74,7 @@ public class FyresWorldData extends WorldSavedData {
 		if(nbttagcompound.hasKey("currentTaskID")) {currentTaskID = nbttagcompound.getInteger("currentTaskID");}
 		if(nbttagcompound.hasKey("currentTaskAmount")) {currentTaskAmount = nbttagcompound.getInteger("currentTaskAmount");}
 		if(nbttagcompound.hasKey("progress")) {progress = nbttagcompound.getInteger("progress");}
+		if(nbttagcompound.hasKey("tasksCompleted")) {tasksCompleted = nbttagcompound.getInteger("tasksCompleted");}
 		
 		checkWorldData();
 	} 
@@ -89,6 +91,7 @@ public class FyresWorldData extends WorldSavedData {
 		nbttagcompound.setInteger("currentTaskID", currentTaskID);
 		nbttagcompound.setInteger("currentTaskAmount", currentTaskAmount);
 		nbttagcompound.setInteger("progress", progress);
+		nbttagcompound.setInteger("tasksCompleted", tasksCompleted);
 	}
 	
 	private void checkWorldData() {
