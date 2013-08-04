@@ -111,6 +111,8 @@ public class EntityStatHelper {
 	
 	public static ArrayList<EntityStatTracker> temp = new ArrayList<EntityStatTracker>();
 	
+	public static boolean b = false;
+	
 	public static void processEntity(Entity entity, Random r) {
 		
 		if(entity == null) {return;}
@@ -143,9 +145,7 @@ public class EntityStatHelper {
 		if(entity instanceof EntityLiving) {
 			String entityName = ((EntityLiving) entity).hasCustomNameTag() ? ((EntityLiving) entity).getCustomNameTag() : null;
 			
-			System.out.println(entityName);
-			
-			if(FyresWorldData.currentDisadvantage.equals("Illiterate")) {
+			if(FyresWorldData.currentDisadvantage != null && FyresWorldData.currentDisadvantage.equals("Illiterate")) {
 				if((entityName == null || !entityName.startsWith("\u00A7k"))) {
 					setName((EntityLiving) entity, "\u00A7k" + (entityName == null ? entity.getEntityName() : entityName));
 				}

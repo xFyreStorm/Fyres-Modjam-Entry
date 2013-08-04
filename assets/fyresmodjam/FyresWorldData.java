@@ -1,9 +1,15 @@
 package assets.fyresmodjam;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.MapStorage;
 
 public class FyresWorldData extends WorldSavedData {
@@ -20,6 +26,8 @@ public class FyresWorldData extends WorldSavedData {
 
 	public FyresWorldData() {
 		super(key);
+		
+		checkWorldData();
 	}
 
 	public FyresWorldData(String key) {
@@ -75,7 +83,7 @@ public class FyresWorldData extends WorldSavedData {
 		
 		if(potionDurations == null) {potionDurations = new int[12];}
 		for(int i = 0; i < 12; i++) {if(potionDurations[i] != 0) {continue;} potionDurations[i] = 5 + ModjamMod.r.nextInt(26);}
-	
+		
 		boolean changeDisadvantage = currentDisadvantage == null;
 		
 		if(!changeDisadvantage) {
@@ -84,6 +92,23 @@ public class FyresWorldData extends WorldSavedData {
 			changeDisadvantage = !valid;
 		}
 		
-		if(changeDisadvantage) {currentDisadvantage = validDisadvantages[ModjamMod.r.nextInt(validDisadvantages.length)];}
+		if(changeDisadvantage) {
+			currentDisadvantage = validDisadvantages[ModjamMod.r.nextInt(validDisadvantages.length)];
+			
+			if(currentDisadvantage.equals("Illiterate")) {
+				MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+				
+				for(int i = 0; i < server.worldServers.length; i++) {
+					WorldServer s = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers[i];
+					
+					if(s == null) {continue;}
+					
+					for(Object o : s.loadedEntityList) {
+						if(o == null || o instanceof EntityPlayer) {continue;}
+						EntityStatHelper.processEntity((Entity) o, ModjamMod.r);
+					}
+				}
+			}
+		}
 	}
 }

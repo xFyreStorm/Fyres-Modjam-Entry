@@ -195,6 +195,8 @@ public class ItemStatHelper implements ICraftingHandler {
 	public static void processItemStack(ItemStack stack, Random r) {
 		if(stack == null) {return;}
 		
+		CommonTickHandler.worldData.checkWorldData();
+		
 		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
 		
 		String processed = ItemStatHelper.getStat(stack, "processed");
