@@ -35,6 +35,7 @@ public class FyresWorldData extends WorldSavedData {
 	public static int currentTaskAmount = 0;
 	
 	public static Class[] validMobs = {EntityDragon.class, EntityWither.class};
+	public static String[] validMobNames = {"Ender Dragon", "Wither"};
 	public static int[][] mobNumbers = {new int[] {1, 1} , new int[] {1, 3}};
 	
 	public static int[] validItems = {Block.blockDiamond.blockID, Block.blockGold.blockID, Block.blockEmerald.blockID, Block.blockLapis.blockID, Item.diamond.itemID, Item.emerald.itemID, Item.ingotGold.itemID, Item.netherStar.itemID, Item.ghastTear.itemID};
