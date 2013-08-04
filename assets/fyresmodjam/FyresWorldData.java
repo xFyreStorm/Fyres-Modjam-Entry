@@ -57,7 +57,7 @@ public class FyresWorldData extends WorldSavedData {
 		
 		if(result == null) {result = new FyresWorldData(); storage.setData(key, result); result.checkWorldData();}
 		
-		return result;
+		return result; 
 	}
 
 	@Override
