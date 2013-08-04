@@ -199,37 +199,38 @@ public class ItemStatHelper implements ICraftingHandler {
 	public static void processItemStack(ItemStack stack, Random r) {
 		if(stack == null) {return;}
 		
-		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
+		temp.clear();
 		
-		String processed = ItemStatHelper.getStat(stack, "processed");
+		if(statTrackersByClass.containsKey(stack.getItem().getClass())) {temp.add(statTrackersByClass.get(stack.getItem().getClass()));}
+		if(statTrackersByID.containsKey(stack.getItem().itemID)) {temp.add(statTrackersByID.get(stack.getItem().itemID));}
 		
-		if(processed == null || processed.equals("false")) {
-			
-			temp.clear();
-			
-			stack.getTagCompound().setTag("Lore", new NBTTagList());
-			
-			if(statTrackersByClass.containsKey(stack.getItem().getClass())) {temp.add(statTrackersByClass.get(stack.getItem().getClass()));}
-			if(statTrackersByID.containsKey(stack.getItem().itemID)) {temp.add(statTrackersByID.get(stack.getItem().itemID));}
-			
-			for(ItemStatTracker e : genericTrackers) {
-				if(!temp.contains(e)) {
-					for(Class c : e.classes) {if(c.isAssignableFrom(stack.getItem().getClass())) {temp.add(e); break;}}
-				}
+		for(ItemStatTracker e : genericTrackers) {
+			if(!temp.contains(e)) {
+				for(Class c : e.classes) {if(c.isAssignableFrom(stack.getItem().getClass())) {temp.add(e); break;}}
 			}
+		}
+		
+		if(!temp.isEmpty()) {
+			if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
 			
-			ItemStatHelper.giveStat(stack, "processed", "true");
+			String processed = ItemStatHelper.getStat(stack, "processed");
 			
-			for(ItemStatTracker statTracker : temp) {
-				for(ItemStat s : statTracker.stats) {
-					giveStat(stack, s.name, s.getNewValue(stack, r).toString());
-					
-					String lore = s.getLore(stack);
-					if(lore != null) {addLore(stack, lore);}
-					
-					setName(stack, s.getAlteredStackName(stack));
-					
-					s.modifyStack(stack);
+			if(processed == null || processed.equals("false")) {
+				stack.getTagCompound().setTag("Lore", new NBTTagList());
+				
+				ItemStatHelper.giveStat(stack, "processed", "true");
+				
+				for(ItemStatTracker statTracker : temp) {
+					for(ItemStat s : statTracker.stats) {
+						giveStat(stack, s.name, s.getNewValue(stack, r).toString());
+						
+						String lore = s.getLore(stack);
+						if(lore != null) {addLore(stack, lore);}
+						
+						setName(stack, s.getAlteredStackName(stack));
+						
+						s.modifyStack(stack);
+					}
 				}
 			}
 		}

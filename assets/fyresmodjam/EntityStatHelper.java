@@ -118,27 +118,28 @@ public class EntityStatHelper {
 		
 		if(entity == null) {return;}
 		
-		String processed = EntityStatHelper.getStat(entity, "processed");
+		temp.clear();
 		
-		if(processed == null || processed.equals("false")) {
-			
-			temp.clear();
-			
-			if(statTrackersByClass.containsKey(entity.getClass())) {temp.add(statTrackersByClass.get(entity.getClass()));}
-			
-			for(EntityStatTracker e : genericTrackers) {
-				if(!temp.contains(e)) {
-					for(Class c : e.classes) {if(c.isAssignableFrom(entity.getClass())) {temp.add(e); break;}}
-				}
+		if(statTrackersByClass.containsKey(entity.getClass())) {temp.add(statTrackersByClass.get(entity.getClass()));}
+		
+		for(EntityStatTracker e : genericTrackers) {
+			if(!temp.contains(e)) {
+				for(Class c : e.classes) {if(c.isAssignableFrom(entity.getClass())) {temp.add(e); break;}}
 			}
+		}
+		
+		if(!temp.isEmpty()) {
+			String processed = EntityStatHelper.getStat(entity, "processed");
 			
-			EntityStatHelper.giveStat(entity, "processed", "true");
-			
-			for(EntityStatTracker statTracker : temp) {
-				for(EntityStat s : statTracker.stats) {
-					giveStat(entity, s.name, s.getNewValue(r).toString());
-					if(entity instanceof EntityLiving) {setName((EntityLiving) entity, s.getAlteredEntityName((EntityLiving) entity));}
-					s.modifyEntity(entity);
+			if(processed == null || processed.equals("false")) {
+				EntityStatHelper.giveStat(entity, "processed", "true");
+				
+				for(EntityStatTracker statTracker : temp) {
+					for(EntityStat s : statTracker.stats) {
+						giveStat(entity, s.name, s.getNewValue(r).toString());
+						if(entity instanceof EntityLiving) {setName((EntityLiving) entity, s.getAlteredEntityName((EntityLiving) entity));}
+						s.modifyEntity(entity);
+					}
 				}
 			}
 		}
@@ -177,7 +178,7 @@ public class EntityStatHelper {
 			
 			int level = 0;
 			if(event.entity.getEntityData().hasKey("Level")) {level = Integer.parseInt(event.entity.getEntityData().getString("Level"));}
-			if(ModjamMod.r.nextInt(20) == 0 || level == 5) {event.entity.entityDropItem(new ItemStack(ModjamMod.mysteryPotion.itemID, 1, ModjamMod.r.nextInt(13)), event.entity.height/2);}
+			if(ModjamMod.r.nextInt(10) == 0 || level == 5) {event.entity.entityDropItem(new ItemStack(ModjamMod.mysteryPotion.itemID, 1, ModjamMod.r.nextInt(13)), event.entity.height/2);}
 		
 		}
 	}
