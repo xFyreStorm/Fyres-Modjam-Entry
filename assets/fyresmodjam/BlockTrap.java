@@ -63,7 +63,13 @@ public class BlockTrap extends BlockContainer
     
     public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)  {	
     	if(par1World.isRemote && par5EntityPlayer.isSneaking()) {
-    		PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.DISARM_TRAP, new Object[] {par2, par3, par4, par5EntityPlayer.getEntityData().hasKey("Blessing") && par5EntityPlayer.getEntityData().getString("Blessing").equals("Mechanic")}));
+    		if((par5EntityPlayer.getEntityData().hasKey("Blessing") && par5EntityPlayer.getEntityData().getString("Blessing").equals("Mechanic")) ? ModjamMod.r.nextInt(4) != 0 : ModjamMod.r.nextInt(4) == 0) {PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.DISARM_TRAP, new Object[] {par2, par3, par4, par5EntityPlayer.getEntityData().hasKey("Blessing") && par5EntityPlayer.getEntityData().getString("Blessing").equals("Mechanic")}));}
+    		else {
+    			//PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7c\u00A7oYou failed to disarm the trap."}), (Player) par5EntityPlayer);
+    			par5EntityPlayer.attackEntityFrom(DamageSource.cactus, 1.0F);
+    			Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7c\u00A7oYou failed to disarm the trap.");
+    		}
+    		
     		return false;
     	}
     	

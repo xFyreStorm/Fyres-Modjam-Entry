@@ -15,7 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileEntityPillar extends TileEntity {
 
 	public static String[] validBlessings = {"Miner", "Lumberjack", "Warrior", "Hunter", "Swamp", "Thief", "Ninja", "Mechanic", "Alchemist"};
-	public static String[] blessingDescriptions = {"+25% mine speed on stone and iron blocks", "+25% mine speed on wooden blocks", "+25% melee damage", "+25% projectile damage", "Attacks will slow enemies", "Enemies have a chance to drop gold nuggets", "While sneaking you are invisble and attacks on enemies with full health do double damage", "You can salvage disarmed traps 50% of the time", "All potions act like wildcard potions"};
+	public static String[] blessingDescriptions = {"+25% mine speed on stone and iron blocks", "+25% mine speed on wooden blocks", "+25% melee damage", "+25% projectile damage", "Attacks will slow enemies", "Enemies have a chance to drop gold nuggets", "While sneaking you are invisble and attacks on enemies with full health do double damage", "You disarm traps 3x as often and disarmed traps are salvaged 50% of the time", "All potions act like wildcard potions"};
 	
 	public String blessing = null;
 	

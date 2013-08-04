@@ -27,6 +27,7 @@ public class ItemMysteryPotion extends Item {
 	
 	public ItemMysteryPotion(int par1) {
 		super(par1);
+		this.setHasSubtypes(true);
 	}
 	
 	@SideOnly(Side.CLIENT)
