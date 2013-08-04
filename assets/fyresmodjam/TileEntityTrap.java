@@ -14,6 +14,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityTrap extends TileEntity {
 	
+	public int type = -1;
+	
     public TileEntityTrap() {}
 
     /*public void updateEntity() {
@@ -22,10 +24,12 @@ public class TileEntityTrap extends TileEntity {
     
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
+    	par1NBTTagCompound.setInteger("TrapType", type);
     }
 
     public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
     	super.readFromNBT(par1NBTTagCompound);
+    	type = par1NBTTagCompound.getInteger("TrapType");
     }
 
     public Packet getDescriptionPacket() {
