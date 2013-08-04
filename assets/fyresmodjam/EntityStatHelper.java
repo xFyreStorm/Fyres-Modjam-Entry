@@ -172,7 +172,7 @@ public class EntityStatHelper {
 						
 						if(blessing.equals("Thief") && ModjamMod.r.nextInt(10) == 0) {
 							if(!event.entity.worldObj.isRemote) {event.entity.dropItem(Item.goldNugget.itemID, 1);}
-							event.entity.worldObj.playSoundAtEntity(event.entity, "fyresmodjam:coin", 1.0F, 1.0F);
+							//event.entity.worldObj.playSoundAtEntity(event.entity, "fyresmodjam:coin", 1.0F, 1.0F);
 						}
 					}
 				}

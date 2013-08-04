@@ -6,7 +6,6 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
-import net.minecraft.command.ServerCommandManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -19,11 +18,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.StatCollector;
+import net.minecraft.stats.Achievement;
+import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -70,6 +68,10 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Item itemPillar;
     public static Item mysteryPotion;
     public static Item itemTrap;
+    
+    
+    public static Achievement losingIsFun;
+    public static AchievementPage page;
 	
     public static void loadProperties() {
 		Properties prop = new Properties();
@@ -222,6 +224,13 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		//ItemStatTracker foodTracker = new ItemStatTracker(ItemFood.class, -1);
 		//foodTracker.addStat(new ItemStat("Spoiled", false));
 		//ItemStatHelper.addStatTracker(foodTracker);
+		
+		//Achievements
+		
+		losingIsFun = getNewAchievement(500, 0, 0, new ItemStack(itemTrap, 1), "losingIsFun", "Losing Is Fun", "Experience the \"fun\".", (Achievement) null, true);
+		page = new AchievementPage("The You Will Die Mod", losingIsFun);
+		
+		AchievementPage.registerAchievementPage(page);
 	}
 	
 	@EventHandler
@@ -272,16 +281,25 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     			if(event.block.blockMaterial == Material.wood) {event.newSpeed = event.originalSpeed * 1.25F;}
     		}
     	}
-    }
-	
+	}
+
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 		this.initCommands(event);
 	}
-	
+
 	public void initCommands(FMLServerStartingEvent event) {
-        event.registerServerCommand(new CommandCurrentBlessing());
-        event.registerServerCommand(new CommandCurrentDisadvantage());
-        event.registerServerCommand(new CommandCurrentWorldTask());
-    }
+		event.registerServerCommand(new CommandCurrentBlessing());
+		event.registerServerCommand(new CommandCurrentDisadvantage());
+		event.registerServerCommand(new CommandCurrentWorldTask());
+	}
+
+	public static Achievement getNewAchievement(int id, int x, int y, ItemStack stack, String name, String displayName, String desc, Achievement prereq, boolean independent) {
+		Achievement achievement = new Achievement(id, name, x, y, stack, prereq);
+		if(independent) {achievement = achievement.setIndependent();}
+		LanguageRegistry.instance().addStringLocalization("achievement." + name, "en_US", displayName);
+		LanguageRegistry.instance().addStringLocalization("achievement." + name + ".desc", "en_US", desc);
+		achievement.registerAchievement();
+		return achievement;
+	}
 }
