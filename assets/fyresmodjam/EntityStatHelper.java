@@ -201,5 +201,9 @@ public class EntityStatHelper {
 				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted}));
 			}
 		}
+		
+		if(event.entity instanceof EntityPlayer) {
+			((EntityPlayer) event.entity).triggerAchievement(ModjamMod.losingIsFun);
+		}
 	}
 }
