@@ -42,7 +42,8 @@ Blessings:
     Ninja - While sneaking you are invisible and attacks on enemies with full health do double damage,
     Mechanic - You can salvage disarmed traps 50% of the time.
     Alchemist - All potions act like wildcard potions,
-    Scout - You can see traps without sneaking
+    Scout - You can see traps without sneaking,
+    Guardian - Take 25% less damage from all sources
     
 /currentBlessing command shows your current blessing
     
