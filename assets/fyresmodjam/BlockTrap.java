@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
@@ -36,22 +37,36 @@ public class BlockTrap extends BlockContainer
 	
 	public static int trapTypes = 2;
 	
+	public static Icon[] icons;
+	public static String[] iconLocations = new String[] {"fyresmodjam:spikes", "fyresmodjam:trap2"};
+	
     protected BlockTrap(int par1) {
         super(par1, Material.circuits);
         this.setLightOpacity(0);
         this.setCreativeTab(CreativeTabs.tabBlock);
+  
         //this.setTickRandomly(true);
         //this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
     }
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister) {
-        this.blockIcon = par1IconRegister.registerIcon("fyresmodjam:spikes");
+    	if(icons == null) {
+    		icons = new Icon[trapTypes];
+    		for(int i = 0; i < iconLocations.length; i++) {icons[i] = par1IconRegister.registerIcon(iconLocations[i]);}
+    	}
+    	
+        this.blockIcon = icons[0];
     }
 
     @SideOnly(Side.CLIENT)
+    public Icon getIcon(int par1, int par2) {
+        return icons[par2]; 
+    }
+    
+    @SideOnly(Side.CLIENT)
     public String getItemIconName() {
-        return "fyresmodjam:spikes"; 
+        return "fyresmodjam:spikes";
     }
 
     public int idDropped(int par1, Random par2Random, int par3) {
@@ -106,11 +121,7 @@ public class BlockTrap extends BlockContainer
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
     	if(!par1World.isRemote && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
     		
-    		TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
-    		
-    		if(te == null || !(te instanceof TileEntityTrap)) {return;}
-    		
-    		int type = ((TileEntityTrap) te).type;
+    		int type = par1World.getBlockMetadata(par2, par3, par4);
     		
     		if(type % trapTypes == 0) {
     			par5Entity.attackEntityFrom(DamageSource.cactus, 2.0F);
@@ -158,5 +169,14 @@ public class BlockTrap extends BlockContainer
 		}*/
     	
     	return /*b2 &&*/ (player == null ? false : (player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout"))));
+    }
+    
+    public int damageDropped(int par1) {
+        return par1;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+        for (int i = 0; i < trapTypes; i++) {par3List.add(new ItemStack(par1, 1, i));}
     }
 }

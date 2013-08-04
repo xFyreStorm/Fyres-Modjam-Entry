@@ -16,6 +16,7 @@ public class WorldGenTraps implements IWorldGenerator {
     			for(int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
     				if(random.nextInt(100) == 0 && (world.isAirBlock(x, y, z) || Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z)) && (!world.isAirBlock(x, y - 1, z) && world.getBlockId(x, y - 1, z) != ModjamMod.blockTrap.blockID && !Block.blocksList[world.getBlockId(x, y - 1, z)].isBlockReplaceable(world, x, y - 1, z))) {
     					world.setBlock(x, y, z, ModjamMod.blockTrap.blockID);
+    					world.setBlockMetadataWithNotify(x, y, z, random.nextInt(BlockTrap.trapTypes), 0);
     				}
     			}
     		}
