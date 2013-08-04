@@ -41,7 +41,8 @@ Blessings:
     
 /currentBlessing command shows your current blessing
     
-Unmarked potions (Each new world you make selects 12 potion types and durations. Drink a mystery potion to find out what it does permanently in that world! Wildcard potion always give a random effect)
+Mystery potions - each new world you make selects 12 potion types and durations. Find and drink a mystery potion to find out what it does permanently in that world! Wildcard potion always give a random effect.
+1 in 10 drop from all mobs, 100% drop rate for level 5 mobs
 
 When a world is created, it is given a random disadvantage. You are told what it is when logging in to a world.
 
