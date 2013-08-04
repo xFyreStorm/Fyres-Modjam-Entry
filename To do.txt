@@ -8,7 +8,7 @@ Add more blessings to pillars
 Figure out what mobs I want to give levels and attribute bonuses
 Figure out what items I want give stats and variation
 More trap types
-Disadvantages
+More disadvantages
 
 
 Done:
@@ -40,3 +40,11 @@ Blessings:
 /currentBlessing command shows your current blessing
     
 Unmarked potions (Each new world you make selects 12 potion types and durations. Drink a mystery potion to find out what it does permanently in that world! Wildcard potion always give a random effect)
+
+When a world is created, it is given a random disadvantage. You are told what it is when logging in to a world.
+
+Disadvantages:
+
+    Tougher Mobs - -25% damage to hostile enemies,
+    Weak - -25% melee damage
+    
