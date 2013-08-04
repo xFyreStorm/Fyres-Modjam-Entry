@@ -63,12 +63,12 @@ public class TileEntityTrap extends TileEntity {
     
     @SideOnly(Side.CLIENT)
     public void spawnParticles() {
-    	/*EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+    	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		int type = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
 		
 		if(type == 1 && (player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout"))) && this.getDistanceFrom(TileEntityRenderer.staticPlayerX, TileEntityRenderer.staticPlayerY, TileEntityRenderer.staticPlayerZ) < 36.0F) {
 			if(ModjamMod.r.nextInt(5) == 0) {this.worldObj.spawnParticle("smoke", this.xCoord + 0.5F, this.yCoord + 0.175F, this.zCoord + 0.5F, (ModjamMod.r.nextFloat() - 0.5F)/16, ModjamMod.r.nextFloat()/16, (ModjamMod.r.nextFloat() - 0.5F)/16);}
 			this.worldObj.spawnParticle("flame", this.xCoord + 0.5F, this.yCoord + 0.175F, this.zCoord + 0.5F, 0.0F, 0.0F, 0.0F);
-		}*/
+		}
     }
 }

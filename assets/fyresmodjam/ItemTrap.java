@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class ItemTrap extends Item {
 
 	public static Icon[] icons;
-	public static String[] iconLocations = new String[] {"fyresmodjam:spikes", "fyresmodjam:trap2"};
+	public static String[] iconLocations = new String[] {"fyresmodjam:itemTrap", "fyresmodjam:trap2"};
 
 	public ItemTrap(int par1) {
 		super(par1);

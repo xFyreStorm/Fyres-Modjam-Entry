@@ -89,34 +89,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     }
     
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		loadProperties();
-		
-		blockPillar = new BlockPillar(blockID).setBlockUnbreakable().setResistance(6000000.0F);
-		blockTrap = new BlockTrap(blockID + 1).setBlockUnbreakable().setResistance(6000000.0F);
-		
-		itemPillar = new ItemPillar(itemID).setUnlocalizedName("blockPillar");
-		mysteryPotion = new ItemMysteryPotion(itemID + 1).setUnlocalizedName("mysteryPotion").setCreativeTab(CreativeTabs.tabBrewing);
-		itemTrap = new ItemTrap(itemID + 2).setUnlocalizedName("itemTrap").setCreativeTab(CreativeTabs.tabBlock);
-		
-		GameRegistry.registerBlock(blockPillar, "blockPillar");
-		GameRegistry.registerTileEntity(TileEntityPillar.class, "Pillar Tile Entity");
-		
-		GameRegistry.registerBlock(blockTrap, "blockTrap");
-		GameRegistry.registerTileEntity(TileEntityTrap.class, "Trap Entity");
-		
-		LanguageRegistry.addName(blockPillar, "Pillar Block");
-		LanguageRegistry.addName(blockTrap, "Trap");
-		
-		LanguageRegistry.addName(itemPillar, "Pillar");
-		LanguageRegistry.addName(mysteryPotion, "Mystery Potion");
-		LanguageRegistry.addName(itemTrap, "Trap");
-		
-		startTheGame = getNewAchievement(achievementID, 0, 0, new ItemStack(Item.swordIron, 1), "startTheGame", "You Will Die", "Join a world with this mod installed", null, true);
-		losingIsFun = getNewAchievement(achievementID + 1, -2, 0, new ItemStack(itemTrap.itemID, 1, 0), "losingIsFun", "Losing Is Fun", "Experience \"fun\"", startTheGame, false);
-		whoops = getNewAchievement(achievementID + 2, 2, 0, new ItemStack(itemTrap.itemID, 1, 1), "whoops", "Whoops", "Fail to disarm a trap", startTheGame, false);
-		page = new AchievementPage("The \"You Will Die\" Mod", startTheGame, losingIsFun, whoops);
-	}
+	public void preInit(FMLPreInitializationEvent event) {loadProperties();}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
@@ -140,6 +113,26 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		for(int i = 0; i < 3; i++) {GameRegistry.registerWorldGenerator(new WorldGenMoreDungeons());}
 		
 		//Item and Block loading
+		
+		blockPillar = new BlockPillar(blockID).setBlockUnbreakable().setResistance(6000000.0F);
+		blockTrap = new BlockTrap(blockID + 1).setBlockUnbreakable().setResistance(6000000.0F);
+		
+		itemPillar = new ItemPillar(itemID).setUnlocalizedName("blockPillar");
+		mysteryPotion = new ItemMysteryPotion(itemID + 1).setUnlocalizedName("mysteryPotion").setCreativeTab(CreativeTabs.tabBrewing);
+		itemTrap = new ItemTrap(itemID + 2).setUnlocalizedName("itemTrap").setCreativeTab(CreativeTabs.tabBlock);
+		
+		GameRegistry.registerBlock(blockPillar, "blockPillar");
+		GameRegistry.registerTileEntity(TileEntityPillar.class, "Pillar Tile Entity");
+		
+		GameRegistry.registerBlock(blockTrap, "blockTrap");
+		GameRegistry.registerTileEntity(TileEntityTrap.class, "Trap Entity");
+		
+		LanguageRegistry.addName(blockPillar, "Pillar Block");
+		LanguageRegistry.addName(blockTrap, "Trap");
+		
+		LanguageRegistry.addName(itemPillar, "Pillar");
+		LanguageRegistry.addName(mysteryPotion, "Mystery Potion");
+		LanguageRegistry.addName(itemTrap, "Trap");
 		
 		LanguageRegistry.instance().addStringLocalization("commands.currentBlessing.usage", "/currentBlessing - used to check your current blessing");
 		LanguageRegistry.instance().addStringLocalization("commands.currentDisadvantage.usage", "/currentDisadvantage - used to check your current world disadvantage");
@@ -236,7 +229,12 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 		//Achievements
 		
-		AchievementPage.registerAchievementPage(page);
+		//startTheGame = getNewAchievement(achievementID, 0, 0, new ItemStack(Item.swordIron, 1), "startTheGame", "You Will Die", "Join a world with this mod installed", null, true);
+		//losingIsFun = getNewAchievement(achievementID + 1, -2, 0, new ItemStack(itemTrap, 1), "losingIsFun", "Losing Is Fun", "Experience \"fun\"", startTheGame, false);
+		//whoops = getNewAchievement(achievementID + 2, 2, 0, new ItemStack(itemTrap, 1, 1), "whoops", "Whoops", "Fail to disarm a trap", startTheGame, false);
+		//page = new AchievementPage("The \"You Will Die\" Mod", startTheGame, losingIsFun, whoops);
+		
+		//AchievementPage.registerAchievementPage(page);
 	}
 	
 	@EventHandler
