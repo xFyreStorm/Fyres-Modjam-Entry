@@ -68,6 +68,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     
     public static Item itemPillar;
     public static Item mysteryPotion;
+    public static Item itemTrap;
 	
     public static void loadProperties() {
 		Properties prop = new Properties();
@@ -113,6 +114,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 		itemPillar = new ItemPillar(itemID).setUnlocalizedName("blockPillar");
 		mysteryPotion = new ItemMysteryPotion(itemID + 1).setUnlocalizedName("mysteryPotion").setCreativeTab(CreativeTabs.tabBrewing);
+		itemTrap = new ItemTrap(itemID + 2).setUnlocalizedName("itemTrap").setCreativeTab(CreativeTabs.tabCombat);
 		
 		GameRegistry.registerBlock(blockPillar, "blockPillar");
 		GameRegistry.registerTileEntity(TileEntityPillar.class, "Pillar Tile Entity");
@@ -125,6 +127,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 		LanguageRegistry.addName(itemPillar, "Pillar");
 		LanguageRegistry.addName(mysteryPotion, "Mystery Potion");
+		LanguageRegistry.addName(itemTrap, "Trap");
 		
 		LanguageRegistry.instance().addStringLocalization("commands.currentBlessing.usage", "/currentBlessing - used to check your current blessing");
 		LanguageRegistry.instance().addStringLocalization("commands.currentDisadvantage.usage", "/currentDisadvantage - used to check your current world disadvantage");

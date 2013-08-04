@@ -79,7 +79,7 @@ public class PacketHandler implements IPacketHandler {
 								player.worldObj.setBlockToAir(blockX, blockY, blockZ);
 								boolean salvage = ModjamMod.r.nextBoolean() && mechanic;
 								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7o" + (!salvage ? "You disarmed the trap." : "You disarm and salvage the trap.")}), (Player) player);
-								if(salvage) {player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, blockX + 0.5F, blockY, blockZ + 0.5F, new ItemStack(ModjamMod.blockTrap, 1, player.worldObj.getBlockMetadata(blockX, blockY, blockZ)  % BlockTrap.trapTypes)));}
+								if(salvage) {player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, blockX + 0.5F, blockY, blockZ + 0.5F, new ItemStack(ModjamMod.itemTrap.itemID, 1, player.worldObj.getBlockMetadata(blockX, blockY, blockZ) % BlockTrap.trapTypes)));}
 							} else {
 								player.attackEntityFrom(DamageSource.cactus, 1.0F);
 								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7c\u00A7oYou failed to disarm the trap."}), (Player) player);
