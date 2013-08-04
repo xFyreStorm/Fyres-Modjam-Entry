@@ -239,8 +239,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 			for(int i = 0; i < FyresWorldData.validDisadvantages.length; i++) {if(FyresWorldData.validDisadvantages[i].equals(FyresWorldData.currentDisadvantage)) {index = i; break;}}
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eWorld disadvantage: " + FyresWorldData.currentDisadvantage + (index == -1 ? "" : " (" + FyresWorldData.disadvantageDescriptions[index] + ")")}), (Player) player);
 			
-			String name1 = Item.itemsList[FyresWorldData.currentTaskID] != null ? StatCollector.translateToLocal(Item.itemsList[FyresWorldData.currentTaskID].getUnlocalizedName()) : null;
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eWorld goal: " + FyresWorldData.currentTask + " " + FyresWorldData.currentTaskAmount + " " + (FyresWorldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[FyresWorldData.currentTaskID] : ((name1 == null || name1.contains(".")) ? StatCollector.translateToLocal(Block.blocksList[FyresWorldData.currentTaskID].getUnlocalizedName()) : name1)) + "."}), (Player) player);
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eWorld goal: " + FyresWorldData.currentTask + " " + FyresWorldData.currentTaskAmount + " " + (FyresWorldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[FyresWorldData.currentTaskID] : new ItemStack(Item.itemsList[FyresWorldData.currentTaskID], 1).getDisplayName()) + "s."}), (Player) player);
 		}
 	}
 

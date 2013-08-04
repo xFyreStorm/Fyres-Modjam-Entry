@@ -152,7 +152,10 @@ public class ItemStatHelper {
 	@ForgeSubscribe
 	public void itemPickUp(EntityItemPickupEvent event) {
 		if(!event.entityPlayer.worldObj.isRemote) {
-			processItemStack(event.item.getDataWatcher().getWatchableObjectItemStack(10), ModjamMod.r);
+			//processItemStack(event.item.getDataWatcher().getWatchableObjectItemStack(10), ModjamMod.r);
+			if(FyresWorldData.currentTask.equals("Collect") && event.item.getDataWatcher().getWatchableObjectItemStack(10).getItem().itemID == FyresWorldData.currentTaskID) {
+				
+			}
 		}
 	}
 	

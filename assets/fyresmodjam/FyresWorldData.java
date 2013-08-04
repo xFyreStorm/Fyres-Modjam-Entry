@@ -33,6 +33,7 @@ public class FyresWorldData extends WorldSavedData {
 	public static String currentTask = null;
 	public static int currentTaskID = -1;
 	public static int currentTaskAmount = 0;
+	public static int progress = 0;
 	
 	public static Class[] validMobs = {EntityDragon.class, EntityWither.class};
 	public static String[] validMobNames = {"Ender Dragon", "Wither"};
@@ -71,6 +72,7 @@ public class FyresWorldData extends WorldSavedData {
 		if(nbttagcompound.hasKey("currentTask")) {currentTask = nbttagcompound.getString("currentTask");}
 		if(nbttagcompound.hasKey("currentTaskID")) {currentTaskID = nbttagcompound.getInteger("currentTaskID");}
 		if(nbttagcompound.hasKey("currentTaskAmount")) {currentTaskAmount = nbttagcompound.getInteger("currentTaskAmount");}
+		if(nbttagcompound.hasKey("progress")) {progress = nbttagcompound.getInteger("progress");}
 		
 		checkWorldData();
 	} 
@@ -86,6 +88,7 @@ public class FyresWorldData extends WorldSavedData {
 		nbttagcompound.setString("currentTask", currentTask);
 		nbttagcompound.setInteger("currentTaskID", currentTaskID);
 		nbttagcompound.setInteger("currentTaskAmount", currentTaskAmount);
+		nbttagcompound.setInteger("progress", progress);
 	}
 	
 	private void checkWorldData() {
@@ -148,6 +151,8 @@ public class FyresWorldData extends WorldSavedData {
 	}
 
 	public void giveNewTask() {
+		progress = 0;
+		
 		currentTask = validTasks[ModjamMod.r.nextInt(validTasks.length)];
 		
 		if(currentTask.equals("Kill")) {
