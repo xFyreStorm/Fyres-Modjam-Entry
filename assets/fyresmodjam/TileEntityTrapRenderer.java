@@ -2,6 +2,7 @@ package assets.fyresmodjam;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelSign;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,11 +15,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityTrapRenderer extends TileEntitySpecialRenderer
-{
-    private ModelSpikes modelTrap = new ModelSpikes();
+public class TileEntityTrapRenderer extends TileEntitySpecialRenderer {
+	
+    private ModelBase[] models = {new ModelSpikes(), new ModelTrap2()};
 
-    public static ResourceLocation texture = new ResourceLocation("fyresmodjam", "textures/blocks/spikes.png");
+    public static ResourceLocation[] textures = {new ResourceLocation("fyresmodjam", "textures/blocks/spikes.png"), new ResourceLocation("fyresmodjam", "textures/blocks/trap2.png")};
     
     public void renderTileEntityAt(TileEntity tileEntity, double d, double d1, double d2, float f)
     {
@@ -41,15 +42,15 @@ public class TileEntityTrapRenderer extends TileEntitySpecialRenderer
        
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		boolean active = player != null && (player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")));
-        
+		
 		if(active) {
 	        GL11.glPushMatrix();
 	        
 	        GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 	        GL11.glTranslatef(0.5F, -1.5F, -0.5F);
 	        
-	        this.tileEntityRenderer.renderEngine.func_110577_a(texture);
-	        this.modelTrap.render((Entity) null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+	        this.tileEntityRenderer.renderEngine.func_110577_a(textures[tl.type % BlockTrap.trapTypes]);
+	        this.models[tl.type % BlockTrap.trapTypes].render((Entity) null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 	        GL11.glPopMatrix();
 		}
     }
