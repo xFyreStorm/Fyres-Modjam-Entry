@@ -45,7 +45,7 @@ public class BlockTrap extends BlockContainer
     }
 
     @SideOnly(Side.CLIENT)
-    public String getItemIconName() { 
+    public String getItemIconName() {
         return "fyresmodjam:spikes"; 
     }
 
