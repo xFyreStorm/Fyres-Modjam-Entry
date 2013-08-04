@@ -59,7 +59,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     
     public static Random r = new Random();
     
-    public static int itemID = 2875, blockID = 2875, achievementID = 500;
+    public static int itemID = 2875, blockID = 2875, achievementID = 2500;
     public static boolean pillarGlow = true, spawnTraps = true;
     
     public static Block blockPillar;
@@ -83,7 +83,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 		itemID = Integer.parseInt(prop.getProperty("itemID", "" + itemID));
 		blockID = Integer.parseInt(prop.getProperty("blockID", "" + blockID));
-		achievementID = Integer.parseInt(prop.getProperty("achievementID", "" + achievementID));
+		//achievementID = Integer.parseInt(prop.getProperty("achievementID", "" + achievementID));
 		pillarGlow = Boolean.parseBoolean(prop.getProperty("pillarGlow", "" + pillarGlow));
 		spawnTraps = Boolean.parseBoolean(prop.getProperty("spawnTraps", "" + spawnTraps));
     }
@@ -229,9 +229,9 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 		//Achievements
 		
-		losingIsFun = getNewAchievement(achievementID, 0, 0, new ItemStack(itemTrap, 1), "losingIsFun", "Losing Is Fun", "Experience the \"fun\".", (Achievement) null, true);
+		losingIsFun = getNewAchievement(achievementID, 0, 0, new ItemStack(itemTrap, 1), "losingIsFun", "Losing Is Fun", "Experience \"fun\"", (Achievement) null, true);
 		whoops = getNewAchievement(achievementID + 1, 2, 0, new ItemStack(itemTrap, 1, 1), "whoops", "Whoops", "Fail to disarm a trap", (Achievement) null, true);
-		page = new AchievementPage("The You Will Die Mod", losingIsFun, whoops);
+		page = new AchievementPage("The \"You Will Die\" Mod", losingIsFun, whoops);
 		
 		AchievementPage.registerAchievementPage(page);
 	}
