@@ -85,7 +85,5 @@ public class FyresWorldData extends WorldSavedData {
 		}
 		
 		if(changeDisadvantage) {currentDisadvantage = validDisadvantages[ModjamMod.r.nextInt(validDisadvantages.length)];}
-	
-		currentDisadvantage = "Illiterate";
 	}
 }

@@ -198,7 +198,13 @@ public class ItemStatHelper implements ICraftingHandler {
 		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
 		
 		String stackName = getName(stack);
-		if(FyresWorldData.currentDisadvantage.equals("Illiterate") && (stackName == null || !stackName.startsWith("\u00A7k"))) {setName(stack, "\u00A7k" + (stackName == null ? stack.getDisplayName() : stackName));}
+		if(FyresWorldData.currentDisadvantage.equals("Illiterate")) {
+			if((stackName == null || !stackName.startsWith("\u00A7k"))) {
+				setName(stack, "\u00A7k" + (stackName == null ? stack.getDisplayName() : stackName));
+			}
+		} else if(stackName != null && stackName.startsWith("\u00A7k")) {
+			setName(stack, stackName.replace("\u00A7k", ""));
+		}
 		
 		String processed = ItemStatHelper.getStat(stack, "processed");
 		

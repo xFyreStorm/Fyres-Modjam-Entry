@@ -2,6 +2,7 @@ package assets.fyresmodjam;
 
 import java.util.List;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
@@ -47,12 +48,15 @@ public class ItemMysteryPotion extends Item {
         for(int i = 0; i < 13; i++) {par3List.add(new ItemStack(par1, 1, i));}
     }
 	
+	@SideOnly(Side.CLIENT)
 	public String getItemDisplayName(ItemStack par1ItemStack) {
 		String name = "Mystery Potion #" + (par1ItemStack.getItemDamage() + 1);
 		
-		String blessing = Side.CLIENT.isClient() ? getBlessing() : null;
+		String blessing = null;
 		
-		if(par1ItemStack.getItemDamage() < 12 && Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().theWorld.isRemote) {
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {blessing = getBlessing();}
+		
+		if(par1ItemStack.getItemDamage() < 12) {
 			if(Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.getEntityData().hasKey("PotionKnowledge")) {
 				if(Minecraft.getMinecraft().thePlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] != -1) {
 					Potion potion = Potion.potionTypes[FyresWorldData.potionValues[par1ItemStack.getItemDamage()]];
@@ -68,7 +72,7 @@ public class ItemMysteryPotion extends Item {
 			name = "Wildcard Potion";
 		}
 		
-		if(blessing != null && blessing.equals("Alchemist")) {name = "\u00A7k" + name;}
+		if((blessing != null && blessing.equals("Alchemist")) || FyresWorldData.currentDisadvantage.equals("Illiterate")) {name = "\u00A7k" + name;}
 		
         return name;
     }
@@ -91,7 +95,7 @@ public class ItemMysteryPotion extends Item {
         
         String blessing = (par3EntityPlayer != null && par3EntityPlayer.getEntityData().hasKey("Blessing")) ? par3EntityPlayer.getEntityData().getString("Blessing") : null;
         
-        if(!blessing.equals("Alchemist") && par1ItemStack.getItemDamage() < 12) {
+        if((blessing == null || !blessing.equals("Alchemist")) && par1ItemStack.getItemDamage() < 12) {
 	        if(!par2World.isRemote) {
 	        	
 	        	int value = FyresWorldData.potionValues[par1ItemStack.getItemDamage()];
