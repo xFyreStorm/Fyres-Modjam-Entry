@@ -132,6 +132,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 		LanguageRegistry.instance().addStringLocalization("commands.currentBlessing.usage", "/currentBlessing - used to check your current blessing");
 		LanguageRegistry.instance().addStringLocalization("commands.currentDisadvantage.usage", "/currentDisadvantage - used to check your current world disadvantage");
+		LanguageRegistry.instance().addStringLocalization("commands.currentGoal.usage", "/currentGoal - used to check your current world goal");
 		
 		//Entity Trackers
 		
@@ -280,5 +281,6 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	public void initCommands(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandCurrentBlessing());
         event.registerServerCommand(new CommandCurrentDisadvantage());
+        event.registerServerCommand(new CommandCurrentWorldTask());
     }
 }

@@ -3,13 +3,11 @@ Name: You Will Die Mod
 
 To do:
 
-Goals
 Add more blessings to pillars
 Figure out what mobs I want to give levels and attribute bonuses
 Figure out what items I want give stats and variation
 More trap types
 More disadvantages
-
 
 Done:
 
@@ -51,11 +49,15 @@ Blessings:
 Mystery potions - each new world you make selects 12 potion types and durations. Find and drink a mystery potion to find out what it does permanently in that world! Wildcard potion always give a random effect.
 1 in 10 drop from all mobs, 100% drop rate for level 5 mobs
 
-When a world is created, it is given a random disadvantage. You are told what it is when logging in to a world.
+When a world is created, it is given a random disadvantage. You are told what it is when logging in to a world. Complete world goal to remove disadvantage.
 
 Disadvantages:
 
     Tougher Mobs - -25% damage to hostile enemies,
     Weak - -25% melee damage,
     Explosive Traps - Traps trigger explosions on failed disarms
+    
+World Goals: When a world is created, it is given a random goal. Complete the goal to remove the world disadvantage. You then receive a new goal.
+
+/currentGoal command shows your current world goal
     

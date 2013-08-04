@@ -155,16 +155,23 @@ public class ItemStatHelper {
 			//processItemStack(event.item.getDataWatcher().getWatchableObjectItemStack(10), ModjamMod.r);
 			
 			ItemStack stack = event.item.getDataWatcher().getWatchableObjectItemStack(10);
+			
 			if(FyresWorldData.currentTask.equals("Collect") && stack.getItem().itemID == FyresWorldData.currentTaskID) {
 				FyresWorldData.progress += stack.stackSize;
 				
 				if(FyresWorldData.progress > FyresWorldData.currentTaskAmount) {
+					FyresWorldData.progress = 0;
 					FyresWorldData.tasksCompleted++;
-					CommonTickHandler.worldData.giveNewTask(); CommonTickHandler.worldData.markDirty();
+					
+					CommonTickHandler.worldData.giveNewTask();
+					
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!" + (!FyresWorldData.currentDisadvantage.equals("None") ? " World disadvantage has been lifted!": "")}));
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA new world goal has been set: " + (FyresWorldData.currentTask + " " + FyresWorldData.currentTaskAmount + " " + (FyresWorldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[FyresWorldData.currentTaskID] : new ItemStack(Item.itemsList[FyresWorldData.currentTaskID], 1).getDisplayName()) + "s. (" + FyresWorldData.progress + " " + FyresWorldData.currentTask + "ed)")}));
 					
 					FyresWorldData.currentDisadvantage = "None";
-					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!"}));
 				}
+				
+				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {FyresWorldData.potionValues, FyresWorldData.potionDurations, FyresWorldData.currentDisadvantage, FyresWorldData.currentTask, FyresWorldData.currentTaskID, FyresWorldData.currentTaskAmount, FyresWorldData.progress, FyresWorldData.tasksCompleted}));
 			}
 		}
 	}
