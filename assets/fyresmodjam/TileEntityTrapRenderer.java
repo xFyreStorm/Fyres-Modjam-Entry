@@ -40,7 +40,7 @@ public class TileEntityTrapRenderer extends TileEntitySpecialRenderer
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)l1, (float)l2);
        
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		boolean active = player != null && player.isSneaking();
+		boolean active = player != null && (player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")));
         
 		if(active) {
 	        GL11.glPushMatrix();
