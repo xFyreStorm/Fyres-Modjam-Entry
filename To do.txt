@@ -3,7 +3,7 @@ Name: You Will Die Mod
 
 To do:
 
-
+Goals
 Add more blessings to pillars
 Figure out what mobs I want to give levels and attribute bonuses
 Figure out what items I want give stats and variation
