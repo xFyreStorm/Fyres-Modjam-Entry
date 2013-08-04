@@ -35,6 +35,7 @@ public class ItemMysteryPotion extends Item {
 		if(icons == null) {
 			icons = new Icon[13];
 			for(int i = 0; i < 13; i++) {icons[i] = par1IconRegister.registerIcon("fyresmodjam:mysteryPotion_" + (i + 1));}
+			System.out.println(true);
 		}
 		
         this.itemIcon = icons[0];

@@ -27,7 +27,7 @@ public class ItemTrap extends Item {
 	@SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister) {
 		if(icons == null) {
-    		icons = new Icon[BlockTrap.trapTypes];
+    		icons = new Icon[iconLocations.length];
     		for(int i = 0; i < iconLocations.length; i++) {icons[i] = par1IconRegister.registerIcon(iconLocations[i]);}
     	}
     	
