@@ -14,9 +14,9 @@ public class PillarGen implements IWorldGenerator {
         if(world.provider.dimensionId == 0 && random.nextInt(25) == 0) {
         	boolean placed = false;
         	
-        	for(int y = 30, added = 0; y < 254 && !placed && added < 3; y++) {
-        		for(int x = chunkX * 16; x < chunkX * 16 + 16 && !placed && added < 3; x++) {
-        			for(int z = chunkZ * 16; z < chunkZ * 16 + 16 && !placed && added < 3; z++) {
+        	for(int y = 30, added = 0; y < 254 && !placed && added < 4; y++) {
+        		for(int x = chunkX * 16; x < chunkX * 16 + 16 && !placed && added < 4; x++) {
+        			for(int z = chunkZ * 16; z < chunkZ * 16 + 16 && !placed && added < 4; z++) {
         				if(random.nextInt(10) != 0 || world.isAirBlock(x, y, z) || Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z)) {continue;}
         				
         				Block block = ModjamMod.blockPillar;
