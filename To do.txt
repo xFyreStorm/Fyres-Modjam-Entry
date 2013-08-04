@@ -35,7 +35,9 @@ Blessings:
     Swamp - Attacks will slow enemies,
     Thief - Enemies have a chance to drop gold nuggets,
     Ninja - While sneaking you are invisible and attacks on enemies with full health do double damage,
-    Mechanic - You can salvage disarmed traps 50% of the time
+    Mechanic - You can salvage disarmed traps 50% of the time.
+    Alchemist - All potions act like wildcard potions,
+    Scout - You can see traps without sneaking
     
 /currentBlessing command shows your current blessing
     
@@ -46,5 +48,6 @@ When a world is created, it is given a random disadvantage. You are told what it
 Disadvantages:
 
     Tougher Mobs - -25% damage to hostile enemies,
-    Weak - -25% melee damage
+    Weak - -25% melee damage,
+    Explosive Traps - Traps trigger explosions on failed disarms
     
