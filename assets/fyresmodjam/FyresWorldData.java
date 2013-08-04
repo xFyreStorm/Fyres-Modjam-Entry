@@ -25,16 +25,16 @@ public class FyresWorldData extends WorldSavedData {
 	
 	public static String key = "FyresWorldData";
 	
-	public static int[] potionValues = null;
-	public static int[] potionDurations = null;
+	public int[] potionValues = null;
+	public int[] potionDurations = null;
 	
-	public static String currentDisadvantage = null;
+	public String currentDisadvantage = null;
 	
-	public static String currentTask = null;
-	public static int currentTaskID = -1;
-	public static int currentTaskAmount = 0;
-	public static int progress = 0;
-	public static int tasksCompleted = 0;
+	public String currentTask = null;
+	public int currentTaskID = -1;
+	public int currentTaskAmount = 0;
+	public int progress = 0;
+	public int tasksCompleted = 0;
 	
 	public static Class[] validMobs = {EntityDragon.class, EntityWither.class};
 	public static String[] validMobNames = {"Ender Dragon", "Wither"};
@@ -47,8 +47,8 @@ public class FyresWorldData extends WorldSavedData {
 		
 		potionValues = null;
 		potionDurations = null;
-		
 		currentDisadvantage = null;
+		currentTask = null;
 		
 		checkWorldData();
 	}
@@ -149,11 +149,13 @@ public class FyresWorldData extends WorldSavedData {
 		if(currentTask == null) {
 			giveNewTask();
 		} else {
-			
+			boolean changeTask = true;
+			for(String s : validTasks) {if(s.equals(validTasks)) {changeTask = false; break;}}
+			if(changeTask) {giveNewTask();} else {if(currentTask.equals("Kill")) {currentTaskID %= validMobs.length;}}
 		}
 	}
 
-	public static void giveNewTask() {
+	public void giveNewTask() {
 		progress = 0;
 		
 		currentTask = validTasks[ModjamMod.r.nextInt(validTasks.length)];
