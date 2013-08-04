@@ -43,7 +43,8 @@ Blessings:
     Mechanic - You can salvage disarmed traps 50% of the time.
     Alchemist - All potions act like wildcard potions,
     Scout - You can see traps without sneaking,
-    Guardian - Take 25% less damage from all sources
+    Guardian - Take 25% less damage from all sources,
+    Vampire - Heal 10% of damage dealt to enemies
     
 /currentBlessing command shows your current blessing
     

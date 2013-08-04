@@ -1,8 +1,12 @@
 package assets.fyresmodjam;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -17,12 +21,23 @@ public class FyresWorldData extends WorldSavedData {
 	public static String[] validDisadvantages = {/*"Illiterate",*/ "Tougher Mobs", "Weak", "Explosive Traps"};
 	public static String[] disadvantageDescriptions = {/*"Item names are unreadable",*/ "-25% damage to hostile enemies", "-25% melee damage", "Traps trigger explosions on failed disarms"};
 	
+	public static String[] validTasks = {"Kill", "Collect"};
+	
 	public static String key = "FyresWorldData";
 	
 	public static int[] potionValues = null;
 	public static int[] potionDurations = null;
 	
 	public static String currentDisadvantage = null;
+	
+	public static String currentTask = null;
+	public static int currentTaskID = -1;
+	public static int currentTaskAmount = 0;
+	
+	public static Class[] validMobs = {EntityDragon.class, EntityWither.class};
+	public static int[][] mobNumbers = {new int[] {1, 1} , new int[] {1, 3}};
+	
+	public static int[] validItems = {Block.blockDiamond.blockID, Block.blockGold.blockID, Block.blockEmerald.blockID, Block.blockLapis.blockID, Item.diamond.itemID, Item.emerald.itemID, Item.ingotGold.itemID, Item.netherStar.itemID, Item.ghastTear.itemID};
 
 	public FyresWorldData() {
 		super(key);
@@ -51,15 +66,25 @@ public class FyresWorldData extends WorldSavedData {
 		if(nbttagcompound.hasKey("values")) {potionValues = nbttagcompound.getIntArray("values");}
 		if(nbttagcompound.hasKey("durations")) {potionDurations = nbttagcompound.getIntArray("durations");}
 		if(nbttagcompound.hasKey("currentDisadvantage")) {currentDisadvantage = nbttagcompound.getString("currentDisadvantage");}
+		
+		if(nbttagcompound.hasKey("currentTask")) {currentTask = nbttagcompound.getString("currentTask");}
+		if(nbttagcompound.hasKey("currentTaskID")) {currentTaskID = nbttagcompound.getInteger("currentTaskID");}
+		if(nbttagcompound.hasKey("currentTaskAmount")) {currentTaskAmount = nbttagcompound.getInteger("currentTaskAmount");}
+		
 		checkWorldData();
 	} 
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		checkWorldData();
+		
 		nbttagcompound.setIntArray("values", potionValues);
 		nbttagcompound.setIntArray("durations", potionDurations);
 		nbttagcompound.setString("currentDisadvantage", currentDisadvantage);
+		
+		nbttagcompound.setString("currentTask", currentTask);
+		nbttagcompound.setInteger("currentTaskID", currentTaskID);
+		nbttagcompound.setInteger("currentTaskAmount", currentTaskAmount);
 	}
 	
 	private void checkWorldData() {
@@ -112,6 +137,24 @@ public class FyresWorldData extends WorldSavedData {
 					EntityStatHelper.processEntity((Entity) o, ModjamMod.r);
 				}
 			}*/
+		}
+		
+		if(currentTask == null) {
+			giveNewTask();
+		} else {
+			
+		}
+	}
+
+	public void giveNewTask() {
+		currentTask = validTasks[ModjamMod.r.nextInt(validTasks.length)];
+		
+		if(currentTask.equals("Kill")) {
+			currentTaskID = ModjamMod.r.nextInt(validMobs.length);
+			currentTaskAmount = mobNumbers[currentTaskID][0] + ModjamMod.r.nextInt(mobNumbers[currentTaskID][1]);
+		} else if(currentTask.equals("Collect")) {
+			currentTaskID = validItems[ModjamMod.r.nextInt(validItems.length)];
+			currentTaskAmount = 5 + ModjamMod.r.nextInt(28);
 		}
 	}
 }

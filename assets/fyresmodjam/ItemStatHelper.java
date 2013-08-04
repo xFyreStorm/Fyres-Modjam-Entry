@@ -172,6 +172,16 @@ public class ItemStatHelper {
 			
 			float damageMultiplier = 1.0F;
 			
+			if(FyresWorldData.currentDisadvantage.equals("Weak") || (FyresWorldData.currentDisadvantage.equals("Tougher Mobs") && event.entity instanceof EntityMob)) {
+				damageMultiplier -= 0.25F;
+			}
+			
+			if(event.entity.getEntityData().hasKey("Blessing")) {
+				if(event.entity.getEntityData().getString("Blessing").equals("Guardian")) {
+					damageMultiplier -= 0.25F;
+				}
+			}
+			
 			if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
 				String blessing = event.source.getEntity().getEntityData().getString("Blessing");
 				
@@ -183,16 +193,8 @@ public class ItemStatHelper {
 					damageMultiplier += 1.0F;
 				} else if(blessing.equals("Swamp") && event.entityLiving != null) {
 					event.entityLiving.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1, false));
-				}
-			}
-			
-			if(FyresWorldData.currentDisadvantage.equals("Weak") || (FyresWorldData.currentDisadvantage.equals("Tougher Mobs") && event.entity instanceof EntityMob)) {
-				damageMultiplier -= 0.25F;
-			}
-			
-			if(event.entity.getEntityData().hasKey("Blessing")) {
-				if(event.entity.getEntityData().getString("Blessing").equals("Guardian")) {
-					damageMultiplier -= 0.25F;
+				} else if(blessing.equals("Vampire") && event.source.getEntity() instanceof EntityLivingBase) {
+					((EntityLivingBase) event.source.getEntity()).heal(event.ammount * damageMultiplier * 0.1F);
 				}
 			}
 			
