@@ -22,6 +22,12 @@ public class TileEntityTrap extends TileEntity {
     	super.updateEntity();
     }*/
     
+    public void updateEntity() {
+    	super.updateEntity();
+    	
+    	if(worldObj.isRemote) {spawnParticles();}
+    }
+    
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
     	
@@ -52,5 +58,16 @@ public class TileEntityTrap extends TileEntity {
     public double getMaxRenderDistanceSquared() {
     	//EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         return 36.0F; //(player != null && player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")) ? 16.0D : 36.0D;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public void spawnParticles() {
+    	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		int type = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+		
+		if(type == 1 && (player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")))) {
+			if(ModjamMod.r.nextInt(5) == 0) {this.worldObj.spawnParticle("smoke", this.xCoord + 0.5F, this.yCoord + 0.175F, this.zCoord + 0.5F, (ModjamMod.r.nextFloat() - 0.5F)/16, ModjamMod.r.nextFloat()/16, (ModjamMod.r.nextFloat() - 0.5F)/16);}
+			this.worldObj.spawnParticle("flame", this.xCoord + 0.5F, this.yCoord + 0.175F, this.zCoord + 0.5F, 0.0F, 0.0F, 0.0F);
+		}
     }
 }
