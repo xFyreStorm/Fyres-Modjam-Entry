@@ -24,6 +24,8 @@ public class TileEntityTrap extends TileEntity {
     
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
+    	
+    	if(type == -1) {type = ModjamMod.r.nextInt(4);}
     	par1NBTTagCompound.setInteger("TrapType", type);
     }
 

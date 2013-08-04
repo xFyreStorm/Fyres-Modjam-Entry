@@ -33,6 +33,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockTrap extends BlockContainer
 {
+	
+	public static int trapTypes = 2;
+	
     protected BlockTrap(int par1) {
         super(par1, Material.circuits);
         this.setLightOpacity(0);
@@ -102,8 +105,20 @@ public class BlockTrap extends BlockContainer
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
     	if(!par1World.isRemote && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
-    		par5Entity.attackEntityFrom(DamageSource.cactus, 1.0F);
-    		if(ModjamMod.r.nextInt(100) == 0) {((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.poison.id, 100, 1));}
+    		
+    		TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
+    		
+    		if(te == null || !(te instanceof TileEntityTrap)) {return;}
+    		
+    		int type = ((TileEntityTrap) te).type;
+    		
+    		if(type % trapTypes == 0) {
+    			par5Entity.attackEntityFrom(DamageSource.cactus, 2.0F);
+    			if(ModjamMod.r.nextInt(100) == 0) {((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.poison.id, 100, 1));}
+    		} else if(type % trapTypes == 1) {
+    			if(!par5Entity.isBurning()) {par5Entity.setFire(5);}
+    		}
+    		
     	}
     }
     
