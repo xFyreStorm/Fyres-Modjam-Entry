@@ -47,7 +47,7 @@ public class FyresWorldData extends WorldSavedData {
 		if(nbttagcompound.hasKey("durations")) {potionDurations = nbttagcompound.getIntArray("durations");}
 		if(nbttagcompound.hasKey("currentDisadvantage")) {currentDisadvantage = nbttagcompound.getString("currentDisadvantage");}
 		checkWorldData();
-	}
+	} 
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
