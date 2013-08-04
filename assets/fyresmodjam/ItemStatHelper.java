@@ -190,6 +190,12 @@ public class ItemStatHelper {
 				damageMultiplier -= 0.25F;
 			}
 			
+			if(event.entity.getEntityData().hasKey("Blessing")) {
+				if(event.entity.getEntityData().getString("Blessing").equals("Guardian")) {
+					damageMultiplier -= 0.25F;
+				}
+			}
+			
 			event.ammount *= damageMultiplier;
 		}
 	}
