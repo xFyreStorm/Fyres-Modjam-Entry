@@ -90,6 +90,7 @@ public class EntityStatHelper {
 	
 	public static Entity setName(EntityLiving entity, String name) {
 		entity.setCustomNameTag(name);
+		if(entity.getCustomNameTag().equals(entity.getEntityName())) {entity.setCustomNameTag("");}
 		return entity;
 	}
 	
@@ -149,9 +150,9 @@ public class EntityStatHelper {
 				if((entityName == null || !entityName.startsWith("\u00A7k"))) {
 					setName((EntityLiving) entity, "\u00A7k" + (entityName == null ? entity.getEntityName() : entityName));
 				}
-			} else if(entityName != null && entityName.startsWith("\u00A7k")) {
+			}/* else if(entityName != null && entityName.startsWith("\u00A7k")) {
 				setName((EntityLiving) entity, entityName.replace("\u00A7k", ""));
-			}
+			}*/
 		}
 	}
 	

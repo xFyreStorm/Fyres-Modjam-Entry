@@ -85,6 +85,7 @@ public class FyresWorldData extends WorldSavedData {
 		for(int i = 0; i < 12; i++) {if(potionDurations[i] != 0) {continue;} potionDurations[i] = 5 + ModjamMod.r.nextInt(26);}
 		
 		boolean changeDisadvantage = currentDisadvantage == null;
+		changeDisadvantage = true;
 		
 		if(!changeDisadvantage) {
 			boolean valid = false;
@@ -95,18 +96,16 @@ public class FyresWorldData extends WorldSavedData {
 		if(changeDisadvantage) {
 			currentDisadvantage = validDisadvantages[ModjamMod.r.nextInt(validDisadvantages.length)];
 			
-			if(currentDisadvantage.equals("Illiterate")) {
-				MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+			MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+			
+			for(int i = 0; i < server.worldServers.length; i++) {
+				WorldServer s = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers[i];
 				
-				for(int i = 0; i < server.worldServers.length; i++) {
-					WorldServer s = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers[i];
-					
-					if(s == null) {continue;}
-					
-					for(Object o : s.loadedEntityList) {
-						if(o == null || o instanceof EntityPlayer) {continue;}
-						EntityStatHelper.processEntity((Entity) o, ModjamMod.r);
-					}
+				if(s == null) {continue;}
+				
+				for(Object o : s.loadedEntityList) {
+					if(o == null || o instanceof EntityPlayer) {continue;}
+					EntityStatHelper.processEntity((Entity) o, ModjamMod.r);
 				}
 			}
 		}

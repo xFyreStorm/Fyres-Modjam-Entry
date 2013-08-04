@@ -36,6 +36,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.network.packet.Packet5PlayerInventory;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -107,6 +108,11 @@ public class ItemStatHelper implements ICraftingHandler {
 		if(!stack.hasTagCompound()) {stack.setTagCompound(new NBTTagCompound());}
 		if(!stack.getTagCompound().hasKey("display")) {stack.getTagCompound().setTag("display", new NBTTagCompound());}
 		stack.getTagCompound().getCompoundTag("display").setString("Name", name);
+		
+		if(getName(stack).equals(StatCollector.translateToLocal(stack.getItemName()))) {
+			stack.getTagCompound().getCompoundTag("display").removeTag("Name");
+		}
+		
 		return stack;
 	}
 	
@@ -237,9 +243,9 @@ public class ItemStatHelper implements ICraftingHandler {
 			if((stackName == null || !stackName.startsWith("\u00A7k"))) {
 				setName(stack, "\u00A7k" + (stackName == null ? stack.getDisplayName() : stackName));
 			}
-		} else if(stackName != null && stackName.startsWith("\u00A7k")) {
+		}/* else if(stackName != null && stackName.startsWith("\u00A7k")) {
 			setName(stack, stackName.replace("\u00A7k", ""));
-		}
+		}*/
 	}
 
 	@Override
