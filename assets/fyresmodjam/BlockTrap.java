@@ -125,6 +125,11 @@ public class BlockTrap extends BlockContainer
         return b;
     }
     
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+    	return super.canPlaceBlockAt(world, x, y, z) && (y == 0 || world.getBlockId(x, y - 1, z) != ModjamMod.blockTrap.blockID);
+    }
+    
     @SideOnly(Side.CLIENT)
     public boolean getPlayerSneaking() {
     	return Minecraft.getMinecraft().thePlayer == null ? false : Minecraft.getMinecraft().thePlayer.isSneaking();
