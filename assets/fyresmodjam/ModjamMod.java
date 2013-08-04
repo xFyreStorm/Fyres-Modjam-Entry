@@ -69,7 +69,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Item mysteryPotion;
     public static Item itemTrap;
     
-    
+    public static Achievement startTheGame; 
     public static Achievement losingIsFun;
     public static Achievement whoops;
     public static AchievementPage page;
@@ -229,9 +229,10 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 		//Achievements
 		
-		losingIsFun = getNewAchievement(achievementID, 0, 0, new ItemStack(itemTrap, 1), "losingIsFun", "Losing Is Fun", "Experience \"fun\"", (Achievement) null, true);
-		whoops = getNewAchievement(achievementID + 1, 2, 0, new ItemStack(itemTrap, 1, 1), "whoops", "Whoops", "Fail to disarm a trap", (Achievement) null, true);
-		page = new AchievementPage("The \"You Will Die\" Mod", losingIsFun, whoops);
+		startTheGame = getNewAchievement(achievementID, 0, 0, new ItemStack(Item.swordIron, 1), "startTheGame", "You Will Die", "Join a world with this mod installed", null, true);
+		losingIsFun = getNewAchievement(achievementID + 1, -2, 0, new ItemStack(itemTrap, 1), "losingIsFun", "Losing Is Fun", "Experience \"fun\"", startTheGame, false);
+		whoops = getNewAchievement(achievementID + 2, 2, 0, new ItemStack(itemTrap, 1, 1), "whoops", "Whoops", "Fail to disarm a trap", startTheGame, false);
+		page = new AchievementPage("The \"You Will Die\" Mod", startTheGame, losingIsFun, whoops);
 		
 		AchievementPage.registerAchievementPage(page);
 	}
@@ -256,6 +257,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eWorld goal: " + CommonTickHandler.worldData.currentTask + " " + CommonTickHandler.worldData.currentTaskAmount + " " + (CommonTickHandler.worldData.currentTask.equals("Kill") ? CommonTickHandler.worldData.validMobNames[CommonTickHandler.worldData.currentTaskID] : new ItemStack(Item.itemsList[CommonTickHandler.worldData.currentTaskID], 1).getDisplayName()) + (CommonTickHandler.worldData.currentTaskAmount > 1 ? "s" : "") + ". (" + CommonTickHandler.worldData.progress + " " + CommonTickHandler.worldData.currentTask + "ed)"}), (Player) player);
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eGoals completed: " + CommonTickHandler.worldData.tasksCompleted}), (Player) player);
 		}
+		
+		//player.triggerAchievement(startTheGame);
 	}
 
 	@Override

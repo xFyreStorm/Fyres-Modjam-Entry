@@ -41,19 +41,23 @@ public class ClientTickHandler implements ITickHandler {
 	private void onClientTick() {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		
-		if(player != null && player.openContainer != null) {
-			boolean sendPacket = false;
-			
-			for(Object object : player.inventory.mainInventory) {
-				if(object == null || !(object instanceof ItemStack)) {continue;}
+		if(player != null) {
+			if(player.openContainer != null) {
+				boolean sendPacket = false;
 				
-				ItemStack stack = (ItemStack) object;
-				if(stack.getTagCompound() == null || !stack.getTagCompound().hasKey("processed") || stack.getTagCompound().getString("processed").equals("false")) {
-					sendPacket = true;
+				for(Object object : player.inventory.mainInventory) {
+					if(object == null || !(object instanceof ItemStack)) {continue;}
+					
+					ItemStack stack = (ItemStack) object;
+					if(stack.getTagCompound() == null || !stack.getTagCompound().hasKey("processed") || stack.getTagCompound().getString("processed").equals("false")) {
+						sendPacket = true;
+					}
 				}
+				
+				if(sendPacket) {PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.UPDATE_PLAYER_ITEMS));}
 			}
 			
-			if(sendPacket) {PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.UPDATE_PLAYER_ITEMS));}
+			player.triggerAchievement(ModjamMod.startTheGame);
 		}
 	}
 
