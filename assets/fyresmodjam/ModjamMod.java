@@ -89,7 +89,16 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     }
     
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {loadProperties();}
+	public void preInit(FMLPreInitializationEvent event) {
+		loadProperties();
+		
+		startTheGame = getNewAchievement(achievementID, 0, 0, new ItemStack(Item.swordIron, 1), "startTheGame", "You Will Die", "Join a world with this mod installed", null, true);
+		losingIsFun = getNewAchievement(achievementID + 1, -2, 0, new ItemStack(Item.bow, 1), "losingIsFun", "Losing Is Fun", "Experience \"fun\"", startTheGame, false);
+		whoops = getNewAchievement(achievementID + 2, 2, 0, new ItemStack(Item.flintAndSteel, 1, 1), "whoops", "Whoops", "Fail to disarm a trap", startTheGame, false);
+		page = new AchievementPage("The \"You Will Die\" Mod", startTheGame, losingIsFun, whoops);
+		
+		AchievementPage.registerAchievementPage(page);
+	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
@@ -226,15 +235,6 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		//ItemStatTracker foodTracker = new ItemStatTracker(ItemFood.class, -1);
 		//foodTracker.addStat(new ItemStat("Spoiled", false));
 		//ItemStatHelper.addStatTracker(foodTracker);
-		
-		//Achievements
-		
-		//startTheGame = getNewAchievement(achievementID, 0, 0, new ItemStack(Item.swordIron, 1), "startTheGame", "You Will Die", "Join a world with this mod installed", null, true);
-		//losingIsFun = getNewAchievement(achievementID + 1, -2, 0, new ItemStack(itemTrap, 1), "losingIsFun", "Losing Is Fun", "Experience \"fun\"", startTheGame, false);
-		//whoops = getNewAchievement(achievementID + 2, 2, 0, new ItemStack(itemTrap, 1, 1), "whoops", "Whoops", "Fail to disarm a trap", startTheGame, false);
-		//page = new AchievementPage("The \"You Will Die\" Mod", startTheGame, losingIsFun, whoops);
-		
-		//AchievementPage.registerAchievementPage(page);
 	}
 	
 	@EventHandler
