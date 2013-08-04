@@ -122,7 +122,7 @@ public class FyresWorldData extends WorldSavedData {
 		if(!changeDisadvantage) {
 			boolean valid = false;
 			for(String s : validDisadvantages) {if(s.equals(currentDisadvantage)) {valid = true; break;}}
-			changeDisadvantage = !valid;
+			changeDisadvantage = !valid && !currentDisadvantage.equals("None");
 		}
 		
 		if(changeDisadvantage) {
