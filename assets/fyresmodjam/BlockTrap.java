@@ -37,36 +37,9 @@ public class BlockTrap extends BlockContainer
 	
 	public static int trapTypes = 2;
 	
-	public static Icon[] icons;
-	public static String[] iconLocations = new String[] {"fyresmodjam:spikes", "fyresmodjam:trap2"};
-	
     protected BlockTrap(int par1) {
         super(par1, Material.circuits);
         this.setLightOpacity(0);
-        this.setCreativeTab(CreativeTabs.tabBlock);
-  
-        //this.setTickRandomly(true);
-        //this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister) {
-    	if(icons == null) {
-    		icons = new Icon[trapTypes];
-    		for(int i = 0; i < iconLocations.length; i++) {icons[i] = par1IconRegister.registerIcon(iconLocations[i]);}
-    	}
-    	
-        this.blockIcon = icons[0];
-    }
-
-    @SideOnly(Side.CLIENT)
-    public Icon getIcon(int par1, int par2) {
-        return icons[par2]; 
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public String getItemIconName() {
-        return "fyresmodjam:spikes";
     }
 
     public int idDropped(int par1, Random par2Random, int par3) {
@@ -172,13 +145,13 @@ public class BlockTrap extends BlockContainer
     }
     
     public int damageDropped(int par1) {
-        return par1;
+        return par1 % trapTypes;
     }
 
-    @SideOnly(Side.CLIENT)
+    /*@SideOnly(Side.CLIENT)
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {
         for (int i = 0; i < trapTypes; i++) {par3List.add(new ItemStack(par1, 1, i));}
-    }
+    }*/
     
     public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
     	super.onBlockPlacedBy(par1World, par2, par3, par4, par5EntityLivingBase, par6ItemStack);
