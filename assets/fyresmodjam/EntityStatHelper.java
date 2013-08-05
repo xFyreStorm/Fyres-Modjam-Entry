@@ -18,6 +18,7 @@ import assets.fyresmodjam.ItemStatHelper.ItemStatTracker;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -199,6 +200,13 @@ public class EntityStatHelper {
 				}
 				
 				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted}));
+			
+				CommonTickHandler.worldData.markDirty();
+			}
+			
+			if(!CommonTickHandler.worldData.enderDragonKilled && event.entity instanceof EntityDragon) {
+				CommonTickHandler.worldData.enderDragonKilled = true;
+				CommonTickHandler.worldData.markDirty();
 			}
 		}
 		

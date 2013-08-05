@@ -154,7 +154,7 @@ public class FyresWorldData extends WorldSavedData {
 		} else {
 			boolean changeTask = true;
 			for(String s : validTasks) {if(s.equals(currentTask)) {changeTask = false; break;}}
-			if(changeTask) {giveNewTask();} else {if(currentTask.equals("Kill")) {currentTaskID %= validMobs.length;}}
+			if(changeTask || (currentTask != null && currentTask.equals("Kill") && currentTaskID == 0 && enderDragonKilled)) {giveNewTask();} else {if(currentTask.equals("Kill")) {currentTaskID %= validMobs.length;}}
 		}
 	}
 
