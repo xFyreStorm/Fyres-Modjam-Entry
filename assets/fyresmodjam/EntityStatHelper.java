@@ -137,9 +137,11 @@ public class EntityStatHelper {
 				} catch (Exception e) {e.printStackTrace();}
 				
 				if(entityNew != null) {
-					entityNew.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, event.entity.rotationYaw, event.entity.rotationPitch);
-					entityNew.getDataWatcher().addObject(30, (byte) 1);
-					event.world.spawnEntityInWorld(entityNew);
+					try {
+						entityNew.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, event.entity.rotationYaw, event.entity.rotationPitch);
+						entityNew.getDataWatcher().addObject(30, (byte) 1);
+						event.world.spawnEntityInWorld(entityNew);
+					} catch (Exception e) {System.out.println("Error.");}
 				}
 			}
 		}
