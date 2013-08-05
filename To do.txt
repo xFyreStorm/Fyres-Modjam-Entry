@@ -59,7 +59,8 @@ Disadvantages:
 
     Tougher Mobs - -25% damage to hostile enemies,
     Weak - -25% melee damage,
-    Explosive Traps - Traps trigger explosions on failed disarms
+    Explosive Traps - Traps trigger explosions on failed disarms,
+    Increased Mob Spawn - 50% more hostile mobs
     
 World Goals: When a world is created, it is given a random goal. Complete the goal to remove the world disadvantage. You then receive a new goal.
 

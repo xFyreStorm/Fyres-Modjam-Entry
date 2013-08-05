@@ -114,7 +114,13 @@ public class EntityStatHelper {
 		if(!event.world.isRemote) {
 			processEntity(event.entity, ModjamMod.r);
 			
-			if(CommonTickHandler.worldData.currentDisadvantage.equals("Increased Mob Spawn") && (event.entity instanceof EntityMob) && !(event.entity instanceof EntityDragon) && ModjamMod.r.nextBoolean()) {
+			boolean isClone = true;
+			
+			try {
+				isClone = event.entity.getDataWatcher().getWatchableObjectByte(30) != 0;
+			} catch (Exception e) {isClone = false;}
+			
+			if(CommonTickHandler.worldData != null && CommonTickHandler.worldData.currentDisadvantage.equals("Increased Mob Spawn") && (event.entity instanceof EntityMob) && !(event.entity instanceof EntityDragon) && !isClone && ModjamMod.r.nextBoolean()) {
 				Entity entityNew = null;
 				
 				try {
@@ -129,6 +135,7 @@ public class EntityStatHelper {
 				
 				if(entityNew != null) {
 					entityNew.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, event.entity.rotationYaw, event.entity.rotationPitch);
+					entityNew.getDataWatcher().addObject(30, (byte) 1);
 					event.world.spawnEntityInWorld(entityNew);
 				}
 			}
