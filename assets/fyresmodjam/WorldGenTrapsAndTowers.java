@@ -5,10 +5,12 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.DungeonHooks;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGenTrapsAndTowers implements IWorldGenerator {
@@ -27,8 +29,8 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     					world.setBlock(x, y, z, ModjamMod.blockTrap.blockID, random.nextInt(BlockTrap.trapTypes), 0);
     				}
 
-    				if(!addedDungeon && world.getBlockId(x, y, z) == Block.grass.blockID && ModjamMod.r.nextInt(100) == 0) {
-    					int floors = 3 + random.nextInt(7);
+    				if(!addedDungeon && (world.getBlockId(x, y, z) == Block.grass.blockID || world.getBlockId(x, y, z) == Block.sand.blockID) && ModjamMod.r.nextInt(100) == 0) {
+    					int floors = 3 + random.nextInt(5);
 
     					for(int y2 = 0; y2 <= floors * 5; y2++) {
     						for(int x2 = -4; x2 <= 4; x2++) {
@@ -36,22 +38,30 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
 
     								if(y2 % 5 == 0 || x2 == -4 || x2 == 4 || z2 == -4 || z2 == 4) {
     									world.setBlock(x + x2, y + y2, z + z2, Block.cobblestoneMossy.blockID);
-    								} else if(y2 % 5 == 1 && x2 == 0 && z2 == 0 && (y2/5 >= floors - 1 || random.nextInt(4) == 0)) {
+    									
+    									if(x2 == 0 && z2 == -4 && y2 != 0 && y2 <= floors * 5 - 4) {
+    										world.setBlock(x + x2, y + y2, z + z2 + 1, Block.ladder.blockID, Block.ladder.onBlockPlaced(world, x + x2, y + y2, z + z2 + 1, 0, 0, 0, 0, 0), 0);
+    									}
+    									
+    								} else if(y2 % 5 == 1 && x2 == 0 && z2 == 3 && (y2/5 >= floors - 1 || random.nextInt(4) == 0)) {
     									world.setBlock(x + x2, y + y2, z + z2, Block.chest.blockID, 0, 2);
     									
     									TileEntityChest tileentitychest = (TileEntityChest) world.getBlockTileEntity(x + x2, y + y2, z + z2);
 
-    									if (tileentitychest != null) {
+    									if(tileentitychest != null) {
     										ChestGenHooks info = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
     										WeightedRandomChestContent.generateChestContents(random, info.getItems(random), tileentitychest, info.getCount(random));
     									}
-    								} else {
+    								} else if(y2 % 5 == 1 && x2 == 0 && z2 == 0) {
+    									world.setBlock(x + x2, y + y2, z + z2, Block.mobSpawner.blockID, 0, 2);
+    						            TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)world.getBlockTileEntity(x + x2, y + y2, z + z2);
+
+    						            if(tileentitymobspawner != null) {
+    						                tileentitymobspawner.getSpawnerLogic().setMobID(DungeonHooks.getRandomDungeonMob(random));
+    						            }
+    								} else if(world.getBlockId(x + x2, y + y2, z + z2) != Block.mobSpawner.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.chest.blockID) {
     									world.setBlockToAir(x + x2, y + y2, z + z2);
     								}
-    								
-    								 if(z2 == 1 && y2 != 0) {
-     									world.setBlock(x + x2, y + y2, z + z2, Block.ladder.blockID, Block.ladder.onBlockPlaced(world, x + x2, y + y2, z + z2, 0, 0, 0, 0, 0), 0);
-     								}
 
     							}
 	    					}
