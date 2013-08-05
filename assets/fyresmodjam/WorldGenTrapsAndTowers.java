@@ -66,12 +66,8 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
 	    						                tileentitymobspawner.getSpawnerLogic().setMobID(DungeonHooks.getRandomDungeonMob(random));
 	    						            }
     									} else {
-    										Block block = ModjamMod.blockPillar;
-    				        		        
-    				        		        if(block.canPlaceBlockAt(world, x, y, z)) { 
-    				        		        	world.setBlock(x, y + 1, z, block.blockID, 0, 0);
-    				        		        	world.setBlock(x, y + 2, z, block.blockID, 1, 0);
-    				        		        }
+    				        		        world.setBlock(x + x2, y + y2, z + z2, ModjamMod.blockPillar.blockID, 0, 0);
+    				        		        world.setBlock(x + x2, y + y2 + 1, z + z2, ModjamMod.blockPillar.blockID, 1, 0);
     									}
     								} else if((x2 * x2 + z2 * z2 <= 25) && world.getBlockId(x + x2, y + y2, z + z2) != Block.mobSpawner.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.chest.blockID) {
     									world.setBlockToAir(x + x2, y + y2, z + z2);

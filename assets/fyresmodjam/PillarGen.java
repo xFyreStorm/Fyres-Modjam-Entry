@@ -22,9 +22,11 @@ public class PillarGen implements IWorldGenerator {
         				Block block = ModjamMod.blockPillar;
         		        
         		        if(block.canPlaceBlockAt(world, x, y + 1, z)) { 
-        		        	world.setBlock(x, y + 1, z, block.blockID, 0, 0);
-        		            
-        		        	world.setBlock(x, y + 2, z, block.blockID, 1, 0);
+        		        	world.setBlock(x, y + 1, z, block.blockID);
+        		        	world.setBlockMetadataWithNotify(x, y + 1, z, 0, 0);
+        		        	
+        		        	world.setBlock(x, y + 2, z, block.blockID);
+        		        	world.setBlockMetadataWithNotify(x, y + 2, z, 1, 0);
         		        	
         		        	placed = random.nextBoolean();
         		        	
