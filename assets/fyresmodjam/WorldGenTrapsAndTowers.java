@@ -42,11 +42,12 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     								
     								if((x2 * x2 + z2 * z2 <= 25) && (y2 % 5 == 0 || z2 > 3 + (y2 < 5 ? 1 : 0) || z2 < -3 || Math.abs(x2) > 3 + (y2 < 5 ? 1 : 0))) {
     									if(world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID) {
-    										//if(!((Math.abs(z2) == 4 && x2 == 0) || (Math.abs(x2) == 4 && z2 == 0)) || y2 % 5 == 0) {
-	    										world.setBlock(x + x2, y + y2, z + z2, random.nextBoolean() ? Block.cobblestoneMossy.blockID : Block.cobblestone.blockID);
-	    									//} else {
-	    										//world.setBlockToAir(x + x2, y + y2, z + z2);
-	    									//}
+    										if(y2 >= 5 && (y2 % 5 == 2 || y2 % 5 == 3) && ((Math.abs(z2) == 1 && Math.abs(x2) == 2) || (Math.abs(z2) == 2 && Math.abs(x2) == 1))) {
+    											world.setBlock(x + x2, y + y2, z + z2, Block.fenceIron.blockID);
+    											System.out.println(true);
+    										} else {
+    											world.setBlock(x + x2, y + y2, z + z2, random.nextBoolean() ? Block.cobblestoneMossy.blockID : Block.cobblestone.blockID);
+    										}
     									}
     									
     									if(x2 == 0 && z2 == -5 && y2 != 0 && y2 <= floors * 5 - 4) {
