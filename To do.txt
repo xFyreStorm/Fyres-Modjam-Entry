@@ -63,4 +63,5 @@ Disadvantages:
 World Goals: When a world is created, it is given a random goal. Complete the goal to remove the world disadvantage. You then receive a new goal.
 
 /currentGoal command shows your current world goal
-    
+
+3 Achievements to earn

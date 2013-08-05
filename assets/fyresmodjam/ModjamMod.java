@@ -47,7 +47,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.0a")
+@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.1a")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
 public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	
