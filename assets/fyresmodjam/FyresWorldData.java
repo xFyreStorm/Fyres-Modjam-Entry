@@ -173,6 +173,7 @@ public class FyresWorldData extends WorldSavedData {
 			currentTaskAmount = mobNumbers[currentTaskID][0] + ModjamMod.r.nextInt(mobNumbers[currentTaskID][1]);
 		} else if(currentTask.equals("Collect")) {
 			currentTaskID = validItems[ModjamMod.r.nextInt(validItems.length)];
+			currentTaskID = Item.ingotGold.itemID;
 			currentTaskAmount = 5 + ModjamMod.r.nextInt(28);
 		}
 		

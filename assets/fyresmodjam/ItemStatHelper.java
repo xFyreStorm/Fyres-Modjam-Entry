@@ -47,7 +47,7 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 
-public class ItemStatHelper {
+public class ItemStatHelper implements ICraftingHandler {
 	
 	//There's probably a better way of doing all of this. :P Oh well.
 	
@@ -327,26 +327,72 @@ public class ItemStatHelper {
 		}*/
 	}
 
-	/*@Override
+	@Override
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
 		if(player != null && !player.worldObj.isRemote) {
-			processItemStack(item, ModjamMod.r);
-			((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
-			//player.openContainer.detectAndSendChanges();
-			//Not what I'm looking for. :P PacketDispatcher.sendPacketToPlayer(new Packet5PlayerInventory(player.entityId, 0, item), (Player) player);
+			for(int i = 0; i < craftMatrix.getSizeInventory(); i++) {
+				ItemStack stack = craftMatrix.getStackInSlot(i);
+				
+				if(stack == null) {continue;}
+				
+				if(CommonTickHandler.worldData.currentTask.equals("Collect") && stack.getItem().itemID == CommonTickHandler.worldData.currentTaskID) {
+					CommonTickHandler.worldData.progress -= stack.stackSize;
+					
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled}));
+					
+					CommonTickHandler.worldData.setDirty(true);
+				}
+			}
+			
+			if(CommonTickHandler.worldData.currentTask.equals("Collect") && item.getItem().itemID == CommonTickHandler.worldData.currentTaskID) {
+				CommonTickHandler.worldData.progress += item.stackSize;
+				
+				if(CommonTickHandler.worldData.progress >= CommonTickHandler.worldData.currentTaskAmount) {
+					CommonTickHandler.worldData.progress = 0;
+					CommonTickHandler.worldData.tasksCompleted++;
+					
+					CommonTickHandler.worldData.giveNewTask();
+					
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!" + (!CommonTickHandler.worldData.currentDisadvantage.equals("None") ? " World disadvantage has been lifted!": "")}));
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA new world goal has been set: " + (CommonTickHandler.worldData.currentTask + " " + CommonTickHandler.worldData.currentTaskAmount + " " + (CommonTickHandler.worldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[CommonTickHandler.worldData.currentTaskID] : new ItemStack(Item.itemsList[CommonTickHandler.worldData.currentTaskID], 1).getDisplayName()) + "s. (" + CommonTickHandler.worldData.progress + " " + CommonTickHandler.worldData.currentTask + "ed)")}));
+					
+					CommonTickHandler.worldData.currentDisadvantage = "None";
+				}
+				
+				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled}));
+			
+				CommonTickHandler.worldData.setDirty(true);
+			}
 		}
 	}
 
 	@Override
 	public void onSmelting(EntityPlayer player, ItemStack item) {
 		if(player != null && !player.worldObj.isRemote) {
-			processItemStack(item, ModjamMod.r);
-			((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+			if(CommonTickHandler.worldData.currentTask.equals("Collect") && item.getItem().itemID == CommonTickHandler.worldData.currentTaskID) {
+				CommonTickHandler.worldData.progress += item.stackSize;
+				
+				if(CommonTickHandler.worldData.progress >= CommonTickHandler.worldData.currentTaskAmount) {
+					CommonTickHandler.worldData.progress = 0;
+					CommonTickHandler.worldData.tasksCompleted++;
+					
+					CommonTickHandler.worldData.giveNewTask();
+					
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!" + (!CommonTickHandler.worldData.currentDisadvantage.equals("None") ? " World disadvantage has been lifted!": "")}));
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA new world goal has been set: " + (CommonTickHandler.worldData.currentTask + " " + CommonTickHandler.worldData.currentTaskAmount + " " + (CommonTickHandler.worldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[CommonTickHandler.worldData.currentTaskID] : new ItemStack(Item.itemsList[CommonTickHandler.worldData.currentTaskID], 1).getDisplayName()) + "s. (" + CommonTickHandler.worldData.progress + " " + CommonTickHandler.worldData.currentTask + "ed)")}));
+					
+					CommonTickHandler.worldData.currentDisadvantage = "None";
+				}
+				
+				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled}));
+			
+				CommonTickHandler.worldData.setDirty(true);
+			}
 		}
-	}*/
+	}
 	
 	public void register() {
 		MinecraftForge.EVENT_BUS.register(this);
-		//GameRegistry.registerCraftingHandler(this);
+		GameRegistry.registerCraftingHandler(this);
 	}
 }
