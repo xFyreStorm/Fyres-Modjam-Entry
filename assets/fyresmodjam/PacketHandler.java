@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -24,7 +26,7 @@ import cpw.mods.fml.relauncher.Side;
 public class PacketHandler implements IPacketHandler {
 
 	//Packet types
-	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3, SEND_MESSAGE = 4, UPDATE_WORLD_DATA = 5, UPDATE_PLAYER_ITEMS = 6, DISARM_TRAP = 7;
+	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3, SEND_MESSAGE = 4, UPDATE_WORLD_DATA = 5, UPDATE_PLAYER_ITEMS = 6, DISARM_TRAP = 7, EXAMINE_MOB = 8;
 	
 	public static int[] potionValues = null;
 	public static int[] potionDurations = null;
@@ -99,6 +101,25 @@ public class PacketHandler implements IPacketHandler {
 								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7c\u00A7oYou failed to disarm the trap."}), (Player) player);
 								if(CommonTickHandler.worldData.currentDisadvantage.equals("Explosive Traps")) {player.worldObj.setBlockToAir(blockX, blockY, blockZ); player.worldObj.createExplosion(null, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, 1.33F, true);}
 								player.triggerAchievement(ModjamMod.whoops);
+							}
+							
+							return;
+							
+						case EXAMINE_MOB:
+							
+							int dimension = inputStream.readInt();
+							int entityID = inputStream.readInt();
+							
+							Entity entity = MinecraftServer.getServer().worldServers[dimension].getEntityByID(entityID);
+							
+							if(entity != null) {
+								String blessing = entity.getEntityData().hasKey("Blessing") ? entity.getEntityData().getString("Blessing") : null;
+								
+								if(blessing != null) {
+									PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eYou notice " + entity.getTranslatedEntityName() + " is using Blessing of the " + blessing + "."}), (Player) player);
+								} else {
+									PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eThere doesn't seem to be anything special about " + (entity instanceof EntityPlayer ? "" : "this ") + entity.getTranslatedEntityName() + "."}), (Player) player);
+								}
 							}
 							
 							return;
