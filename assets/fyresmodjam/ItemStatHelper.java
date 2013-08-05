@@ -41,6 +41,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
@@ -152,15 +153,15 @@ public class ItemStatHelper {
 	}*/
 	
 	@ForgeSubscribe
-	public void playerToss(PlayerDropsEvent event) {
-		for(EntityItem i : event.drops) {
-			ItemStack stack = i.getDataWatcher().getWatchableObjectItemStack(10);
-			
+	public void playerToss(ItemTossEvent event) {
+		if(!event.entity.worldObj.isRemote) {
+			ItemStack stack = event.entityItem.getDataWatcher().getWatchableObjectItemStack(10);
+				
 			if(CommonTickHandler.worldData.currentTask.equals("Collect") && stack.getItem().itemID == CommonTickHandler.worldData.currentTaskID) {
 				CommonTickHandler.worldData.progress -= stack.stackSize;
-				
+					
 				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted}));
-				
+					
 				CommonTickHandler.worldData.setDirty(true);
 			}
 		}
@@ -168,28 +169,32 @@ public class ItemStatHelper {
 	
 	@ForgeSubscribe
 	public void playerDestroyItem(PlayerDestroyItemEvent event) {
-		ItemStack stack = event.original;
-			
-		if(CommonTickHandler.worldData.currentTask.equals("Collect") && stack.getItem().itemID == CommonTickHandler.worldData.currentTaskID) {
-			CommonTickHandler.worldData.progress -= stack.stackSize;
+		if(!event.entity.worldObj.isRemote) {
+			ItemStack stack = event.original;
 				
-			PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted}));
-				
-			CommonTickHandler.worldData.setDirty(true);
+			if(CommonTickHandler.worldData.currentTask.equals("Collect") && stack.getItem().itemID == CommonTickHandler.worldData.currentTaskID) {
+				CommonTickHandler.worldData.progress -= stack.stackSize;
+					
+				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted}));
+					
+				CommonTickHandler.worldData.setDirty(true);
+			}
 		}
 	}
 	
 	@ForgeSubscribe
 	public void playerDrops(PlayerDropsEvent event) {
-		for(EntityItem i : event.drops) {
-			ItemStack stack = i.getDataWatcher().getWatchableObjectItemStack(10);
-			
-			if(CommonTickHandler.worldData.currentTask.equals("Collect") && stack.getItem().itemID == CommonTickHandler.worldData.currentTaskID) {
-				CommonTickHandler.worldData.progress -= stack.stackSize;
+		if(!event.entity.worldObj.isRemote) {
+			for(EntityItem i : event.drops) {
+				ItemStack stack = i.getDataWatcher().getWatchableObjectItemStack(10);
 				
-				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted}));
-				
-				CommonTickHandler.worldData.setDirty(true);
+				if(CommonTickHandler.worldData.currentTask.equals("Collect") && stack.getItem().itemID == CommonTickHandler.worldData.currentTaskID) {
+					CommonTickHandler.worldData.progress -= stack.stackSize;
+					
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted}));
+					
+					CommonTickHandler.worldData.setDirty(true);
+				}
 			}
 		}
 	}

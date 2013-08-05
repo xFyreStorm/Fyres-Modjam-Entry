@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,9 +37,11 @@ public class FyresWorldData extends WorldSavedData {
 	public int progress = 0;
 	public int tasksCompleted = 0;
 	
-	public static Class[] validMobs = {EntityDragon.class, EntityWither.class};
-	public static String[] validMobNames = {"Ender Dragon", "Wither"};
-	public static int[][] mobNumbers = {new int[] {1, 1} , new int[] {1, 3}};
+	public boolean enderDragonKilled = false;
+	
+	public static Class[] validMobs = {EntityDragon.class, EntityGhast.class, EntityWither.class};
+	public static String[] validMobNames = {"Ender Dragon", "Ghast", "Wither"};
+	public static int[][] mobNumbers = {new int[] {1, 1}, new int[] {5, 15} , new int[] {1, 3}};
 	
 	public static int[] validItems = {Block.blockDiamond.blockID, Block.blockGold.blockID, Block.blockEmerald.blockID, Block.blockLapis.blockID, Item.diamond.itemID, Item.emerald.itemID, Item.ingotGold.itemID, Item.netherStar.itemID, Item.ghastTear.itemID};
 
@@ -72,6 +75,8 @@ public class FyresWorldData extends WorldSavedData {
 		if(nbttagcompound.hasKey("progress")) {progress = nbttagcompound.getInteger("progress");}
 		if(nbttagcompound.hasKey("tasksCompleted")) {tasksCompleted = nbttagcompound.getInteger("tasksCompleted");}
 		
+		if(nbttagcompound.hasKey("enderDragonKilled")) {enderDragonKilled = nbttagcompound.getBoolean("enderDragonKilled");}
+		
 		checkWorldData();
 	} 
 
@@ -88,6 +93,8 @@ public class FyresWorldData extends WorldSavedData {
 		nbttagcompound.setInteger("currentTaskAmount", currentTaskAmount);
 		nbttagcompound.setInteger("progress", progress);
 		nbttagcompound.setInteger("tasksCompleted", tasksCompleted);
+		
+		nbttagcompound.setBoolean("enderDragonKilled", enderDragonKilled);
 	}
 	
 	private void checkWorldData() {
@@ -157,7 +164,7 @@ public class FyresWorldData extends WorldSavedData {
 		currentTask = validTasks[ModjamMod.r.nextInt(validTasks.length)];
 		
 		if(currentTask.equals("Kill")) {
-			currentTaskID = ModjamMod.r.nextInt(validMobs.length);
+			currentTaskID = !enderDragonKilled ? ModjamMod.r.nextInt(validMobs.length) : 1 + ModjamMod.r.nextInt(validMobs.length - 1);
 			currentTaskAmount = mobNumbers[currentTaskID][0] + ModjamMod.r.nextInt(mobNumbers[currentTaskID][1]);
 		} else if(currentTask.equals("Collect")) {
 			currentTaskID = validItems[ModjamMod.r.nextInt(validItems.length)];
