@@ -54,7 +54,7 @@ Blessings:
 /currentBlessing command shows your current blessing
     
 Mystery potions - each new world you make selects 12 potion types and durations. Find and drink a mystery potion to find out what it does permanently in that world! Wildcard potion always give a random effect.
-1 in 10 drop from all mobs, 100% drop rate for level 5 mobs
+1 in 10 drop from all mobs, 100% drop rate for level 5 mobs, they also spawn in dungeon chests
 
 When a world is created, it is given a random disadvantage. You are told what it is when logging in to a world. Complete world goal to remove disadvantage.
 

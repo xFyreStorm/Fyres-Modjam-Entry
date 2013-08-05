@@ -255,7 +255,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		whoopsStack.itemID = itemTrap.itemID;
 		
 		for(int i = 0; i < 13; i++) {
-			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(mysteryPotion.itemID, i, 1, 5, 10));
+			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(mysteryPotion.itemID, i, 1, 5, 5));
 		}
 	}
 	

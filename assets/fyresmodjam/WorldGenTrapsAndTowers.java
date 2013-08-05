@@ -76,7 +76,7 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     				        		        world.setBlock(x + x2, y + y2 + 1, z + z2, ModjamMod.blockPillar.blockID);
     				        		        world.setBlockMetadataWithNotify(x + x2, y + y2 + 1, z + z2, 1, 0);
     									}
-    								} else if((x2 * x2 + z2 * z2 <= 25) && world.getBlockId(x + x2, y + y2, z + z2) != Block.mobSpawner.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.chest.blockID) {
+    								} else if((x2 * x2 + z2 * z2 <= 25) && world.getBlockId(x + x2, y + y2, z + z2) != ModjamMod.blockPillar.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.mobSpawner.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.chest.blockID) {
     									world.setBlockToAir(x + x2, y + y2, z + z2);
     								}
 
