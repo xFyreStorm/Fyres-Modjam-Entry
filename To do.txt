@@ -10,6 +10,7 @@ More trap types
 More disadvantages
 More goals
 Fix bugs
+New world gen feature
 
 Done:
 

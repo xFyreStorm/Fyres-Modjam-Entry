@@ -3,6 +3,7 @@ package assets.fyresmodjam;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -17,6 +18,7 @@ import assets.fyresmodjam.ItemStatHelper.ItemStatTracker;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,6 +33,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.network.packet.Packet5PlayerInventory;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -108,7 +111,28 @@ public class EntityStatHelper {
 	
 	@ForgeSubscribe
 	public void entityJoinWorld(EntityJoinWorldEvent event) {
-		if(!event.world.isRemote) {processEntity(event.entity, ModjamMod.r);}
+		if(!event.world.isRemote) {
+			processEntity(event.entity, ModjamMod.r);
+			
+			if(CommonTickHandler.worldData.currentDisadvantage.equals("Increased Mob Spawn") && (event.entity instanceof EntityMob) && !(event.entity instanceof EntityDragon) && ModjamMod.r.nextBoolean()) {
+				Entity entityNew = null;
+				
+				try {
+					Constructor[] constructors = event.entity.getClass().getConstructors();
+					
+					for(int i = 0; i < constructors.length; i++) {
+						Class[] parameters = constructors[i].getParameterTypes();
+						if(parameters.length == 1 && parameters[0].equals(World.class)) {entityNew = (Entity) event.entity.getClass().getConstructors()[i].newInstance(event.world);}
+					}
+					
+				} catch (Exception e) {e.printStackTrace();}
+				
+				if(entityNew != null) {
+					entityNew.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, event.entity.rotationYaw, event.entity.rotationPitch);
+					event.world.spawnEntityInWorld(entityNew);
+				}
+			}
+		}
 	}
 	
 	public static ArrayList<EntityStatTracker> temp = new ArrayList<EntityStatTracker>();
