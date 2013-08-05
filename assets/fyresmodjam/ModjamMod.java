@@ -186,11 +186,19 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 				}
 				
 				if(level == 5) {
-					if(ModjamMod.r.nextBoolean()) {
-						if(entity instanceof IRangedAttackMob) {entity.getEntityData().setString("Blessing", "Hunter");}
-						else {entity.getEntityData().setString("Blessing", "Warrior");}
-					} else {
-						entity.getEntityData().setString("Blessing", "Swamp");
+					switch(r.nextInt(4)) {
+					
+						case 0:
+							if(entity instanceof IRangedAttackMob) {entity.getEntityData().setString("Blessing", "Hunter");}
+							else {entity.getEntityData().setString("Blessing", "Warrior");}
+						break;
+						
+						case 1: entity.getEntityData().setString("Blessing", "Swamp"); break;
+						case 2: entity.getEntityData().setString("Blessing", "Guardian"); break;
+						case 3: entity.getEntityData().setString("Blessing", "Vampire"); break;
+						
+						default: break;
+						
 					}
 					
 					if(entity instanceof EntityCreeper) {
@@ -254,7 +262,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 			if(player.getEntityData().hasKey("Blessing")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_BLESSING, new Object[] {player.getEntityData().getString("Blessing")}), (Player) player);}
 			if(player.getEntityData().hasKey("PotionKnowledge")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {player.getEntityData().getIntArray("PotionKnowledge")}), (Player) player);}
 			
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted}), (Player) player);
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled}), (Player) player);
 			
 			int index = -1;
 			for(int i = 0; i < CommonTickHandler.worldData.validDisadvantages.length; i++) {if(CommonTickHandler.worldData.validDisadvantages[i].equals(CommonTickHandler.worldData.currentDisadvantage)) {index = i; break;}}

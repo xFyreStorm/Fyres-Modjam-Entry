@@ -37,6 +37,8 @@ public class PacketHandler implements IPacketHandler {
 	public static int progress = 0;
 	public static int tasksCompleted = 0;
 	
+	public boolean enderDragonKilled = false;
+	
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player playerEntity) {
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
 
@@ -124,6 +126,7 @@ public class PacketHandler implements IPacketHandler {
 							currentTaskAmount = inputStream.readInt(); 
 							progress = inputStream.readInt(); 
 							tasksCompleted = inputStream.readInt();
+							enderDragonKilled = inputStream.readBoolean();
 							
 							return;
 						
