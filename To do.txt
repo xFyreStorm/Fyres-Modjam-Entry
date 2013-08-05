@@ -29,7 +29,8 @@ Level 5 mobs get a blessing (Ranged mobs: Hunter or Swamp, Non-ranged Mobs: Warr
 Bows, Axes, and Swords get a random rank and bonus damage, along with a random prefix
 
 Pillars (randomly spawn around world, give blessing when right clicked, i.e. Blessing of the Miner, +25% Mining Speed, pillars of your current blessing will slightly glow and emit particles)
-Use x button on pillar to see what blessing they have.
+
+You can use the x button to examine blocks and entities. Examining a pillar, or a mob with a blessing, will tell you what blessing it has.
 
 Blessings: 
 
@@ -40,7 +41,7 @@ Blessings:
     Swamp - Attacks will slow enemies,
     Thief - Enemies have a chance to drop gold nuggets,
     Ninja - While sneaking you are invisible and attacks on enemies with full health do double damage,
-    Mechanic - You can salvage disarmed traps 50% of the time.
+    Mechanic - You disarm traps 3x as often and have 2x the chance to salvage disarmed traps,
     Alchemist - All potions act like wildcard potions,
     Scout - You can see traps without sneaking,
     Guardian - Take 25% less damage from all sources,

@@ -92,7 +92,7 @@ public class PacketHandler implements IPacketHandler {
 							boolean mechanic = inputStream.readBoolean();
 							
 							if(mechanic ? ModjamMod.r.nextInt(4) != 0 : ModjamMod.r.nextInt(4) == 0) {
-								boolean salvage = ModjamMod.r.nextBoolean() && mechanic;
+								boolean salvage = mechanic ? ModjamMod.r.nextBoolean() : (ModjamMod.r.nextInt(4) == 0);
 								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7o" + (!salvage ? "You disarmed the trap." : "You disarm and salvage the trap.")}), (Player) player);
 								if(salvage) {player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, blockX + 0.5F, blockY, blockZ + 0.5F, new ItemStack(ModjamMod.itemTrap.itemID, 1, player.worldObj.getBlockMetadata(blockX, blockY, blockZ) % BlockTrap.trapTypes)));}
 								player.worldObj.setBlockToAir(blockX, blockY, blockZ);
@@ -116,9 +116,9 @@ public class PacketHandler implements IPacketHandler {
 								String blessing = entity.getEntityData().hasKey("Blessing") ? entity.getEntityData().getString("Blessing") : null;
 								
 								if(blessing != null) {
-									PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eYou notice " + entity.getTranslatedEntityName() + " is using Blessing of the " + blessing + "."}), (Player) player);
+									PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eYou notice " + entity.getTranslatedEntityName() + "\u00A7e is using Blessing of the " + blessing + "."}), (Player) player);
 								} else {
-									PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eThere doesn't seem to be anything special about " + (entity instanceof EntityPlayer ? "" : "this ") + entity.getTranslatedEntityName() + "."}), (Player) player);
+									PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eThere doesn't seem to be anything special about " + (entity instanceof EntityPlayer ? "" : "this ") + entity.getTranslatedEntityName() + "\u00A7e."}), (Player) player);
 								}
 							}
 							
