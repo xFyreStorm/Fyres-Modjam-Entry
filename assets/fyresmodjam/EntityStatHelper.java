@@ -143,6 +143,18 @@ public class EntityStatHelper {
 					CommonTickHandler.addLater.add(entityNew); //event.world.spawnEntityInWorld(entityNew);
 				}
 			}
+			
+			if(event.entity instanceof EntityPlayer) {
+				if(!event.entity.getEntityData().hasKey("Blessing") && FyresWorldData.blessingByPlayer.containsKey(event.entity.getEntityName())) {
+					event.entity.getEntityData().setString("Blessing", FyresWorldData.blessingByPlayer.get(event.entity.getEntityName()));
+					PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_BLESSING, new Object[] {event.entity.getEntityData().getString("Blessing")}), (Player) event.entity);
+				}
+				
+				if(!event.entity.getEntityData().hasKey("PotionKnowledge") && FyresWorldData.potionKnowledgeByPlayer.containsKey(event.entity.getEntityName())) {
+					event.entity.getEntityData().setIntArray("PotionKnowledge", FyresWorldData.potionKnowledgeByPlayer.get(event.entity.getEntityName()));
+					PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {event.entity.getEntityData().getIntArray("PotionKnowledge")}), (Player) event.entity);
+				}
+			}
 		}
 	}
 	
@@ -248,6 +260,7 @@ public class EntityStatHelper {
 		
 		if(event.entity instanceof EntityPlayer) {
 			((EntityPlayer) event.entity).triggerAchievement(ModjamMod.losingIsFun);
+			FyresWorldData.blessingByPlayer.put(event.entity.getEntityName(), event.entity.getEntityData().getString("Blessing"));
 		}
 	}
 }

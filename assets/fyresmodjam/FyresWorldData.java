@@ -1,5 +1,7 @@
 package assets.fyresmodjam;
 
+import java.util.HashMap;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -42,6 +44,9 @@ public class FyresWorldData extends WorldSavedData {
 	public static Class[] validMobs = {EntityDragon.class, EntityGhast.class, EntityWither.class};
 	public static String[] validMobNames = {"Ender Dragon", "Ghast", "Wither"};
 	public static int[][] mobNumbers = {new int[] {1, 1}, new int[] {5, 15} , new int[] {1, 3}};
+	
+	public static HashMap<String, String> blessingByPlayer = new HashMap<String, String>();
+	public static HashMap<String, int[]> potionKnowledgeByPlayer = new HashMap<String, int[]>();
 	
 	public static int[] validItems = {Block.blockDiamond.blockID, Block.blockGold.blockID, Block.blockEmerald.blockID, Block.blockLapis.blockID, Item.diamond.itemID, Item.emerald.itemID, Item.ingotGold.itemID, Item.netherStar.itemID, Item.ghastTear.itemID};
 
