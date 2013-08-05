@@ -29,15 +29,17 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     					world.setBlock(x, y, z, ModjamMod.blockTrap.blockID, random.nextInt(BlockTrap.trapTypes), 0);
     				}
 
-    				if(!addedDungeon && (world.getBlockId(x, y, z) == Block.grass.blockID || world.getBlockId(x, y, z) == Block.sand.blockID) && ModjamMod.r.nextInt(100) == 0) {
+    				if(!addedDungeon && ((world.getBlockId(x, y, z) == Block.grass.blockID || world.getBlockId(x, y, z) == Block.sand.blockID)) && world.getBlockId(x, y + 1, z) != Block.waterStill.blockID && world.getBlockId(x, y + 1, z) != Block.waterMoving.blockID && world.getBlockId(x, y + 1, z) != Block.lavaStill.blockID && world.getBlockId(x, y + 1, z) != Block.lavaMoving.blockID && ModjamMod.r.nextInt(100) == 0) {
     					int floors = 3 + random.nextInt(5);
 
     					for(int y2 = 0; y2 <= floors * 5; y2++) {
     						for(int x2 = -4; x2 <= 4; x2++) {
     							for(int z2 = -4; z2 <= 4; z2++) {
 
-    								if(y2 % 5 == 0 || x2 == -4 || x2 == 4 || z2 == -4 || z2 == 4) {
-    									world.setBlock(x + x2, y + y2, z + z2, Block.cobblestoneMossy.blockID);
+    								if((x2 * x2 + y2 * y2 <= 16) && (y2 % 5 == 0 || x2 == -4 || x2 == 4 || z2 == -4 || z2 == 4)) {
+    									if(world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID) {
+    										world.setBlock(x + x2, y + y2, z + z2, Block.cobblestoneMossy.blockID);
+    									}
     									
     									if(x2 == 0 && z2 == -4 && y2 != 0 && y2 <= floors * 5 - 4) {
     										world.setBlock(x + x2, y + y2, z + z2 + 1, Block.ladder.blockID, Block.ladder.onBlockPlaced(world, x + x2, y + y2, z + z2 + 1, 0, 0, 0, 0, 0), 0);
