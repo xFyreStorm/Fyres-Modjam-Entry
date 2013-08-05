@@ -42,7 +42,7 @@ public class ClientTickHandler implements ITickHandler {
 	private void onRenderTick() {
 		MovingObjectPosition mouse = Minecraft.getMinecraft().objectMouseOver;
 		
-		if(mouse != null && Minecraft.getMinecraft().theWorld != null && mouse.typeOfHit == EnumMovingObjectType.TILE && Minecraft.getMinecraft().theWorld.getBlockId(mouse.blockX, mouse.blockY, mouse.blockZ) == ModjamMod.blockPillar.blockID) {
+		if(mouse != null && Minecraft.getMinecraft().inGameHasFocus && Minecraft.getMinecraft().isGuiEnabled() && Minecraft.getMinecraft().theWorld != null && mouse.typeOfHit == EnumMovingObjectType.TILE && Minecraft.getMinecraft().theWorld.getBlockId(mouse.blockX, mouse.blockY, mouse.blockZ) == ModjamMod.blockPillar.blockID) {
 	        ScaledResolution scaledRes = new ScaledResolution(Minecraft.getMinecraft().gameSettings, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 	        int screenWidth = scaledRes.getScaledWidth();
 	        int screenHeight = scaledRes.getScaledHeight();
