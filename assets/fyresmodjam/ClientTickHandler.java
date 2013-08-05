@@ -1,13 +1,18 @@
 package assets.fyresmodjam;
 
+import java.awt.Color;
 import java.util.EnumSet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MovingObjectPosition;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -35,7 +40,16 @@ public class ClientTickHandler implements ITickHandler {
     }
 	
 	private void onRenderTick() {
+		MovingObjectPosition mouse = Minecraft.getMinecraft().objectMouseOver;
 		
+		if(mouse != null && Minecraft.getMinecraft().theWorld != null && mouse.typeOfHit == EnumMovingObjectType.TILE && Minecraft.getMinecraft().theWorld.getBlockId(mouse.blockX, mouse.blockY, mouse.blockZ) == ModjamMod.blockPillar.blockID) {
+	        ScaledResolution scaledRes = new ScaledResolution(Minecraft.getMinecraft().gameSettings, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+	        int screenWidth = scaledRes.getScaledWidth();
+	        int screenHeight = scaledRes.getScaledHeight();
+	        
+	        String string = "Press x to Examine";
+	        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(string, (screenWidth / 2) - (Minecraft.getMinecraft().fontRenderer.getStringWidth(string) / 2), screenHeight / 2 + 16, Color.WHITE.getRGB());
+		}
 	}
 
 	private void onClientTick() {
