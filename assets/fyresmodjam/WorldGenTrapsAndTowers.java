@@ -35,8 +35,8 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     					for(int y2 = 0; y2 <= floors * 5; y2++) {
     						for(int x2 = -4; x2 <= 4; x2++) {
     							for(int z2 = -4; z2 <= 4; z2++) {
-
-    								if((x2 * x2 + y2 * y2 <= 16) && (y2 % 5 == 0 || x2 == -4 || x2 == 4 || z2 == -4 || z2 == 4)) {
+    								
+    								if((x2 * x2 + z2 * z2 <= 16) && (y2 % 5 == 0 || Math.abs(z2) > 3 || Math.abs(x2) > 3)) {
     									if(world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID) {
     										world.setBlock(x + x2, y + y2, z + z2, Block.cobblestoneMossy.blockID);
     									}
