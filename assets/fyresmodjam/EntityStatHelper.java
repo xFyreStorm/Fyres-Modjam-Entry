@@ -118,11 +118,12 @@ public class EntityStatHelper {
 			
 			try {
 				isClone = event.entity.getDataWatcher().getWatchableObjectByte(30) != 0;
-			} catch (Exception e) {isClone = false;}
-			
-			if(CommonTickHandler.worldData != null && CommonTickHandler.worldData.currentDisadvantage.equals("Increased Mob Spawn") && (event.entity instanceof EntityMob) && !(event.entity instanceof EntityDragon) && !isClone && ModjamMod.r.nextBoolean()) {
-				
+			} catch (Exception e) {
+				isClone = false;
 				event.entity.getDataWatcher().addObject(30, (byte) 1);
+			}
+			
+			if(CommonTickHandler.worldData != null && CommonTickHandler.worldData.currentDisadvantage.equals("Increased Mob Spawn") && (event.entity instanceof EntityMob) && !(event.entity instanceof EntityDragon) && !isClone && ModjamMod.r.nextInt(3) == 0) {
 				
 				Entity entityNew = null;
 				
@@ -137,11 +138,9 @@ public class EntityStatHelper {
 				} catch (Exception e) {e.printStackTrace();}
 				
 				if(entityNew != null) {
-					try {
-						entityNew.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, event.entity.rotationYaw, event.entity.rotationPitch);
-						entityNew.getDataWatcher().addObject(30, (byte) 1);
-						event.world.spawnEntityInWorld(entityNew);
-					} catch (Exception e) {System.out.println("Error.");}
+					entityNew.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, event.entity.rotationYaw, event.entity.rotationPitch);
+					entityNew.getDataWatcher().addObject(30, (byte) 1);
+					CommonTickHandler.addLater.add(entityNew); //event.world.spawnEntityInWorld(entityNew);
 				}
 			}
 		}

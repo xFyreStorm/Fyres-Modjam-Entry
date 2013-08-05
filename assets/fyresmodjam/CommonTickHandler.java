@@ -1,7 +1,9 @@
 package assets.fyresmodjam;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -15,6 +17,8 @@ import cpw.mods.fml.common.TickType;
 
 public class CommonTickHandler implements ITickHandler {
 	public static FyresWorldData worldData = null;
+	
+	public static ArrayList<Entity> addLater = new ArrayList<Entity>();
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
@@ -57,6 +61,9 @@ public class CommonTickHandler implements ITickHandler {
 				}
 			}
 		}
+		
+		for(Entity e : addLater) {server.worldServers[e.dimension].spawnEntityInWorld(e);}
+		addLater.clear();
 	}
 
 	@Override
