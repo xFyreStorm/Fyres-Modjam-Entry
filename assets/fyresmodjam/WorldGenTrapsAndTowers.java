@@ -33,19 +33,22 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     					int floors = 3 + random.nextInt(5);
 
     					for(int y2 = 0; y2 <= floors * 5; y2++) {
-    						for(int x2 = -4; x2 <= 4; x2++) {
-    							for(int z2 = -4; z2 <= 4; z2++) {
+    						for(int x2 = -5; x2 <= 5; x2++) {
+    							for(int z2 = -5; z2 <= 5; z2++) {
     								
-    								if((x2 * x2 + z2 * z2 <= 16) && (y2 % 5 == 0 || Math.abs(z2) > 3 || Math.abs(x2) > 3)) {
+    								if((x2 * x2 + z2 * z2 <= 25) && (y2 % 5 == 0 || z2 > 3 + (y2 < 5 ? 1 : 0) || z2 < -3 - (y2 < 5 ? 1 : 0) || Math.abs(x2) > 3)) {
     									if(world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID) {
-    										world.setBlock(x + x2, y + y2, z + z2, Block.cobblestoneMossy.blockID);
+    										//if(!((Math.abs(z2) == 4 && x2 == 0) || (Math.abs(x2) == 4 && z2 == 0)) || y2 % 5 == 0) {
+	    										world.setBlock(x + x2, y + y2, z + z2, Block.cobblestoneMossy.blockID);
+	    									//} else {
+	    										//world.setBlockToAir(x + x2, y + y2, z + z2);
+	    									//}
     									}
     									
-    									if(x2 == 0 && z2 == -4 && y2 != 0 && y2 <= floors * 5 - 4) {
-    										world.setBlock(x + x2, y + y2, z + z2 + 1, Block.ladder.blockID, Block.ladder.onBlockPlaced(world, x + x2, y + y2, z + z2 + 1, 0, 0, 0, 0, 0), 0);
+    									if(x2 == 0 && z2 == -5 && y2 != 0 && y2 <= floors * 5 - 4) {
+    										world.setBlock(x + x2, y + y2, z + z2 + 2, Block.ladder.blockID, Block.ladder.onBlockPlaced(world, x + x2, y + y2, z + z2 + 1, 0, 0, 0, 0, 0), 0);
     									}
-    									
-    								} else if(y2 % 5 == 1 && x2 == 0 && z2 == 3 && (y2/5 >= floors - 1 || random.nextInt(4) == 0)) {
+    								} else if(y2 % 5 == 1 && x2 == 0 && z2 == 4 && (y2/5 >= floors - 1 || random.nextInt(4) == 0)) {
     									world.setBlock(x + x2, y + y2, z + z2, Block.chest.blockID, 0, 2);
     									
     									TileEntityChest tileentitychest = (TileEntityChest) world.getBlockTileEntity(x + x2, y + y2, z + z2);
