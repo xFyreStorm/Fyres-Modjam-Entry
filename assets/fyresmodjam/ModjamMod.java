@@ -21,7 +21,9 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.stats.Achievement;
+import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.AchievementPage;
+import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -247,8 +249,14 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		//foodTracker.addStat(new ItemStat("Spoiled", false));
 		//ItemStatHelper.addStatTracker(foodTracker);
 		
+		//Other
+		
 		losingIsFunStack.itemID = itemTrap.itemID;
 		whoopsStack.itemID = itemTrap.itemID;
+		
+		for(int i = 0; i < 13; i++) {
+			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(mysteryPotion.itemID, i, 1, 5, 10));
+		}
 	}
 	
 	@EventHandler
