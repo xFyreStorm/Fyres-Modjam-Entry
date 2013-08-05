@@ -17,8 +17,12 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
 
 	public static final WeightedRandomChestContent[] field_111189_a = new WeightedRandomChestContent[] {new WeightedRandomChestContent(Item.saddle.itemID, 0, 1, 1, 10), new WeightedRandomChestContent(Item.ingotIron.itemID, 0, 1, 4, 10), new WeightedRandomChestContent(Item.bread.itemID, 0, 1, 1, 10), new WeightedRandomChestContent(Item.wheat.itemID, 0, 1, 4, 10), new WeightedRandomChestContent(Item.gunpowder.itemID, 0, 1, 4, 10), new WeightedRandomChestContent(Item.silk.itemID, 0, 1, 4, 10), new WeightedRandomChestContent(Item.bucketEmpty.itemID, 0, 1, 1, 10), new WeightedRandomChestContent(Item.appleGold.itemID, 0, 1, 1, 1), new WeightedRandomChestContent(Item.redstone.itemID, 0, 1, 4, 10), new WeightedRandomChestContent(Item.record13.itemID, 0, 1, 1, 10), new WeightedRandomChestContent(Item.recordCat.itemID, 0, 1, 1, 10), new WeightedRandomChestContent(Item.field_111212_ci.itemID, 0, 1, 1, 10), new WeightedRandomChestContent(Item.field_111216_cf.itemID, 0, 1, 1, 2), new WeightedRandomChestContent(Item.field_111215_ce.itemID, 0, 1, 1, 5), new WeightedRandomChestContent(Item.field_111213_cg.itemID, 0, 1, 1, 1)};
 	
+	public static boolean genning = false;
+	
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+		
+		genning = true;
 		
 		boolean addedDungeon = random.nextInt(100) != 0;
 		
@@ -58,7 +62,7 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     										WeightedRandomChestContent.generateChestContents(random, info.getItems(random), tileentitychest, info.getCount(random));
     									}
     								} else if(y2 % 5 == 1 && x2 == 0 && z2 == 0) {
-    									if(y2 >= 5) {
+    									if(y2 != 1) {
 	    									world.setBlock(x + x2, y + y2, z + z2, Block.mobSpawner.blockID, 0, 2);
 	    						            TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)world.getBlockTileEntity(x + x2, y + y2, z + z2);
 	
@@ -66,8 +70,11 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
 	    						                tileentitymobspawner.getSpawnerLogic().setMobID(DungeonHooks.getRandomDungeonMob(random));
 	    						            }
     									} else {
-    				        		        world.setBlock(x + x2, y + y2, z + z2, ModjamMod.blockPillar.blockID, 0, 0);
-    				        		        world.setBlock(x + x2, y + y2 + 1, z + z2, ModjamMod.blockPillar.blockID, 1, 0);
+    										world.setBlock(x + x2, y + y2, z + z2, ModjamMod.blockPillar.blockID);
+    				        		        world.setBlockMetadataWithNotify(x + x2, y + y2, z + z2, 0, 0);
+    				        		        	
+    				        		        world.setBlock(x + x2, y + y2 + 1, z + z2, ModjamMod.blockPillar.blockID);
+    				        		        world.setBlockMetadataWithNotify(x + x2, y + y2 + 1, z + z2, 1, 0);
     									}
     								} else if((x2 * x2 + z2 * z2 <= 25) && world.getBlockId(x + x2, y + y2, z + z2) != Block.mobSpawner.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.chest.blockID) {
     									world.setBlockToAir(x + x2, y + y2, z + z2);
@@ -82,6 +89,8 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     			}
     		}
 		}
+		
+		genning = false;
 	}
 
 }

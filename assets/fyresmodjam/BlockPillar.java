@@ -93,7 +93,7 @@ public class BlockPillar extends BlockContainer
     public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
         super.onNeighborBlockChange(par1World, par2, par3, par4, par5);
 
-        if (!par1World.isRemote) {
+        if (!par1World.isRemote && !WorldGenTrapsAndTowers.genning) {
             int i1 = par1World.getBlockMetadata(par2, par3, par4);
 
             if (i1 == 0) {
