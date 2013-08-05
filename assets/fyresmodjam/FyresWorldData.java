@@ -19,8 +19,8 @@ import net.minecraft.world.storage.MapStorage;
 
 public class FyresWorldData extends WorldSavedData {
 
-	public static String[] validDisadvantages = {/*"Illiterate",*/ "Tougher Mobs", "Weak", "Explosive Traps", "Increased Mob Spawn"};
-	public static String[] disadvantageDescriptions = {/*"Item names are unreadable",*/ "-25% damage to hostile enemies", "-25% melee damage", "Traps trigger explosions on failed disarms", "+33% hostile mob spawn rate"};
+	public static String[] validDisadvantages = {/*"Illiterate",*/ "Tougher Mobs", "Weak", "Explosive Traps", "Increased Mob Spawn", "Neverending Rain"};
+	public static String[] disadvantageDescriptions = {/*"Item names are unreadable",*/ "-25% damage to hostile enemies", "-25% melee damage", "Traps trigger explosions on failed disarms", "+33% hostile mob spawn rate", "Constantly rains"};
 	
 	public static String[] validTasks = {"Kill", "Collect"};
 	
@@ -156,6 +156,8 @@ public class FyresWorldData extends WorldSavedData {
 			for(String s : validTasks) {if(s.equals(currentTask)) {changeTask = false; break;}}
 			if(changeTask || (currentTask != null && currentTask.equals("Kill") && currentTaskID == 0 && enderDragonKilled)) {giveNewTask();} else {if(currentTask.equals("Kill")) {currentTaskID %= validMobs.length;}}
 		}
+		
+		this.currentDisadvantage = "Neverending Rain";
 	}
 
 	public void giveNewTask() {
