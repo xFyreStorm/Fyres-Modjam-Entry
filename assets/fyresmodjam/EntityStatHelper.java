@@ -121,6 +121,9 @@ public class EntityStatHelper {
 			} catch (Exception e) {isClone = false;}
 			
 			if(CommonTickHandler.worldData != null && CommonTickHandler.worldData.currentDisadvantage.equals("Increased Mob Spawn") && (event.entity instanceof EntityMob) && !(event.entity instanceof EntityDragon) && !isClone && ModjamMod.r.nextBoolean()) {
+				
+				event.entity.getDataWatcher().addObject(30, (byte) 1);
+				
 				Entity entityNew = null;
 				
 				try {
