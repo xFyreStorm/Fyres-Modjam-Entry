@@ -65,9 +65,13 @@ public class CommonTickHandler implements ITickHandler {
 		for(Entity e : addLater) {server.worldServers[e.dimension].spawnEntityInWorld(e);}
 		addLater.clear();
 		
-		if(worldData != null && worldData.currentDisadvantage.equals("Neverending Rain")) {
-			if(!MinecraftServer.getServer().worldServers[0].isRaining()) {MinecraftServer.getServer().worldServers[0].toggleRain();}
-			if(!MinecraftServer.getServer().worldServers[0].isThundering()) {MinecraftServer.getServer().worldServers[0].getWorldInfo().setThundering(true);}
+		if(worldData != null) {
+			if(worldData.currentDisadvantage.equals("Neverending Rain")) {
+				if(!MinecraftServer.getServer().worldServers[0].getWorldInfo().isRaining()) {MinecraftServer.getServer().worldServers[0].getWorldInfo().setRaining(true);}
+				if(!MinecraftServer.getServer().worldServers[0].getWorldInfo().isThundering()) {MinecraftServer.getServer().worldServers[0].getWorldInfo().setThundering(true);}
+			} else if(worldData.currentDisadvantage.equals("Neverending Night")) {
+				MinecraftServer.getServer().worldServers[0].getWorldInfo().setWorldTime(18000);
+			}
 		}
 	}
 
