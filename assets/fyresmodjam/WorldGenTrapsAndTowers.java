@@ -12,7 +12,7 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		
-		boolean addedDungeon = random.nextInt(50) != 0;
+		boolean addedDungeon = random.nextInt(100) != 0;
 		
 		for(int y = 1; y < 128; y++) {
     		for(int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
@@ -21,13 +21,13 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     					world.setBlock(x, y, z, ModjamMod.blockTrap.blockID, random.nextInt(BlockTrap.trapTypes), 0);
     				}
     				
-    				if(addedDungeon && world.getBlockId(x, y, z) == Block.grass.blockID && ModjamMod.r.nextInt(100) == 0) {
-    					int floors = 1 + ModjamMod.r.nextInt(6);
+    				if(!addedDungeon && world.getBlockId(x, y, z) == Block.grass.blockID && ModjamMod.r.nextInt(100) == 0) {
+    					int floors = 1 + ModjamMod.r.nextInt(7);
     					
     					for(int y2 = 0; y2 <= floors * 5; y2++) {
-    						for(int x2 = -5; x2 <= 5; x2++) {
-    							for(int z2 = -5; z2 <= 5; z2++) {
-    	    						if(y2 % 5 == 0 || x2 == -5 || x2 == 5 || z2 == -5 || z2 == 5) {
+    						for(int x2 = -4; x2 <= 4; x2++) {
+    							for(int z2 = -4; z2 <= 4; z2++) {
+    	    						if(y2 % 5 == 0 || x2 == -4 || x2 == 4 || z2 == -4 || z2 == 4) {
     	    							world.setBlock(x + x2, y + y2, z + z2, Block.cobblestoneMossy.blockID);
     	    						}
     	    					}
