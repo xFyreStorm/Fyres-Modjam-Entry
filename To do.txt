@@ -21,6 +21,8 @@ Trap types:
     
     Spike Trap - Does 1 heart of damage while touching, 1% chance to poison
     Flame Trap - Sets on fire for 5 seconds
+    
+Towers 3 - 8 floors tall of cobble and mossy cobble spawn around the world, and contain mob spawners and chests
 
 Dungeons spawn 13x as often 
 
@@ -29,7 +31,7 @@ Level 5 mobs get a blessing (Ranged mobs: Hunter or Swamp, Non-ranged Mobs: Warr
 
 Bows, Axes, and Swords get a random rank and bonus damage, along with a random prefix
 
-Pillars (randomly spawn around world, give blessing when right clicked, i.e. Blessing of the Miner, +25% Mining Speed, pillars of your current blessing will slightly glow and emit particles)
+Pillars (randomly spawn around world and change current blessing when right clicked, pillars of your current blessing will slightly glow and emit particles)
 
 You can use the x button to examine blocks and entities. Examining a pillar, or a mob with a blessing, will tell you what blessing it has.
 
