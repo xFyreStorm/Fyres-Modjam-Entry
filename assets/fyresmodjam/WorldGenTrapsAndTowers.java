@@ -30,29 +30,36 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     		for(int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
     			for(int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
     				if(random.nextInt(150) == 0 && (world.isAirBlock(x, y, z) || (Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z) && world.getBlockId(x, y, z) != Block.waterStill.blockID && world.getBlockId(x, y, z) != Block.waterMoving.blockID && world.getBlockId(x, y, z) != Block.lavaStill.blockID && world.getBlockId(x, y, z) != Block.lavaMoving.blockID)) && (!world.isAirBlock(x, y - 1, z) && world.getBlockId(x, y - 1, z) != ModjamMod.blockTrap.blockID && !Block.blocksList[world.getBlockId(x, y - 1, z)].isBlockReplaceable(world, x, y - 1, z))) {
-    					world.setBlock(x, y, z, ModjamMod.blockTrap.blockID, random.nextInt(BlockTrap.trapTypes), 0);
+    					if(ModjamMod.blockTrap.canPlaceBlockAt(world, x, y, z)) {world.setBlock(x, y, z, ModjamMod.blockTrap.blockID, random.nextInt(BlockTrap.trapTypes), 0);}
     				}
 
     				if(!addedDungeon && ((world.getBlockId(x, y, z) == Block.grass.blockID || (world.getBlockId(x, y, z) == Block.sand.blockID && world.isAirBlock(x, y + 1, z)))) && world.getBlockId(x, y + 1, z) != Block.waterStill.blockID && world.getBlockId(x, y + 1, z) != Block.waterMoving.blockID && world.getBlockId(x, y + 1, z) != Block.lavaStill.blockID && world.getBlockId(x, y + 1, z) != Block.lavaMoving.blockID && ModjamMod.r.nextInt(100) == 0) {
+    					
+    					y--;
+    					
     					int floors = 3 + random.nextInt(6);
 
-    					for(int y2 = 0; y2 <= floors * 5; y2++) {
+    					for(int y2 = 0; y2 <= floors * 6; y2++) {
     						for(int x2 = -5; x2 <= 5; x2++) {
     							for(int z2 = -5; z2 <= 5; z2++) {
     								
-    								if((x2 * x2 + z2 * z2 <= 25) && (y2 % 5 == 0 || z2 > 3 + (y2 < 5 ? 1 : 0) || z2 < -3 || Math.abs(x2) > 3 + (y2 < 5 ? 1 : 0))) {
+    								if((x2 * x2 + z2 * z2 <= 25) && ((y2 % 6 == 0 || y2 % 6 == 1) || z2 > 3 + (y2 < 6 ? 1 : 0) || z2 < -3 || Math.abs(x2) > 3 + (y2 < 5 ? 1 : 0))) {
     									if(world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID) {
     										//if(y2 >= 5 && (y2 % 5 == 2 || y2 % 5 == 3) && (Math.abs(x2) == 2 || Math.abs(z2) == 2)) {
     										//	world.setBlock(x + x2, y + y2, z + z2, Block.fenceIron.blockID);
     										//} else {
-    											world.setBlock(x + x2, y + y2, z + z2, random.nextBoolean() ? Block.cobblestoneMossy.blockID : Block.cobblestone.blockID);
+    											if(Math.abs(x2) <= 1 && Math.abs(z2) <= 1 && y2 != floors * 6 && y2 != 1 && y2 % 6 == 1) {
+    												world.setBlock(x + x2, y + y2, z + z2, Block.obsidian.blockID);
+    											} else {
+    												world.setBlock(x + x2, y + y2, z + z2, random.nextBoolean() ? Block.cobblestoneMossy.blockID : Block.cobblestone.blockID);
+    											}
     										//}
     									}
     									
-    									if(x2 == 0 && z2 == -5 && y2 != 0 && y2 <= floors * 5 - 4) {
+    									if(x2 == 0 && z2 == -5 && y2 > 1 && y2 <= floors * 6 - 4) {
     										world.setBlock(x + x2, y + y2, z + z2 + 2, Block.ladder.blockID, 3, 0);
     									}
-    								} else if(y2 % 5 == 1 && x2 == 0 && z2 == 3 && (y2/5 >= floors - 1 || random.nextInt(4) == 0) && y2 >= 5) {
+    								} else if(y2 % 6 == 2 && x2 == 0 && z2 == 3 && (y2/6 >= floors - 1 || random.nextInt(4) == 0) && y2 >= 5) {
     									world.setBlock(x + x2, y + y2, z + z2, Block.chest.blockID, 0, 2);
     									
     									TileEntityChest tileentitychest = (TileEntityChest) world.getBlockTileEntity(x + x2, y + y2, z + z2);
@@ -61,8 +68,10 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     										ChestGenHooks info = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
     										WeightedRandomChestContent.generateChestContents(random, info.getItems(random), tileentitychest, info.getCount(random));
     									}
-    								} else if(y2 % 5 == 1 && x2 == 0 && z2 == 0) {
-    									if(y2 != 1) {
+    									
+    									world.setBlock(x + x2, y + y2 - 1, z + z2, Block.obsidian.blockID);
+    								} else if(y2 % 6 == 2 && x2 == 0 && z2 == 0) {
+    									if(y2 != 2) {
 	    									world.setBlock(x + x2, y + y2, z + z2, Block.mobSpawner.blockID, 0, 2);
 	    						            TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)world.getBlockTileEntity(x + x2, y + y2, z + z2);
 	
@@ -85,6 +94,8 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     					}
     					
     					addedDungeon = true;
+    					
+    					y++;
     				}
     			}
     		}

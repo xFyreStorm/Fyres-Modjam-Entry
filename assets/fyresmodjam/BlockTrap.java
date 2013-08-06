@@ -97,7 +97,7 @@ public class BlockTrap extends BlockContainer
     }
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
-    	if(!par1World.isRemote && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
+    	if(!par1World.isRemote && ModjamMod.spawnTraps && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
     		
     		int type = par1World.getBlockMetadata(par2, par3, par4);
     		
@@ -120,9 +120,14 @@ public class BlockTrap extends BlockContainer
     	}
     }
     
+    @Override
+    public boolean isBlockReplaceable(World world, int x, int y, int z) {
+    	return super.isBlockReplaceable(world, x, y, z) || (world.isRemote ? PacketHandler.trapsDisabled : !ModjamMod.spawnTraps);
+    }  
+    
     public boolean isCollidable() {
     	boolean b = false;
-    	if(Side.CLIENT.isClient()) {b = getPlayerSneaking();}
+    	if(Side.CLIENT.isClient() && !PacketHandler.trapsDisabled) {b = getPlayerSneaking();}
         return b;
     }
     

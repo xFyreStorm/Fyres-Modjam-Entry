@@ -62,7 +62,11 @@ public class CommonTickHandler implements ITickHandler {
 			}
 		}
 		
-		for(Entity e : addLater) {server.worldServers[e.dimension].spawnEntityInWorld(e);}
+		for(Entity e : addLater) {
+			WorldServer world = null;
+			for(WorldServer s : MinecraftServer.getServer().worldServers) {if(s.provider.dimensionId == e.dimension) {world = s; break;}}
+			if(world != null) {world.spawnEntityInWorld(e);}
+		}
 		addLater.clear();
 		
 		if(worldData != null) {

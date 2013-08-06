@@ -11,6 +11,7 @@ import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
@@ -45,8 +46,8 @@ public class FyresWorldData extends WorldSavedData {
 	public static String[] validMobNames = {"Ender Dragon", "Ghast", "Wither"};
 	public static int[][] mobNumbers = {new int[] {1, 1}, new int[] {5, 15} , new int[] {1, 3}};
 	
-	public static HashMap<String, String> blessingByPlayer = new HashMap<String, String>();
-	public static HashMap<String, int[]> potionKnowledgeByPlayer = new HashMap<String, int[]>();
+	public HashMap<String, String> blessingByPlayer = new HashMap<String, String>();
+	public HashMap<String, int[]> potionKnowledgeByPlayer = new HashMap<String, int[]>();
 	
 	public static int[] validItems = {Block.blockDiamond.blockID, Block.blockGold.blockID, Block.blockEmerald.blockID, Block.blockLapis.blockID, Item.diamond.itemID, Item.emerald.itemID, Item.ingotGold.itemID, Item.netherStar.itemID, Item.ghastTear.itemID};
 
@@ -82,6 +83,18 @@ public class FyresWorldData extends WorldSavedData {
 		
 		if(nbttagcompound.hasKey("enderDragonKilled")) {enderDragonKilled = nbttagcompound.getBoolean("enderDragonKilled");}
 		
+		if(nbttagcompound.hasKey("TempPlayerStats")) {
+			NBTTagCompound tempStats = nbttagcompound.getCompoundTag("TempPlayerStats");
+			
+			for(Object o : tempStats.getTags()) {
+				if(o == null || !(o instanceof NBTTagCompound)) {continue;}
+				NBTTagCompound player = (NBTTagCompound) o;
+				
+				blessingByPlayer.put(player.getName(), player.getString("Blessing"));
+				potionKnowledgeByPlayer.put(player.getName(), player.getIntArray("PotionKnowledge"));
+			}
+		}
+		
 		checkWorldData();
 	} 
 
@@ -100,6 +113,23 @@ public class FyresWorldData extends WorldSavedData {
 		nbttagcompound.setInteger("tasksCompleted", tasksCompleted);
 		
 		nbttagcompound.setBoolean("enderDragonKilled", enderDragonKilled);
+		
+		if(!blessingByPlayer.isEmpty()) {
+			NBTTagCompound tempPlayerStats = new NBTTagCompound();
+			
+			for(String s : blessingByPlayer.keySet()) {
+				if(s == null) {continue;}
+				
+				NBTTagCompound player = new NBTTagCompound();
+				
+				player.setString("Blessing", blessingByPlayer.get(s));
+				player.setIntArray("PotionKnowledge", potionKnowledgeByPlayer.get(s));
+				
+				tempPlayerStats.setTag(s, player);
+			}
+			
+			nbttagcompound.setCompoundTag("TempPlayerStats", tempPlayerStats);
+		}
 	}
 	
 	private void checkWorldData() {
@@ -173,8 +203,9 @@ public class FyresWorldData extends WorldSavedData {
 			currentTaskAmount = mobNumbers[currentTaskID][0] + ModjamMod.r.nextInt(mobNumbers[currentTaskID][1]);
 		} else if(currentTask.equals("Collect")) {
 			currentTaskID = validItems[ModjamMod.r.nextInt(validItems.length)];
-			currentTaskID = Item.ingotGold.itemID;
-			currentTaskAmount = 5 + ModjamMod.r.nextInt(28);
+			
+			if(currentTaskID == Item.netherStar.itemID) {currentTaskAmount = 1 + ModjamMod.r.nextInt(3);}
+			else {currentTaskAmount = 5 + ModjamMod.r.nextInt(28);}
 		}
 		
 		markDirty();

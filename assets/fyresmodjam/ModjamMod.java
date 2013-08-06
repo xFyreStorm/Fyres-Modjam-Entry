@@ -1,5 +1,9 @@
 package assets.fyresmodjam;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Properties;
 import java.util.Random;
 
@@ -49,7 +53,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.1a")
+@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.1b")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
 public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	
@@ -62,7 +66,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Random r = new Random();
     
     public static int itemID = 2875, blockID = 2875, achievementID = 2500;
-    public static boolean pillarGlow = true, spawnTraps = true;
+    public static boolean pillarGlow = true, spawnTraps = true, versionChecking = true;
     
     public static Block blockPillar;
     public static Block blockTrap;
@@ -75,6 +79,9 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Achievement losingIsFun;
     public static Achievement whoops;
     public static AchievementPage page;
+    
+    public static String version = "v0.0.1b";
+    public static String foundVersion = "v0.0.1b";
 	
     public static void loadProperties() {
 		Properties prop = new Properties();
@@ -88,6 +95,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		//achievementID = Integer.parseInt(prop.getProperty("achievementID", "" + achievementID));
 		pillarGlow = Boolean.parseBoolean(prop.getProperty("pillarGlow", "" + pillarGlow));
 		spawnTraps = Boolean.parseBoolean(prop.getProperty("spawnTraps", "" + spawnTraps));
+		versionChecking = Boolean.parseBoolean(prop.getProperty("versionChecking", "" + versionChecking));
     }
     
     public static ItemStack losingIsFunStack = new ItemStack(Item.bow, 1);
@@ -96,6 +104,34 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		loadProperties();
+		
+		if(versionChecking) {
+            InputStream in = null;
+            BufferedReader reader = null;
+
+            try {
+                in = new URL("https://dl.dropboxusercontent.com/s/n30va53f6uh2mki/versions.txt?token_hash=AAE89oZXZUV7Khx4mAbLhJS1Q4UuMZW2CXAO52yW1Ef9fw").openStream();
+                reader = new BufferedReader(new InputStreamReader(in));
+                
+                String inputLine;
+                while((inputLine = reader.readLine()) != null && !inputLine.startsWith("YWDMod")) {}
+                if(inputLine != null) {foundVersion = inputLine.split("=")[1];}
+            } catch (Exception e) {
+            	e.printStackTrace();
+            } finally {
+                try {
+                    if(reader != null) {reader.close();}
+
+                    if(in != null) {in.close();}
+                } catch (Exception e) {e.printStackTrace();}
+            }
+
+            if(!version.equals(foundVersion)) {
+                System.out.println("A newer version of the \"You Will Die\" Mod has been found (" + foundVersion + ").");
+            } else {
+                System.out.println("No newer version of the \"You Will Die\" Mod has been found.");
+            }
+        } else {System.out.println("\"You Will\" Die Mod version checking disabled.");}
 		
 		startTheGame = getNewAchievement(achievementID, 0, 0, new ItemStack(Item.swordIron, 1), "startTheGame", "You Will Die", "Join a world with this mod installed", null, true);
 		losingIsFun = getNewAchievement(achievementID + 1, -2, 0, losingIsFunStack, "losingIsFun", "Losing Is Fun", "Experience \"fun\"", startTheGame, false);
@@ -123,7 +159,11 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
 		
 		GameRegistry.registerWorldGenerator(new PillarGen());
-		if(spawnTraps) {GameRegistry.registerWorldGenerator(new WorldGenTrapsAndTowers());}
+		
+		//if(spawnTraps) {
+			GameRegistry.registerWorldGenerator(new WorldGenTrapsAndTowers());
+		//}
+		
 		for(int i = 0; i < 3; i++) {GameRegistry.registerWorldGenerator(new WorldGenMoreDungeons());}
 		
 		//Item and Block loading
@@ -267,7 +307,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	@Override
 	public void onPlayerLogin(EntityPlayer player) {
 		if(!player.worldObj.isRemote) {
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled}), (Player) player);
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled, ModjamMod.spawnTraps}), (Player) player);
 			
 			int index = -1;
 			for(int i = 0; i < CommonTickHandler.worldData.validDisadvantages.length; i++) {if(CommonTickHandler.worldData.validDisadvantages[i].equals(CommonTickHandler.worldData.currentDisadvantage)) {index = i; break;}}
@@ -283,7 +323,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 			
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_BLESSING, new Object[] {player.getEntityData().getString("Blessing")}), (Player) player);
 			
-			if(player.getEntityData().hasKey("PotionKnowledge")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {player.getEntityData().getIntArray("PotionKnowledge")}), (Player) player);}
+			if(!player.getEntityData().hasKey("PotionKnowledge")) {player.getEntityData().setIntArray("PotionKnowledge", new int[] {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});}
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {player.getEntityData().getIntArray("PotionKnowledge")}), (Player) player);
 		}
 		
 		//player.triggerAchievement(startTheGame);

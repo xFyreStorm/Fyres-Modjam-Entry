@@ -17,6 +17,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.WorldServer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -39,7 +40,8 @@ public class PacketHandler implements IPacketHandler {
 	public static int progress = 0;
 	public static int tasksCompleted = 0;
 	
-	public boolean enderDragonKilled = false;
+	public static boolean enderDragonKilled = false;
+	public static boolean trapsDisabled = false;
 	
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player playerEntity) {
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
@@ -110,15 +112,21 @@ public class PacketHandler implements IPacketHandler {
 							int dimension = inputStream.readInt();
 							int entityID = inputStream.readInt();
 							
-							Entity entity = MinecraftServer.getServer().worldServers[dimension].getEntityByID(entityID);
+							WorldServer server = null;
 							
-							if(entity != null) {
-								String blessing = entity.getEntityData().hasKey("Blessing") ? entity.getEntityData().getString("Blessing") : null;
+							for(WorldServer s : MinecraftServer.getServer().worldServers) {if(s.provider.dimensionId == dimension) {server = s; break;}}
+							
+							if(server != null) {
+								Entity entity = server.getEntityByID(entityID);
 								
-								if(blessing != null) {
-									PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eYou notice " + entity.getTranslatedEntityName() + "\u00A7e is using Blessing of the " + blessing + "."}), (Player) player);
-								} else {
-									PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eThere doesn't seem to be anything special about " + (entity instanceof EntityPlayer ? "" : "this ") + entity.getTranslatedEntityName() + "\u00A7e."}), (Player) player);
+								if(entity != null) {
+									String blessing = entity.getEntityData().hasKey("Blessing") ? entity.getEntityData().getString("Blessing") : null;
+									
+									if(blessing != null) {
+										PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eYou notice " + entity.getTranslatedEntityName() + "\u00A7e is using Blessing of the " + blessing + "."}), (Player) player);
+									} else {
+										PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eThere doesn't seem to be anything special about " + (entity instanceof EntityPlayer ? "" : "this ") + entity.getTranslatedEntityName() + "\u00A7e."}), (Player) player);
+									}
 								}
 							}
 							
@@ -148,6 +156,7 @@ public class PacketHandler implements IPacketHandler {
 							progress = inputStream.readInt(); 
 							tasksCompleted = inputStream.readInt();
 							enderDragonKilled = inputStream.readBoolean();
+							trapsDisabled = !inputStream.readBoolean();
 							
 							return;
 						

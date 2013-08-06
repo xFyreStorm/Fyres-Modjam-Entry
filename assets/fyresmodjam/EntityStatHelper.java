@@ -140,19 +140,24 @@ public class EntityStatHelper {
 				if(entityNew != null) {
 					entityNew.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, event.entity.rotationYaw, event.entity.rotationPitch);
 					entityNew.getDataWatcher().addObject(30, (byte) 1);
+					entityNew.dimension = event.entity.dimension;
 					CommonTickHandler.addLater.add(entityNew); //event.world.spawnEntityInWorld(entityNew);
 				}
 			}
 			
 			if(event.entity instanceof EntityPlayer) {
-				if(!event.entity.getEntityData().hasKey("Blessing") && FyresWorldData.blessingByPlayer.containsKey(event.entity.getEntityName())) {
-					event.entity.getEntityData().setString("Blessing", FyresWorldData.blessingByPlayer.get(event.entity.getEntityName()));
+				if(!event.entity.getEntityData().hasKey("Blessing") && CommonTickHandler.worldData.blessingByPlayer.containsKey(event.entity.getEntityName())) {
+					event.entity.getEntityData().setString("Blessing", CommonTickHandler.worldData.blessingByPlayer.get(event.entity.getEntityName()));
 					PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_BLESSING, new Object[] {event.entity.getEntityData().getString("Blessing")}), (Player) event.entity);
+					CommonTickHandler.worldData.blessingByPlayer.remove(event.entity.getEntityName());
+					CommonTickHandler.worldData.markDirty();
 				}
 				
-				if(!event.entity.getEntityData().hasKey("PotionKnowledge") && FyresWorldData.potionKnowledgeByPlayer.containsKey(event.entity.getEntityName())) {
-					event.entity.getEntityData().setIntArray("PotionKnowledge", FyresWorldData.potionKnowledgeByPlayer.get(event.entity.getEntityName()));
+				if(!event.entity.getEntityData().hasKey("PotionKnowledge") && CommonTickHandler.worldData.potionKnowledgeByPlayer.containsKey(event.entity.getEntityName())) {
+					event.entity.getEntityData().setIntArray("PotionKnowledge", CommonTickHandler.worldData.potionKnowledgeByPlayer.get(event.entity.getEntityName()));
 					PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {event.entity.getEntityData().getIntArray("PotionKnowledge")}), (Player) event.entity);
+					CommonTickHandler.worldData.potionKnowledgeByPlayer.remove(event.entity.getEntityName());
+					CommonTickHandler.worldData.markDirty();
 				}
 			}
 		}
@@ -246,21 +251,23 @@ public class EntityStatHelper {
 					CommonTickHandler.worldData.currentDisadvantage = "None";
 				}
 				
-				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled}));
+				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled, ModjamMod.spawnTraps}));
 			
 				CommonTickHandler.worldData.markDirty();
 			}
 			
 			if(!CommonTickHandler.worldData.enderDragonKilled && event.entity instanceof EntityDragon) {
 				CommonTickHandler.worldData.enderDragonKilled = true;
-				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled}));
+				PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled, ModjamMod.spawnTraps}));
 				CommonTickHandler.worldData.markDirty();
 			}
 		}
 		
 		if(event.entity instanceof EntityPlayer) {
 			((EntityPlayer) event.entity).triggerAchievement(ModjamMod.losingIsFun);
-			FyresWorldData.blessingByPlayer.put(event.entity.getEntityName(), event.entity.getEntityData().getString("Blessing"));
+			
+			CommonTickHandler.worldData.blessingByPlayer.put(event.entity.getEntityName(), event.entity.getEntityData().getString("Blessing"));
+			CommonTickHandler.worldData.potionKnowledgeByPlayer.put(event.entity.getEntityName(), event.entity.getEntityData().getIntArray("PotionKnowledge"));
 		}
 	}
 }
