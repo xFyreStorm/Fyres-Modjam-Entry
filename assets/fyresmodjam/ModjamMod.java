@@ -191,6 +191,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		LanguageRegistry.instance().addStringLocalization("commands.currentBlessing.usage", "/currentBlessing - used to check your current blessing");
 		LanguageRegistry.instance().addStringLocalization("commands.currentDisadvantage.usage", "/currentDisadvantage - used to check your current world disadvantage");
 		LanguageRegistry.instance().addStringLocalization("commands.currentGoal.usage", "/currentGoal - used to check your current world goal");
+		LanguageRegistry.instance().addStringLocalization("fyresmodjam.newVersion", "\u00A7eA newer version of the \"You Will Die\" Mod has been found (" + foundVersion + ").");
 		
 		//Entity Trackers
 		
@@ -326,7 +327,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 			
 			if(!player.getEntityData().hasKey("PotionKnowledge")) {player.getEntityData().setIntArray("PotionKnowledge", new int[] {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});}
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {player.getEntityData().getIntArray("PotionKnowledge")}), (Player) player);
-		}
+		} else if(versionChecking && !version.equals(foundVersion)) {player.addChatMessage("fyresmodjam.newVersion");}
 		
 		//player.triggerAchievement(startTheGame);
 	}
