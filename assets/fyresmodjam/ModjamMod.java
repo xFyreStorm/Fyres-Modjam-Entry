@@ -53,7 +53,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.1b")
+@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.1c")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
 public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	
@@ -80,8 +80,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Achievement whoops;
     public static AchievementPage page;
     
-    public static String version = "v0.0.1b";
-    public static String foundVersion = "v0.0.1b";
+    public static String version = "v0.0.1c";
+    public static String foundVersion = "v0.0.1c";
 	
     public static void loadProperties() {
 		Properties prop = new Properties();
@@ -318,6 +318,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 			if(!player.getEntityData().hasKey("Blessing")) {
 				player.getEntityData().setString("Blessing", TileEntityPillar.validBlessings[ModjamMod.r.nextInt(TileEntityPillar.validBlessings.length)]);
+				while(player.getEntityData().getString("Blessing").equals("Inferno")) {player.getEntityData().setString("Blessing", TileEntityPillar.validBlessings[ModjamMod.r.nextInt(TileEntityPillar.validBlessings.length)]);}
 				PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A72You've been granted the Blessing of the " + player.getEntityData().getString("Blessing") + ". (Use /currentBlessing to check effect)"}), (Player) player);
 			}
 			

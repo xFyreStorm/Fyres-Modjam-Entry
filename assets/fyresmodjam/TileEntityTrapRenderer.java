@@ -17,9 +17,9 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntityTrapRenderer extends TileEntitySpecialRenderer {
 	
-    private ModelBase[] models = {new ModelSpikes(), new ModelTrap2()};
+    private ModelBase[] models = {new ModelSpikes(), new ModelTrap2(), new ModelTrap2()};
 
-    public static ResourceLocation[] textures = {new ResourceLocation("fyresmodjam", "textures/blocks/spikes.png"), new ResourceLocation("fyresmodjam", "textures/blocks/trap2.png")};
+    public static ResourceLocation[] textures = {new ResourceLocation("fyresmodjam", "textures/blocks/spikes.png"), new ResourceLocation("fyresmodjam", "textures/blocks/trap2.png"), new ResourceLocation("fyresmodjam", "textures/blocks/trap3.png")};
     
     public void renderTileEntityAt(TileEntity tileEntity, double d, double d1, double d2, float f)
     {

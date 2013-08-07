@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -52,6 +53,10 @@ public class CommonTickHandler implements ITickHandler {
 					if(player.isSneaking() && player.getEntityData().getString("Blessing").equals("Ninja")) {
 						PotionEffect e = player.getActivePotionEffect(Potion.invisibility);
 						if(e == null || player.getActivePotionEffect(Potion.invisibility).getDuration() < 10) {player.addPotionEffect(new PotionEffect(Potion.invisibility.id, 10, 1, false));}
+					} else if(player.getEntityData().getString("Blessing").equals("Diver")) {
+						player.setAir(0);
+					} else if(player.getEntityData().getString("Blessing").equals("Inferno") && player.isWet() && player.ticksExisted % 10 == 0) {
+						player.attackEntityFrom(DamageSource.drown, 1.0F);
 					}/* else if(player.getEntityData().getString("Blessing").equals("Healer")) {
 						if(player.worldObj.getGameRules().getGameRuleBooleanValue("naturalRegeneration") && ((player.worldObj.difficultySetting == 0 && player.func_110143_aJ() < player.func_110138_aP() && player.ticksExisted % 20 * 12 == 0) || (player.getFoodStats().getFoodLevel() >= 18 && player.getEntityData().getInteger("foodTickTimer") >= 80 && player.shouldHeal()))) {
 							player.heal(1.0F);

@@ -35,7 +35,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockTrap extends BlockContainer
 {
 	
-	public static int trapTypes = 2;
+	public static int trapTypes = 3;
 	
     protected BlockTrap(int par1) {
         super(par1, Material.circuits);
@@ -106,6 +106,9 @@ public class BlockTrap extends BlockContainer
     			if(ModjamMod.r.nextInt(100) == 0) {((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.poison.id, 100, 1));}
     		} else if(type % trapTypes == 1) {
     			if(!par5Entity.isBurning()) {par5Entity.setFire(5);}
+    		} else if(type % trapTypes == 2) {
+    			((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.blindness.id, 100, 1));
+    			((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1));
     		}
     		
     	}
@@ -125,11 +128,8 @@ public class BlockTrap extends BlockContainer
     	return super.isBlockReplaceable(world, x, y, z) || (world.isRemote ? PacketHandler.trapsDisabled : !ModjamMod.spawnTraps);
     }  
     
-    public boolean isCollidable() {
-    	boolean b = false;
-    	if(Side.CLIENT.isClient() && !PacketHandler.trapsDisabled) {b = getPlayerSneaking();}
-        return b;
-    }
+    @SideOnly(Side.CLIENT)
+    public boolean isCollidable() {return !PacketHandler.trapsDisabled && getPlayerSneaking();}
     
     @Override
     public boolean canPlaceBlockAt(World world, int x, int y, int z) {

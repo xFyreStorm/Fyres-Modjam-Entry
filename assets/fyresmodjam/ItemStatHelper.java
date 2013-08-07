@@ -231,6 +231,8 @@ public class ItemStatHelper implements ICraftingHandler {
 	@ForgeSubscribe
 	public void livingHurt(LivingHurtEvent event) {
 		if(!event.entity.worldObj.isRemote) {
+			float damageMultiplier = 1.0F;
+			
 			if(event.source != null && event.source.getEntity() != null) {
 				if(event.source.getEntity() instanceof EntityLivingBase) {
 					EntityLivingBase entity = (EntityLivingBase) event.source.getEntity();
@@ -240,18 +242,6 @@ public class ItemStatHelper implements ICraftingHandler {
 					if(held != null && (event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob") || (held.getItem().itemID == Item.bow.itemID && event.source.isProjectile()))) {
 						String s = getStat(held, "BonusDamage");
 						if(s != null) {event.ammount += Integer.parseInt(s);}
-					}
-				}
-				
-				float damageMultiplier = 1.0F;
-				
-				if(CommonTickHandler.worldData.currentDisadvantage.equals("Weak") || (CommonTickHandler.worldData.currentDisadvantage.equals("Tougher Mobs") && event.entity instanceof EntityMob)) {
-					damageMultiplier -= 0.25F;
-				}
-				
-				if(event.entity.getEntityData().hasKey("Blessing")) {
-					if(event.entity.getEntityData().getString("Blessing").equals("Guardian")) {
-						damageMultiplier -= 0.25F;
 					}
 				}
 				
@@ -268,11 +258,25 @@ public class ItemStatHelper implements ICraftingHandler {
 						event.entityLiving.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1, false));
 					} else if(blessing.equals("Vampire") && event.source.getEntity() instanceof EntityLivingBase) {
 						((EntityLivingBase) event.source.getEntity()).heal(event.ammount * damageMultiplier * 0.05F);
+					} else if(blessing.equals("Inferno") && event.source.getEntity().isBurning()) {
+						damageMultiplier += 0.5F;
 					}
 				}
-				
-				event.ammount *= damageMultiplier;
 			}
+			
+			if(CommonTickHandler.worldData.currentDisadvantage.equals("Weak") || (CommonTickHandler.worldData.currentDisadvantage.equals("Tougher Mobs") && event.entity instanceof EntityMob)) {
+				damageMultiplier -= 0.25F;
+			}
+			
+			if(event.entity.getEntityData().hasKey("Blessing")) {
+				if(event.entity.getEntityData().getString("Blessing").equals("Guardian")) {
+					damageMultiplier -= 0.25F;
+				} else if(event.entity.getEntityData().getString("Blessing").equals("Inferno") && (event.source.isFireDamage() || event.source.getDamageType().equals("inFire")  || event.source.getDamageType().equals("onFire")  || event.source.getDamageType().equals("lava"))) {
+					damageMultiplier = 0;
+				}
+			}
+			
+			event.ammount *= damageMultiplier;
 		}
 	}
 	

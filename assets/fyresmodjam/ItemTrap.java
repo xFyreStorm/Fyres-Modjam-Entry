@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class ItemTrap extends Item {
 
 	public static Icon[] icons;
-	public static String[] iconLocations = new String[] {"fyresmodjam:itemTrap", "fyresmodjam:trap2"};
+	public static String[] iconLocations = new String[] {"fyresmodjam:itemTrap", "fyresmodjam:trap2", "fyresmodjam:trap3"};
 
 	public ItemTrap(int par1) {
 		super(par1);
@@ -38,7 +38,7 @@ public class ItemTrap extends Item {
         for(int i = 0; i < BlockTrap.trapTypes; i++) {par3List.add(new ItemStack(par1, 1, i));}
     }
 	
-	public static String[] names = {"Spike Trap", "Flame Trap"};
+	public static String[] names = {"Spike Trap", "Flame Trap", "Smoke Trap"};
 	
 	@SideOnly(Side.CLIENT)
 	public String getItemDisplayName(ItemStack par1ItemStack) {
