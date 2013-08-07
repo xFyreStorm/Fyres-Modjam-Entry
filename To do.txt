@@ -20,6 +20,7 @@ Trap types:
     
     Spike Trap - Does 1 heart of damage while touching, 1% chance to poison
     Flame Trap - Sets on fire for 5 seconds
+    Smoke Trap - Slows and blinds for 5 seconds
     
 Towers (3 - 8 floors tall of cobble and mossy cobble) spawn around the world, and contain mob spawners and chests
 
@@ -49,7 +50,9 @@ Blessings:
     Alchemist - All potions act like wildcard potions,
     Scout - You can see traps without sneaking,
     Guardian - Take 25% less damage from all sources,
-    Vampire - Heal 5% of damage dealt to enemies
+    Vampire - Heal 5% of damage dealt to enemies,
+    Inferno - You don't take fire damage, do +100% damage while on fire, and take damage while wet,
+    Diver - You can breathe under water,
     
 /currentBlessing command shows your current blessing
     
