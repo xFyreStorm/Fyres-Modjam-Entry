@@ -52,7 +52,7 @@ Blessings:
     Scout - You can see traps without sneaking,
     Guardian - Take 25% less damage from all sources,
     Vampire - Heal 7% of damage dealt to enemies, while in sunlight, -20% damage dealt, +20% damage received,
-    Inferno - You don't take fire damage, do +100% damage while on fire, and take damage while wet,
+    Inferno - You don't take fire damage, do +50% damage while on fire, and take damage while wet,
     Diver - You can breathe under water
     
 /currentBlessing command shows your current blessing
