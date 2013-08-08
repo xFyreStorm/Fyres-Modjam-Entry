@@ -39,8 +39,8 @@ You get a randomly selected blessing to start with the first time you enter a wo
 
 Blessings: 
 
-    Miner - +25% mine speed on stone and iron blocks,
-    Lumberjack - +25% mine speed on wooden blocks,
+    Miner - +25% mine speed on stone and iron blocks, +25% damage with pickaxes,
+    Lumberjack - +25% mine speed on wooden blocks, +15% damage with axes,
     Warrior - +25% melee damage,
     Hunter - +25% projectile damage,
     Swamp - Attacks will slow enemies,
@@ -50,7 +50,7 @@ Blessings:
     Alchemist - All potions act like wildcard potions,
     Scout - You can see traps without sneaking,
     Guardian - Take 25% less damage from all sources,
-    Vampire - Heal 5% of damage dealt to enemies,
+    Vampire - Heal 7% of damage dealt to enemies, while in sunlight, -20% damage dealt, +20% damage received,
     Inferno - You don't take fire damage, do +100% damage while on fire, and take damage while wet,
     Diver - You can breathe under water,
     
