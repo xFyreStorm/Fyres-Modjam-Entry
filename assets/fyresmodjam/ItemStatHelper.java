@@ -308,7 +308,7 @@ public class ItemStatHelper implements ICraftingHandler {
 			
 			event.ammount *= damageMultiplier;
 			
-			System.out.println(event.ammount);
+			//System.out.println(event.ammount);
 		}
 	}
 	

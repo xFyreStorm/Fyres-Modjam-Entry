@@ -54,7 +54,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.1c")
+@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.1d")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
 public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	
@@ -81,8 +81,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Achievement whoops;
     public static AchievementPage page;
     
-    public static String version = "v0.0.1c";
-    public static String foundVersion = "v0.0.1c";
+    public static String version = "v0.0.1d";
+    public static String foundVersion = "v0.0.1d";
 	
     public static void loadProperties() {
 		Properties prop = new Properties();
@@ -192,7 +192,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		LanguageRegistry.instance().addStringLocalization("commands.currentBlessing.usage", "/currentBlessing - used to check your current blessing");
 		LanguageRegistry.instance().addStringLocalization("commands.currentDisadvantage.usage", "/currentDisadvantage - used to check your current world disadvantage");
 		LanguageRegistry.instance().addStringLocalization("commands.currentGoal.usage", "/currentGoal - used to check your current world goal");
-		LanguageRegistry.instance().addStringLocalization("fyresmodjam.newVersion", "\u00A7eA newer version of the \"You Will Die\" Mod has been found (" + foundVersion + ").");
+		LanguageRegistry.instance().addStringLocalization("fyresmodjam.newVersion", "\u00A7bA newer version of the \"You Will Die\" Mod has been found (" + foundVersion + ").");
 		
 		//Entity Trackers
 		
@@ -380,7 +380,9 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 			
 			if(!player.getEntityData().hasKey("PotionKnowledge")) {player.getEntityData().setIntArray("PotionKnowledge", new int[] {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});}
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {player.getEntityData().getIntArray("PotionKnowledge")}), (Player) player);
-		} else if(versionChecking && !version.equals(foundVersion)) {player.addChatMessage("fyresmodjam.newVersion");}
+		}
+		
+		if(versionChecking && !version.equals(foundVersion)) {player.addChatMessage("fyresmodjam.newVersion");}
 		
 		//player.triggerAchievement(startTheGame);
 	}
