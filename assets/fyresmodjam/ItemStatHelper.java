@@ -87,8 +87,8 @@ public class ItemStatHelper implements ICraftingHandler {
 		
 		public Object getNewValue(ItemStack stack, Random r) {return value;}
 		public String getLore(ItemStack stack) {return null;}
-		public String getAlteredStackName(ItemStack stack) {return stack.getDisplayName();}
-		public void modifyStack(ItemStack stack) {}
+		public String getAlteredStackName(ItemStack stack, Random r) {return stack.getDisplayName();}
+		public void modifyStack(ItemStack stack, Random r) {}
 	}
 	
 	public static HashMap<Class, ItemStatTracker> statTrackersByClass = new HashMap<Class, ItemStatTracker>();
@@ -254,6 +254,16 @@ public class ItemStatHelper implements ICraftingHandler {
 				}
 			}
 			
+			if(event.entity instanceof EntityLivingBase) {
+				EntityLivingBase entity = (EntityLivingBase) event.entity;
+				
+				for(int i = 0; i < 4; i++) {
+					ItemStack stack = entity.getCurrentItemOrArmor(i + 1);
+					if(stack == null || stack.getTagCompound() == null || !stack.getTagCompound().hasKey("DamageReduction")) {continue;}
+					damageMultiplier -= Float.parseFloat(stack.getTagCompound().getString("DamageReduction")) * 0.01F;
+				}
+			}
+			
 			if(!skip && event.source != null && event.source.getEntity() != null) {
 				if(event.source.getEntity() instanceof EntityLivingBase) {
 					EntityLivingBase entity = (EntityLivingBase) event.source.getEntity();
@@ -298,7 +308,7 @@ public class ItemStatHelper implements ICraftingHandler {
 			
 			event.ammount *= damageMultiplier;
 			
-			//System.out.println(event.ammount);
+			System.out.println(event.ammount);
 		}
 	}
 	
@@ -335,9 +345,9 @@ public class ItemStatHelper implements ICraftingHandler {
 						String lore = s.getLore(stack);
 						if(lore != null) {addLore(stack, lore);}
 						
-						setName(stack, s.getAlteredStackName(stack));
+						setName(stack, s.getAlteredStackName(stack, r));
 						
-						s.modifyStack(stack);
+						s.modifyStack(stack, r);
 					}
 				}
 			}

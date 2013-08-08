@@ -20,6 +20,7 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
@@ -258,33 +259,85 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 		ItemStatTracker weaponTracker = new ItemStatTracker(new Class[] {ItemSword.class, ItemAxe.class, ItemBow.class}, null, true);
 		
-		weaponTracker.addStat(new ItemStat("Prefix", "") {
-			public String[] prefixes = new String[] {"Old", "Sharp", "Average"};
-			public String[] prefixesBow = new String[] {"Old", "Long", "Average"};
-			
-			public Object getNewValue(ItemStack stack, Random r) {return stack.getItem() instanceof ItemBow ? prefixesBow[r.nextInt(prefixesBow.length)] : prefixes[r.nextInt(prefixes.length)];}
-			public String getAlteredStackName(ItemStack stack) {return "\u00A7f" + stack.getTagCompound().getString(name) + " " + stack.getDisplayName();}
-		});
-		
 		weaponTracker.addStat(new ItemStat("Rank", "") {
+			
+			public String[][] prefixesByRank = {
+					{"Old", "Dull", "Broken", "Worn"},
+					{"Average", "Decent", "Modest", "Ordinary"},
+					{"Strong", "Sharp", "Polished", "Refined"},
+					{"Powerful", "Ruthless", "Elite", "Astonishing"},
+					{"Godly", "Divine", "Fabled", "Legendary"}
+			};
+			
 			public Object getNewValue(ItemStack stack, Random r) {
 				int i = 1;
-				for(; i < 5; i++) {if(ModjamMod.r.nextInt(5) < 3) {break;}}
+				for(; i < 5; i++) {if(ModjamMod.r.nextInt(10) < 7) {break;}}
 				return i;
 			}
 			
-			public void modifyStack(ItemStack stack) {
+			public void modifyStack(ItemStack stack, Random r) {
 				int rank = Integer.parseInt(stack.getTagCompound().getString(name));
-				int bonusDamage = (rank - 1)/2 + (int) (ModjamMod.r.nextInt(rank + 1));
+				int bonusDamage = (rank - 1)/2 + (int) (r.nextInt(rank + 1));
 				
 				ItemStatHelper.giveStat(stack, "BonusDamage", bonusDamage);
 				ItemStatHelper.addLore(stack, bonusDamage != 0 ? "\u00A77\u00A7o  " + (bonusDamage > 0 ? "+" : "") + bonusDamage + " bonus damage" : null);
 				
 				ItemStatHelper.addLore(stack, "\u00A7eRank: "+ rank);
 			}
+			
+			public String getAlteredStackName(ItemStack stack, Random r) {
+				String[] list = prefixesByRank[Integer.parseInt(stack.getTagCompound().getString(name)) - 1];
+				String prefix = list[r.nextInt(list.length)];
+				
+				if(prefix.equals("Sharp") && stack.getItem() instanceof ItemBow) {prefix = "Long";}
+				
+				return "\u00A7f" + prefix + " " + stack.getDisplayName();
+			}
+			
 		});
 		
 		ItemStatHelper.addStatTracker(weaponTracker);
+		
+		ItemStatTracker armorTracker = new ItemStatTracker(new Class[] {ItemArmor.class}, null, true);
+		
+		armorTracker.addStat(new ItemStat("Rank", "") {
+			
+			public String[][] prefixesByRank = {
+					{"Old", "Broken", "Worn", "Weak"},
+					{"Average", "Decent", "Modest", "Ordinary"},
+					{"Polished", "Tough", "Hardened", "Durable"},
+					{"Elite", "Astonishing", "Reinforced", "Resilient"},
+					{"Godly", "Divine", "Fabled", "Legendary"}
+			};
+			
+			public Object getNewValue(ItemStack stack, Random r) {
+				int i = 1;
+				for(; i < 5; i++) {if(ModjamMod.r.nextInt(10) < 7) {break;}}
+				return i;
+			}
+			
+			public void modifyStack(ItemStack stack, Random r) {
+				int rank = Integer.parseInt(stack.getTagCompound().getString(name));
+				float damageReduction = (rank - 1) + r.nextFloat() * 0.5F;
+				
+				ItemStatHelper.giveStat(stack, "DamageReduction", String.format("%.2f", damageReduction));
+				ItemStatHelper.addLore(stack, !String.format("%.2f", damageReduction).equals("0.00") ? "\u00A77\u00A7o  " + (damageReduction > 0 ? "+" : "") + String.format("%.2f", damageReduction) + "% damage reduction" : null);
+				
+				ItemStatHelper.addLore(stack, "\u00A7eRank: "+ rank);
+			}
+			
+			public String getAlteredStackName(ItemStack stack, Random r) {
+				String[] list = prefixesByRank[Integer.parseInt(stack.getTagCompound().getString(name)) - 1];
+				String prefix = list[r.nextInt(list.length)];
+				
+				if(prefix.equals("Sharp") && stack.getItem() instanceof ItemBow) {prefix = "Long";}
+				
+				return "\u00A7f" + prefix + " " + stack.getDisplayName();
+			}
+			
+		});
+		
+		ItemStatHelper.addStatTracker(armorTracker);
 		
 		//ItemStatTracker foodTracker = new ItemStatTracker(ItemFood.class, -1);
 		//foodTracker.addStat(new ItemStat("Spoiled", false));

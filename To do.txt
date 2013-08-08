@@ -29,7 +29,8 @@ Dungeons spawn 13x as often
 Hostile mobs get levels (+5 hp per level, +5 additional for level 5)
 Level 5 mobs get a blessing (Ranged mobs: Hunter or Swamp, Non-ranged Mobs: Warrior or Swamp)
 
-Bows, Axes, and Swords get a random rank and bonus damage, along with a random prefix
+Bows, Axes, and Swords get a random rank and bonus damage, along with a random prefix of it's rank
+Armor gets a rank rank and damage reduction, along with a random prefix of it's rank
 
 Pillars (randomly spawn around world and change current blessing when right clicked, pillars of your current blessing will slightly glow and emit particles)
 
@@ -52,7 +53,7 @@ Blessings:
     Guardian - Take 25% less damage from all sources,
     Vampire - Heal 7% of damage dealt to enemies, while in sunlight, -20% damage dealt, +20% damage received,
     Inferno - You don't take fire damage, do +100% damage while on fire, and take damage while wet,
-    Diver - You can breathe under water,
+    Diver - You can breathe under water
     
 /currentBlessing command shows your current blessing
     
