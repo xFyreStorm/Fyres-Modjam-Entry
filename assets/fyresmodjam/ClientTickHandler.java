@@ -3,6 +3,8 @@ package assets.fyresmodjam;
 import java.awt.Color;
 import java.util.EnumSet;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -40,16 +42,18 @@ public class ClientTickHandler implements ITickHandler {
     }
 	
 	private void onRenderTick() {
-		MovingObjectPosition mouse = Minecraft.getMinecraft().objectMouseOver;
+		/*MovingObjectPosition mouse = Minecraft.getMinecraft().objectMouseOver;
 		
 		if(mouse != null && Minecraft.getMinecraft().inGameHasFocus && Minecraft.getMinecraft().isGuiEnabled() && Minecraft.getMinecraft().theWorld != null && mouse.typeOfHit == EnumMovingObjectType.TILE && Minecraft.getMinecraft().theWorld.getBlockId(mouse.blockX, mouse.blockY, mouse.blockZ) == ModjamMod.blockPillar.blockID) {
 	        ScaledResolution scaledRes = new ScaledResolution(Minecraft.getMinecraft().gameSettings, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 	        int screenWidth = scaledRes.getScaledWidth();
 	        int screenHeight = scaledRes.getScaledHeight();
 	        
-	        String string = "Press x to Examine";
+	        String key = Keyboard.getKeyName(FyresKeyHandler.examine.keyCode);
+	        
+	        String string = "Press " + key + " to Examine";
 	        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(string, (screenWidth / 2) - (Minecraft.getMinecraft().fontRenderer.getStringWidth(string) / 2), screenHeight / 2 + 16, Color.WHITE.getRGB());
-		}
+		}*/
 	}
 
 	private void onClientTick() {

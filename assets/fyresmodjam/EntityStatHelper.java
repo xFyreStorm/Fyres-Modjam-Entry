@@ -18,6 +18,7 @@ import assets.fyresmodjam.ItemStatHelper.ItemStatTracker;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EnumEntitySize;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
@@ -269,5 +270,38 @@ public class EntityStatHelper {
 			CommonTickHandler.worldData.blessingByPlayer.put(event.entity.getEntityName(), event.entity.getEntityData().getString("Blessing"));
 			CommonTickHandler.worldData.potionKnowledgeByPlayer.put(event.entity.getEntityName(), event.entity.getEntityData().getIntArray("PotionKnowledge"));
 		}
+	}
+	
+	public static void setEntitySize(Entity entity, float par1, float par2) {
+		float f2;
+
+        if (par1 != entity.width || par2 != entity.height) {
+            f2 = entity.width;
+            entity.width = par1;
+            entity.height = par2;
+            entity.boundingBox.maxX = entity.boundingBox.minX + (double)entity.width;
+            entity.boundingBox.maxZ = entity.boundingBox.minZ + (double)entity.width;
+            entity.boundingBox.maxY = entity.boundingBox.minY + (double)entity.height;
+
+            /*if (entity.width > f2 && !entity.firstUpdate && !entity.worldObj.isRemote) {
+                entity.moveEntity((double)(f2 - entity.width), 0.0D, (double)(f2 - entity.width));
+            }*/
+        }
+
+        f2 = par1 % 2.0F;
+
+        if ((double)f2 < 0.375D) {
+            entity.myEntitySize = EnumEntitySize.SIZE_1;
+        } else if ((double)f2 < 0.75D) {
+            entity.myEntitySize = EnumEntitySize.SIZE_2;
+        } else if ((double)f2 < 1.0D) {
+            entity.myEntitySize = EnumEntitySize.SIZE_3;
+        } else if ((double)f2 < 1.375D) {
+            entity.myEntitySize = EnumEntitySize.SIZE_4;
+        } else if ((double)f2 < 1.75D) {
+            entity.myEntitySize = EnumEntitySize.SIZE_5;
+        } else {
+            entity.myEntitySize = EnumEntitySize.SIZE_6;
+        }
 	}
 }
