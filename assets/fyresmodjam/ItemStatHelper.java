@@ -26,6 +26,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
@@ -233,36 +235,7 @@ public class ItemStatHelper implements ICraftingHandler {
 		if(!event.entity.worldObj.isRemote) {
 			float damageMultiplier = 1.0F;
 			
-			if(event.source != null && event.source.getEntity() != null) {
-				if(event.source.getEntity() instanceof EntityLivingBase) {
-					EntityLivingBase entity = (EntityLivingBase) event.source.getEntity();
-					
-					ItemStack held = entity.getCurrentItemOrArmor(0);
-					
-					if(held != null && (event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob") || (held.getItem().itemID == Item.bow.itemID && event.source.isProjectile()))) {
-						String s = getStat(held, "BonusDamage");
-						if(s != null) {event.ammount += Integer.parseInt(s);}
-					}
-				}
-				
-				if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
-					String blessing = event.source.getEntity().getEntityData().getString("Blessing");
-					
-					if(blessing.equals("Warrior") && (event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob"))) {
-						damageMultiplier += 0.25F;
-					} else if(blessing.equals("Hunter") && event.source.isProjectile()) {
-						damageMultiplier += 0.25F;
-					} else if(event.entityLiving != null && blessing.equals("Ninja") && event.source.getEntity().isSneaking() && event.entityLiving.func_110143_aJ() == event.entityLiving.func_110138_aP()) {
-						damageMultiplier += 1.0F;
-					} else if(blessing.equals("Swamp") && event.entityLiving != null) {
-						event.entityLiving.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1, false));
-					} else if(blessing.equals("Vampire") && event.source.getEntity() instanceof EntityLivingBase) {
-						((EntityLivingBase) event.source.getEntity()).heal(event.ammount * damageMultiplier * 0.05F);
-					} else if(blessing.equals("Inferno") && event.source.getEntity().isBurning()) {
-						damageMultiplier += 0.5F;
-					}
-				}
-			}
+			boolean skip = false;
 			
 			if(CommonTickHandler.worldData.currentDisadvantage.equals("Weak") || (CommonTickHandler.worldData.currentDisadvantage.equals("Tougher Mobs") && event.entity instanceof EntityMob)) {
 				damageMultiplier -= 0.25F;
@@ -272,11 +245,60 @@ public class ItemStatHelper implements ICraftingHandler {
 				if(event.entity.getEntityData().getString("Blessing").equals("Guardian")) {
 					damageMultiplier -= 0.25F;
 				} else if(event.entity.getEntityData().getString("Blessing").equals("Inferno") && (event.source.isFireDamage() || event.source.getDamageType().equals("inFire")  || event.source.getDamageType().equals("onFire")  || event.source.getDamageType().equals("lava"))) {
+					skip = true;
 					damageMultiplier = 0;
+				} else if(event.entity.getEntityData().getString("Blessing").equals("Vampire")) {
+					if(event.entity.getBrightness(1.0F) > 0.5F && event.entity.worldObj.canBlockSeeTheSky((int) (event.entity.posX), (int) (event.entity.posY), (int) (event.entity.posZ))) {
+						damageMultiplier += 0.2F;
+					}
+				}
+			}
+			
+			if(!skip && event.source != null && event.source.getEntity() != null) {
+				if(event.source.getEntity() instanceof EntityLivingBase) {
+					EntityLivingBase entity = (EntityLivingBase) event.source.getEntity();
+					
+					ItemStack held = entity.getCurrentItemOrArmor(0);
+					
+					if(held != null && ((event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob") || (held.getItem().itemID == Item.bow.itemID && event.source.isProjectile())))) {
+						String s = getStat(held, "BonusDamage");
+						if(s != null) {event.ammount += Integer.parseInt(s);}
+					}
+				}
+				
+				if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
+					String blessing = event.source.getEntity().getEntityData().getString("Blessing");
+					
+					ItemStack held = null;
+					if(event.source.getEntity() instanceof EntityLivingBase) {held = ((EntityLivingBase) event.source.getEntity()).getHeldItem();}
+					
+					if(blessing.equals("Warrior") && (event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob"))) {
+						damageMultiplier += 0.25F;
+					} else if(blessing.equals("Hunter") && event.source.isProjectile()) {
+						damageMultiplier += 0.25F;
+					} else if(blessing.equals("Miner") && held != null && held.getItem() instanceof ItemPickaxe) {
+						damageMultiplier += 0.25F;
+					} else if(blessing.equals("Lumberjack") && held != null && held.getItem() instanceof ItemAxe) {
+						damageMultiplier += 0.15F;
+					} else if(event.entityLiving != null && blessing.equals("Ninja") && event.source.getEntity().isSneaking() && event.entityLiving.func_110143_aJ() == event.entityLiving.func_110138_aP()) {
+						damageMultiplier += 1.0F;
+					} else if(blessing.equals("Swamp") && event.entityLiving != null) {
+						event.entityLiving.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1, false));
+					} else if(blessing.equals("Vampire") && event.source.getEntity() instanceof EntityLivingBase) {
+						((EntityLivingBase) event.source.getEntity()).heal(event.ammount * damageMultiplier * 0.07F);
+						
+						if(event.source.getEntity().getBrightness(1.0F) > 0.5F && event.source.getEntity().worldObj.canBlockSeeTheSky((int) (event.source.getEntity().posX), (int) (event.source.getEntity().posY), (int) (event.source.getEntity().posZ))) {
+							damageMultiplier -= 0.2F;
+						}
+					} else if(blessing.equals("Inferno") && event.source.getEntity().isBurning()) {
+						damageMultiplier += 0.5F;
+					}
 				}
 			}
 			
 			event.ammount *= damageMultiplier;
+			
+			//System.out.println(event.ammount);
 		}
 	}
 	
