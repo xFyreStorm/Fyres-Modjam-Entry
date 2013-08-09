@@ -102,13 +102,21 @@ public class BlockTrap extends BlockContainer
     		int type = par1World.getBlockMetadata(par2, par3, par4);
     		
     		if(type % trapTypes == 0) {
-    			par5Entity.attackEntityFrom(DamageSource.cactus, 2.0F);
-    			if(ModjamMod.r.nextInt(100) == 0) {((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.poison.id, 100, 1));}
+    			par5Entity.attackEntityFrom(DamageSource.cactus, 8.0F);
+    			if(ModjamMod.r.nextInt(8) == 0) {((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.poison.id, 100, 1));}
     		} else if(type % trapTypes == 1) {
-    			if(!par5Entity.isBurning()) {par5Entity.setFire(5);}
+    			if(!par5Entity.isBurning()) {par5Entity.setFire(10);}
     		} else if(type % trapTypes == 2) {
-    			((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.blindness.id, 100, 1));
-    			((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1));
+    			((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.blindness.id, 200, 1));
+    			((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200, 1));
+    		}
+    		
+    		if(CommonTickHandler.worldData.currentDisadvantage.equals("Explosive Traps")) {par5Entity.worldObj.setBlockToAir(par2, par3, par4); par5Entity.worldObj.createExplosion(null, par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, 1.33F, true);}
+    		
+    		par1World.setBlockToAir(par2, par3, par4);
+    		
+    		if(par5Entity instanceof EntityPlayer) {
+    			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7c\u00A7oYou triggered a " + ItemTrap.names[type % trapTypes].toLowerCase() + "!"}), (Player) par5Entity);
     		}
     		
     	}

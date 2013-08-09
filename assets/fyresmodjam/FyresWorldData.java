@@ -24,7 +24,7 @@ import net.minecraft.world.storage.MapStorage;
 public class FyresWorldData extends WorldSavedData {
 
 	public static String[] validDisadvantages = {/*"Illiterate",*/ "Tougher Mobs", "Weak", "Explosive Traps", "Increased Mob Spawn", "Neverending Rain", "Neverending Night"};
-	public static String[] disadvantageDescriptions = {/*"Item names are unreadable",*/ "-25% damage to hostile enemies", "-25% melee damage", "Traps trigger explosions on failed disarms", "+33% hostile mob spawn rate", "Constantly rains", "Constant night"};
+	public static String[] disadvantageDescriptions = {/*"Item names are unreadable",*/ "-25% damage to hostile enemies", "-25% melee damage", "Traps also trigger explosions when set off", "+33% hostile mob spawn rate", "Constantly rains", "Constant night"};
 	
 	public static String[] validTasks = {"Kill", "Burn"};
 	

@@ -5,8 +5,10 @@ import java.util.List;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.dispenser.IBehaviorDispenseItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -16,12 +18,15 @@ import net.minecraft.world.World;
 
 public class ItemTrap extends Item {
 
+	private static final IBehaviorDispenseItem dispenseTrap = new BehaviorDispenseTrap();
+	
 	public static Icon[] icons;
 	public static String[] iconLocations = new String[] {"fyresmodjam:itemTrap", "fyresmodjam:trap2", "fyresmodjam:trap3"};
 
 	public ItemTrap(int par1) {
 		super(par1);
 		this.setHasSubtypes(true);
+		BlockDispenser.dispenseBehaviorRegistry.putObject(this, dispenseTrap);
 	}
 	
 	@SideOnly(Side.CLIENT)

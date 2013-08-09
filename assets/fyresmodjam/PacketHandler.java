@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -14,6 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
@@ -100,7 +103,20 @@ public class PacketHandler implements IPacketHandler {
 								if(salvage) {player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, blockX + 0.5F, blockY, blockZ + 0.5F, new ItemStack(ModjamMod.itemTrap.itemID, 1, player.worldObj.getBlockMetadata(blockX, blockY, blockZ) % BlockTrap.trapTypes)));}
 								player.worldObj.setBlockToAir(blockX, blockY, blockZ);
 							} else {
-								player.attackEntityFrom(DamageSource.cactus, 1.0F);
+								int trapType = player.worldObj.getBlockMetadata(blockX, blockY, blockZ);
+					    		
+					    		if(trapType % BlockTrap.trapTypes == 0) {
+					    			player.attackEntityFrom(DamageSource.cactus, 8.0F);
+					    			if(ModjamMod.r.nextInt(8) == 0) {((EntityLivingBase) player).addPotionEffect(new PotionEffect(Potion.poison.id, 100, 1));}
+					    		} else if(trapType % BlockTrap.trapTypes == 1) {
+					    			if(!player.isBurning()) {player.setFire(10);}
+					    		} else if(trapType % BlockTrap.trapTypes == 2) {
+					    			player.addPotionEffect(new PotionEffect(Potion.blindness.id, 200, 1));
+					    			player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200, 1));
+					    		}
+								
+								player.worldObj.setBlockToAir(blockX, blockY, blockZ);
+								
 								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7c\u00A7oYou failed to disarm the trap."}), (Player) player);
 								if(CommonTickHandler.worldData.currentDisadvantage.equals("Explosive Traps")) {player.worldObj.setBlockToAir(blockX, blockY, blockZ); player.worldObj.createExplosion(null, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, 1.33F, true);}
 								player.triggerAchievement(ModjamMod.whoops);
