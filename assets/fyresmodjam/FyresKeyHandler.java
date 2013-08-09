@@ -62,7 +62,8 @@ public class FyresKeyHandler extends KeyHandler {
 						for(int i = 0; i < TileEntityPillar.validBlessings.length; i++) {if(TileEntityPillar.validBlessings[i].equals(((TileEntityPillar) te).blessing)) {index = i; break;}}
 						Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eBlessing of the " + ((TileEntityPillar) te).blessing + ": " + TileEntityPillar.blessingDescriptions[index] + ".");
 					} else {
-						Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eIt's a " + new ItemStack(minecraft.theWorld.getBlockId(x, y, z), 1, minecraft.theWorld.getBlockMetadata(x, y, z)).getDisplayName().toLowerCase() + " tile.");
+						String name = new ItemStack(minecraft.theWorld.getBlockId(x, y, z), 1, minecraft.theWorld.getBlockMetadata(x, y, z)).getDisplayName().toLowerCase();
+						Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eIt's a " + name + (!name.contains("block") ? " block." : "."));
 					}
 				} else if(o.typeOfHit == EnumMovingObjectType.ENTITY && o.entityHit != null) {
 					PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.EXAMINE_MOB, new Object[] {o.entityHit.dimension, o.entityHit.entityId}));

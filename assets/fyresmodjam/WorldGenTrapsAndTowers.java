@@ -44,7 +44,7 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     							for(int z2 = -5; z2 <= 5; z2++) {
     								
     								if((x2 * x2 + z2 * z2 <= 25) && ((y2 % 6 == 0 || y2 % 6 == 1) || z2 > 3 + (y2 < 6 ? 1 : 0) || z2 < -3 || Math.abs(x2) > 3 + (y2 < 5 ? 1 : 0))) {
-    									if(world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID) {
+    									if(world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.obsidian.blockID) {
     										//if(y2 >= 5 && (y2 % 5 == 2 || y2 % 5 == 3) && (Math.abs(x2) == 2 || Math.abs(z2) == 2)) {
     										//	world.setBlock(x + x2, y + y2, z + z2, Block.fenceIron.blockID);
     										//} else {
@@ -70,6 +70,13 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     									}
     									
     									world.setBlock(x + x2, y + y2 - 1, z + z2, Block.obsidian.blockID);
+    									world.setBlock(x + x2, y + y2 + 2, z + z2, Block.obsidian.blockID);
+    									world.setBlock(x + x2, y + y2, z + z2 + 1, Block.obsidian.blockID);
+    									world.setBlock(x + x2, y + y2 + 1, z + z2 + 1, Block.obsidian.blockID);
+    									world.setBlock(x + x2 + 1, y + y2, z + z2, Block.obsidian.blockID);
+    									world.setBlock(x + x2 - 1, y + y2, z + z2, Block.obsidian.blockID);
+    									world.setBlock(x + x2 + 1, y + y2 + 1, z + z2, Block.obsidian.blockID);
+    									world.setBlock(x + x2 - 1, y + y2 + 1, z + z2, Block.obsidian.blockID);
     								} else if(y2 % 6 == 2 && x2 == 0 && z2 == 0) {
     									if(y2 != 2) {
 	    									world.setBlock(x + x2, y + y2, z + z2, Block.mobSpawner.blockID, 0, 2);
@@ -85,7 +92,7 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     				        		        world.setBlock(x + x2, y + y2 + 1, z + z2, ModjamMod.blockPillar.blockID);
     				        		        world.setBlockMetadataWithNotify(x + x2, y + y2 + 1, z + z2, 1, 0);
     									}
-    								} else if((x2 * x2 + z2 * z2 <= 25) && world.getBlockId(x + x2, y + y2, z + z2) != ModjamMod.blockPillar.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.mobSpawner.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.chest.blockID) {
+    								} else if((x2 * x2 + z2 * z2 <= 25) && world.getBlockId(x + x2, y + y2, z + z2) != ModjamMod.blockPillar.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.mobSpawner.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.chest.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.obsidian.blockID) {
     									world.setBlockToAir(x + x2, y + y2, z + z2);
     								}
 

@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
@@ -15,6 +18,8 @@ import net.minecraft.world.WorldServer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public class CommonTickHandler implements ITickHandler {
 	public static FyresWorldData worldData = null;
@@ -63,6 +68,57 @@ public class CommonTickHandler implements ITickHandler {
 							System.out.println(true);
 				        }
 					}*/
+				}
+			}
+
+			for(Object o : s.loadedEntityList) {
+				if(o == null) {continue;}
+
+				if(o instanceof EntityItem) {
+					EntityItem item = (EntityItem) o;
+					
+					if(((EntityItem) o).isBurning()) {
+						ItemStack stack = item.getDataWatcher().getWatchableObjectItemStack(10);
+	
+						if(worldData.currentTask.equals("Burn") && stack.getItem().itemID == worldData.currentTaskID) {
+							worldData.progress += stack.stackSize;
+							((EntityItem) o).isDead = true;
+							
+							String name1 = CommonTickHandler.worldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[CommonTickHandler.worldData.currentTaskID] : new ItemStack(Item.itemsList[CommonTickHandler.worldData.currentTaskID], 1).getDisplayName();
+							
+							if(name1.contains("Block")) {if(name1.contains("Block")) {name1 = name1.replace("Block", "Blocks").replace("block", "blocks");}}
+							else {name1 += "s";}
+							
+							PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7fCurrent Goal Progress: " + worldData.progress + "/" + worldData.currentTaskAmount + " " + name1 + " "+ worldData.currentTask + "ed."}));
+	
+							if(worldData.progress >= worldData.currentTaskAmount) {
+								worldData.progress = 0;
+								worldData.tasksCompleted++;
+	
+								PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.LEVEL_UP, new Object[] {worldData.rewardLevels}));
+								
+								worldData.giveNewTask();
+	
+	
+								String name = worldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[worldData.currentTaskID] : new ItemStack(Item.itemsList[worldData.currentTaskID], 1).getDisplayName();
+	
+								if(worldData.currentTaskAmount > 1) {
+									if(name.contains("Block")) {if(name.contains("Block")) {name = name.replace("Block", "Blocks").replace("block", "blocks");}}
+									else {name += "s";}
+								}
+	
+								PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!" + (!worldData.currentDisadvantage.equals("None") ? " World disadvantage has been lifted!": "")}));
+								PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA new world goal has been set: " + (worldData.currentTask + " " + worldData.currentTaskAmount + " " + name + ". (" + worldData.progress + " " + worldData.currentTask + "ed)")}));
+								//PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eGoal Reward: " + worldData.rewardLevels + " experience levels"}));
+								
+								worldData.currentDisadvantage = "None";
+							}
+	
+							PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {worldData.potionValues, worldData.potionDurations, worldData.currentDisadvantage, worldData.currentTask, worldData.currentTaskID, worldData.currentTaskAmount, worldData.progress, worldData.tasksCompleted, worldData.enderDragonKilled, ModjamMod.spawnTraps, worldData.rewardLevels}));
+	
+							worldData.setDirty(true);
+						}
+					}
 				}
 			}
 		}

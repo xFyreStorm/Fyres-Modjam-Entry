@@ -49,7 +49,7 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 
-public class ItemStatHelper implements ICraftingHandler {
+public class ItemStatHelper /*implements ICraftingHandler*/ {
 	
 	//There's probably a better way of doing all of this. :P Oh well.
 	
@@ -154,7 +154,7 @@ public class ItemStatHelper implements ICraftingHandler {
 		}
 	}*/
 	
-	@ForgeSubscribe
+	/*@ForgeSubscribe
 	public void playerToss(ItemTossEvent event) {
 		if(!event.entity.worldObj.isRemote) {
 			ItemStack stack = event.entityItem.getDataWatcher().getWatchableObjectItemStack(10);
@@ -228,7 +228,7 @@ public class ItemStatHelper implements ICraftingHandler {
 				CommonTickHandler.worldData.setDirty(true);
 			}
 		}
-	}
+	}*/
 	
 	@ForgeSubscribe
 	public void livingHurt(LivingHurtEvent event) {
@@ -363,7 +363,7 @@ public class ItemStatHelper implements ICraftingHandler {
 		}*/
 	}
 
-	@Override
+	/*@Override
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
 		if(player != null && !player.worldObj.isRemote) {
 			for(int i = 0; i < craftMatrix.getSizeInventory(); i++) {
@@ -390,7 +390,7 @@ public class ItemStatHelper implements ICraftingHandler {
 					CommonTickHandler.worldData.giveNewTask();
 					
 					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!" + (!CommonTickHandler.worldData.currentDisadvantage.equals("None") ? " World disadvantage has been lifted!": "")}));
-					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA new world goal has been set: " + (CommonTickHandler.worldData.currentTask + " " + CommonTickHandler.worldData.currentTaskAmount + " " + (CommonTickHandler.worldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[CommonTickHandler.worldData.currentTaskID] : new ItemStack(Item.itemsList[CommonTickHandler.worldData.currentTaskID], 1).getDisplayName()) + "s. (" + CommonTickHandler.worldData.progress + " " + CommonTickHandler.worldData.currentTask + "ed)")}));
+					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA new world goal has been set: " + (CommonTickHandler.worldData.currentTask + " " + CommonTickHandler.worldData.currentTaskAmount + " " + (CommonTickHandler.worldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[CommonTickHandler.worldData.currentTaskID] : new ItemStack(Item.itemsList[CommonTickHandler.worldData.currentTaskID], 1).getDisplayName()) + (CommonTickHandler.worldData.currentTaskAmount > 1 ? "s. (" : ". (") + CommonTickHandler.worldData.progress + " " + CommonTickHandler.worldData.currentTask + "ed)")}));
 					
 					CommonTickHandler.worldData.currentDisadvantage = "None";
 				}
@@ -425,10 +425,10 @@ public class ItemStatHelper implements ICraftingHandler {
 				CommonTickHandler.worldData.setDirty(true);
 			}
 		}
-	}
+	}*/
 	
 	public void register() {
 		MinecraftForge.EVENT_BUS.register(this);
-		GameRegistry.registerCraftingHandler(this);
+		//GameRegistry.registerCraftingHandler(this);
 	}
 }

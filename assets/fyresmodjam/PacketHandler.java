@@ -27,7 +27,7 @@ import cpw.mods.fml.relauncher.Side;
 public class PacketHandler implements IPacketHandler {
 
 	//Packet types
-	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3, SEND_MESSAGE = 4, UPDATE_WORLD_DATA = 5, UPDATE_PLAYER_ITEMS = 6, DISARM_TRAP = 7, EXAMINE_MOB = 8;
+	public static final byte UPDATE_BLESSING = 1, PLAY_SOUND = 2, UPDATE_POTION_KNOWLEDGE = 3, SEND_MESSAGE = 4, UPDATE_WORLD_DATA = 5, UPDATE_PLAYER_ITEMS = 6, DISARM_TRAP = 7, EXAMINE_MOB = 8, LEVEL_UP = 9;
 	
 	public static int[] potionValues = null;
 	public static int[] potionDurations = null;
@@ -39,6 +39,7 @@ public class PacketHandler implements IPacketHandler {
 	public static int currentTaskAmount = 0;
 	public static int progress = 0;
 	public static int tasksCompleted = 0;
+	public static int rewardLevels = 0;
 	
 	public static boolean enderDragonKilled = false;
 	public static boolean trapsDisabled = false;
@@ -145,6 +146,8 @@ public class PacketHandler implements IPacketHandler {
 						case UPDATE_POTION_KNOWLEDGE: int[] potionKnowledge = new int[12]; for(int i = 0; i < 12; i++) {potionKnowledge[i] = inputStream.readInt();} player.getEntityData().setIntArray("PotionKnowledge", potionKnowledge); return;
 						case SEND_MESSAGE: Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(inputStream.readUTF()); return;
 						
+						case LEVEL_UP: player.addExperienceLevel(inputStream.readInt()); return;
+						
 						case UPDATE_WORLD_DATA: 
 							
 							for(int i = 0; i < 12; i++) {potionValues[i] = inputStream.readInt();} 
@@ -157,6 +160,7 @@ public class PacketHandler implements IPacketHandler {
 							tasksCompleted = inputStream.readInt();
 							enderDragonKilled = inputStream.readBoolean();
 							trapsDisabled = !inputStream.readBoolean();
+							rewardLevels = inputStream.readInt();
 							
 							return;
 						

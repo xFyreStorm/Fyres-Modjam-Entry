@@ -10,6 +10,7 @@ import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
@@ -25,7 +26,7 @@ public class FyresWorldData extends WorldSavedData {
 	public static String[] validDisadvantages = {/*"Illiterate",*/ "Tougher Mobs", "Weak", "Explosive Traps", "Increased Mob Spawn", "Neverending Rain", "Neverending Night"};
 	public static String[] disadvantageDescriptions = {/*"Item names are unreadable",*/ "-25% damage to hostile enemies", "-25% melee damage", "Traps trigger explosions on failed disarms", "+33% hostile mob spawn rate", "Constantly rains", "Constant night"};
 	
-	public static String[] validTasks = {"Kill", "Collect"};
+	public static String[] validTasks = {"Kill", "Burn"};
 	
 	public static String key = "FyresWorldData";
 	
@@ -39,12 +40,13 @@ public class FyresWorldData extends WorldSavedData {
 	public int currentTaskAmount = 0;
 	public int progress = 0;
 	public int tasksCompleted = 0;
+	public int rewardLevels = -1;
 	
 	public boolean enderDragonKilled = false;
 	
 	public static Class[] validMobs = {EntityDragon.class, EntityGhast.class, EntityWither.class};
 	public static String[] validMobNames = {"Ender Dragon", "Ghast", "Wither"};
-	public static int[][] mobNumbers = {new int[] {1, 1}, new int[] {5, 15} , new int[] {1, 3}};
+	public static int[][] mobNumbers = {new int[] {1, 1}, new int[] {5, 15} , new int[] {1, 1}};
 	
 	public HashMap<String, String> blessingByPlayer = new HashMap<String, String>();
 	public HashMap<String, int[]> potionKnowledgeByPlayer = new HashMap<String, int[]>();
@@ -83,6 +85,8 @@ public class FyresWorldData extends WorldSavedData {
 		
 		if(nbttagcompound.hasKey("enderDragonKilled")) {enderDragonKilled = nbttagcompound.getBoolean("enderDragonKilled");}
 		
+		if(nbttagcompound.hasKey("rewardLevels")) {rewardLevels = nbttagcompound.getInteger("rewardLevels");}
+		
 		if(nbttagcompound.hasKey("TempPlayerStats")) {
 			NBTTagCompound tempStats = nbttagcompound.getCompoundTag("TempPlayerStats");
 			
@@ -113,6 +117,8 @@ public class FyresWorldData extends WorldSavedData {
 		nbttagcompound.setInteger("tasksCompleted", tasksCompleted);
 		
 		nbttagcompound.setBoolean("enderDragonKilled", enderDragonKilled);
+		
+		nbttagcompound.setInteger("rewardLevels", rewardLevels);
 		
 		if(!blessingByPlayer.isEmpty()) {
 			NBTTagCompound tempPlayerStats = new NBTTagCompound();
@@ -191,6 +197,8 @@ public class FyresWorldData extends WorldSavedData {
 			for(String s : validTasks) {if(s.equals(currentTask)) {changeTask = false; break;}}
 			if(changeTask || (currentTask != null && currentTask.equals("Kill") && currentTaskID == 0 && enderDragonKilled)) {giveNewTask();} else {if(currentTask.equals("Kill")) {currentTaskID %= validMobs.length;}}
 		}
+		
+		if(rewardLevels == -1) {rewardLevels = 5 + ModjamMod.r.nextInt(6);}
 	}
 
 	public void giveNewTask() {
@@ -201,12 +209,16 @@ public class FyresWorldData extends WorldSavedData {
 		if(currentTask.equals("Kill")) {
 			currentTaskID = !enderDragonKilled ? ModjamMod.r.nextInt(validMobs.length) : 1 + ModjamMod.r.nextInt(validMobs.length - 1);
 			currentTaskAmount = mobNumbers[currentTaskID][0] + ModjamMod.r.nextInt(mobNumbers[currentTaskID][1]);
-		} else if(currentTask.equals("Collect")) {
+		} else if(currentTask.equals("Burn")) {
 			currentTaskID = validItems[ModjamMod.r.nextInt(validItems.length)];
 			
-			if(currentTaskID == Item.netherStar.itemID) {currentTaskAmount = 1 + ModjamMod.r.nextInt(3);}
+			if(currentTaskID == Item.netherStar.itemID) {currentTaskAmount = 1;}
 			else {currentTaskAmount = 5 + ModjamMod.r.nextInt(28);}
+			
+			if(Item.itemsList[currentTaskID] instanceof ItemBlock) {currentTaskAmount /= 4;}
 		}
+		
+		rewardLevels = 5 + ModjamMod.r.nextInt(6);
 		
 		markDirty();
 	}
