@@ -56,7 +56,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.1e")
+@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.1f")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
 public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	
@@ -83,8 +83,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Achievement whoops;
     public static AchievementPage page;
     
-    public static String version = "v0.0.1e";
-    public static String foundVersion = "v0.0.1e";
+    public static String version = "v0.0.1f";
+    public static String foundVersion = "v0.0.1f";
 	
     public static void loadProperties() {
 		Properties prop = new Properties();
