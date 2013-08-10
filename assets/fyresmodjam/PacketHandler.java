@@ -99,7 +99,7 @@ public class PacketHandler implements IPacketHandler {
 							
 							TileEntity te = player.worldObj.getBlockTileEntity(blockX, blockY, blockZ);
 							
-							boolean yours = (te == null || !(te instanceof TileEntityTrap)) ? false : ((TileEntityTrap) te).placedBy.equals(player.getEntityName());
+							boolean yours = (te == null || !(te instanceof TileEntityTrap)) ? false : player.getEntityName().equals(((TileEntityTrap) te).placedBy);
 							
 							if(yours || (mechanic ? ModjamMod.r.nextInt(4) != 0 : ModjamMod.r.nextInt(4) == 0)) {
 								boolean salvage = yours || (mechanic ? ModjamMod.r.nextBoolean() : (ModjamMod.r.nextInt(4) == 0));
