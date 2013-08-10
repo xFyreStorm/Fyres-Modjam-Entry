@@ -110,13 +110,13 @@ public class PacketHandler implements IPacketHandler {
 								int trapType = player.worldObj.getBlockMetadata(blockX, blockY, blockZ);
 					    		
 					    		if(trapType % BlockTrap.trapTypes == 0) {
-					    			player.attackEntityFrom(DamageSource.cactus, 8.0F);
-					    			if(ModjamMod.r.nextInt(8) == 0) {((EntityLivingBase) player).addPotionEffect(new PotionEffect(Potion.poison.id, 100, 1));}
+					    			player.attackEntityFrom(DamageSource.cactus, 4.0F);
+					    			if(ModjamMod.r.nextInt(16) == 0) {((EntityLivingBase) player).addPotionEffect(new PotionEffect(Potion.poison.id, 100, 1));}
 					    		} else if(trapType % BlockTrap.trapTypes == 1) {
-					    			if(!player.isBurning()) {player.setFire(10);}
+					    			if(!player.isBurning()) {player.setFire(5);}
 					    		} else if(trapType % BlockTrap.trapTypes == 2) {
-					    			player.addPotionEffect(new PotionEffect(Potion.blindness.id, 200, 1));
-					    			player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200, 1));
+					    			player.addPotionEffect(new PotionEffect(Potion.blindness.id, 100, 1));
+					    			player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1));
 					    		}
 								
 								player.worldObj.setBlockToAir(blockX, blockY, blockZ);
