@@ -17,9 +17,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -27,14 +29,17 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IShearable;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockTrap extends BlockContainer {
+public class BlockTrap extends BlockContainer implements IShearable {
 	
 	public static int trapTypes = 3;
 	
@@ -185,5 +190,43 @@ public class BlockTrap extends BlockContainer {
     		TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
     		if(te != null && te instanceof TileEntityTrap) {((TileEntityTrap) te).placedBy = player.getEntityName();}
     	}
+    }
+    
+    @Override
+    public boolean isShearable(ItemStack item, World world, int x, int y, int z) {return true;}
+
+    @Override
+    public ArrayList<ItemStack> onSheared(ItemStack item, World world, int x, int y, int z, int fortune) {
+        world.setBlockToAir(x, y, z);
+        
+        if(!world.isRemote) {
+        	MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        	
+        	for(int i = 0; i < server.worldServers.length; i++) {
+    			WorldServer s = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers[i];
+    			
+    			if(s == null) {continue;}
+    			
+    			for(Object o : s.playerEntities) {
+    				if(o == null || !(o instanceof EntityPlayer)) {continue;}
+    				
+    				EntityPlayer player = (EntityPlayer) o;
+    				
+    				if(item.equals(player.getHeldItem())) {
+    					PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7oYou disarmed the trap."}), (Player) player);
+    				}
+    			}
+        	}
+        }
+        
+        item.attemptDamageItem(119, ModjamMod.r);
+        
+        return new ArrayList<ItemStack>();
+    }
+    
+    
+    @Override
+    public float getPlayerRelativeBlockHardness(EntityPlayer par1EntityPlayer, World par2World, int par3, int par4, int par5) {
+        return (par1EntityPlayer.getHeldItem() != null && par1EntityPlayer.getHeldItem().getItem().itemID == Item.shears.itemID) ? 1.0F : this.getBlockHardness(par2World, par3, par4, par5);
     }
 }
