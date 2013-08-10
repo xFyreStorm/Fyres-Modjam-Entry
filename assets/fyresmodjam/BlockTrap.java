@@ -2,6 +2,7 @@ package assets.fyresmodjam;
 
 import static net.minecraftforge.common.ForgeDirection.SOUTH;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -27,13 +28,13 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.IShearable;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockTrap extends BlockContainer
-{
+public class BlockTrap extends BlockContainer {
 	
 	public static int trapTypes = 3;
 	
@@ -97,7 +98,9 @@ public class BlockTrap extends BlockContainer
     }
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
-    	if(!par1World.isRemote && ModjamMod.spawnTraps && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
+    	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
+    	
+    	if(!par1World.isRemote && te != null && te instanceof TileEntityTrap && !par5Entity.getEntityName().equals(((TileEntityTrap) te).placedBy) && ModjamMod.spawnTraps && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
     		
     		int type = par1World.getBlockMetadata(par2, par3, par4);
     		
@@ -125,9 +128,9 @@ public class BlockTrap extends BlockContainer
     public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
     	super.onNeighborBlockChange(par1World, par2, par3, par4, par5);
     	
-    	if(!par1World.isRemote && !par1World.isBlockSolidOnSide(par2, par3 -1, par4, ForgeDirection.SOUTH, true)) {
+    	if(!par1World.isRemote && !par1World.isBlockSolidOnSide(par2, par3 - 1, par4, ForgeDirection.SOUTH, true)) {
     		par1World.setBlockToAir(par2, par3, par4);
-    		if(CommonTickHandler.worldData != null && CommonTickHandler.worldData.currentDisadvantage.equals("Explosive Traps")) {par1World.createExplosion(null, par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, 1.33F, true);}
+    		if(ModjamMod.spawnTraps && CommonTickHandler.worldData != null && CommonTickHandler.worldData.currentDisadvantage.equals("Explosive Traps")) {par1World.createExplosion(null, par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, 1.33F, true);}
     	}
     }
     
@@ -174,6 +177,13 @@ public class BlockTrap extends BlockContainer
     
     public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
     	super.onBlockPlacedBy(par1World, par2, par3, par4, par5EntityLivingBase, par6ItemStack);
+    	
     	par1World.setBlockMetadataWithNotify(par2, par3, par4, par6ItemStack.getItemDamage(), 0);
+    	
+    	if(par5EntityLivingBase != null && par5EntityLivingBase instanceof EntityPlayer) {
+    		EntityPlayer player = (EntityPlayer) par5EntityLivingBase;
+    		TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
+    		if(te != null && te instanceof TileEntityTrap) {((TileEntityTrap) te).placedBy = player.getEntityName();}
+    	}
     }
 }

@@ -50,4 +50,9 @@ public class ClientProxy extends CommonProxy {
 	     
 	     MinecraftForge.EVENT_BUS.register(this);
 	}
+	
+	@Override
+	public void sendPlayerMessage(String message) {
+		Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(message);
+	}
 }

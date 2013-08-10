@@ -97,8 +97,12 @@ public class PacketHandler implements IPacketHandler {
 							
 							boolean mechanic = inputStream.readBoolean();
 							
-							if(mechanic ? ModjamMod.r.nextInt(4) != 0 : ModjamMod.r.nextInt(4) == 0) {
-								boolean salvage = mechanic ? ModjamMod.r.nextBoolean() : (ModjamMod.r.nextInt(4) == 0);
+							TileEntity te = player.worldObj.getBlockTileEntity(blockX, blockY, blockZ);
+							
+							boolean yours = (te == null || !(te instanceof TileEntityTrap)) ? false : ((TileEntityTrap) te).placedBy.equals(player.getEntityName());
+							
+							if(yours || (mechanic ? ModjamMod.r.nextInt(4) != 0 : ModjamMod.r.nextInt(4) == 0)) {
+								boolean salvage = yours || (mechanic ? ModjamMod.r.nextBoolean() : (ModjamMod.r.nextInt(4) == 0));
 								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7o" + (!salvage ? "You disarmed the trap." : "You disarm and salvage the trap.")}), (Player) player);
 								if(salvage) {player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, blockX + 0.5F, blockY, blockZ + 0.5F, new ItemStack(ModjamMod.itemTrap.itemID, 1, player.worldObj.getBlockMetadata(blockX, blockY, blockZ) % BlockTrap.trapTypes)));}
 								player.worldObj.setBlockToAir(blockX, blockY, blockZ);

@@ -7,4 +7,6 @@ public class CommonProxy {
 	public void register() {
 		//TickRegistry.registerTickHandler(new CommonTickHandler(), Side.SERVER);
 	}
+
+	public void sendPlayerMessage(String message) {}
 }

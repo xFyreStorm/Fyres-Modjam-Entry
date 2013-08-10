@@ -16,6 +16,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileEntityTrap extends TileEntity {
 	
 	//public int type = -1;
+	public String placedBy = null;
 	
     public TileEntityTrap() {}
 
@@ -34,11 +35,15 @@ public class TileEntityTrap extends TileEntity {
     	
     	//if(type == -1) {type = ModjamMod.r.nextInt(4);}
     	//par1NBTTagCompound.setInteger("TrapType", type);
+    	
+    	if(placedBy != null) {par1NBTTagCompound.setString("PlacedBy", placedBy);}
     }
 
     public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
     	super.readFromNBT(par1NBTTagCompound);
     	//type = par1NBTTagCompound.getInteger("TrapType");
+    	
+    	if(par1NBTTagCompound.hasKey("PlacedBy")) {placedBy = par1NBTTagCompound.getString("PlacedBy");}
     }
 
     public Packet getDescriptionPacket() {
