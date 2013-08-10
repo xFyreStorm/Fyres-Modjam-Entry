@@ -197,10 +197,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		LanguageRegistry.instance().addStringLocalization("fyresmodjam.newVersion", "\u00A7bA newer version of the \"You Will Die\" Mod has been found (" + foundVersion + ").");
 		
 		GameRegistry.addShapelessRecipe(new ItemStack(itemTrap, 1, 0), new Object[] {Block.pressurePlateIron, Block.cactus});
-		GameRegistry.addShapelessRecipe(new ItemStack(itemTrap, 1, 1), new Object[] {Block.pressurePlateIron, Item.blazePowder});
+		GameRegistry.addShapelessRecipe(new ItemStack(itemTrap, 1, 1), new Object[] {Block.pressurePlateIron, Block.torchWood});
 		GameRegistry.addShapelessRecipe(new ItemStack(itemTrap, 1, 2), new Object[] {Block.pressurePlateIron, new ItemStack(Item.dyePowder, 1, 0)});
-		 
-		//GameRegistry.addShapelessRecipe(new ItemStack(, 4, 0), new Object[] {});
 		
 		//Entity Trackers
 		
