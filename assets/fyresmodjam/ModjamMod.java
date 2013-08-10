@@ -97,7 +97,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		blockID = Integer.parseInt(prop.getProperty("blockID", "" + blockID));
 		//achievementID = Integer.parseInt(prop.getProperty("achievementID", "" + achievementID));
 		pillarGlow = Boolean.parseBoolean(prop.getProperty("pillarGlow", "" + pillarGlow));
-		spawnTraps = Boolean.parseBoolean(prop.getProperty("disableTraps", "" + (!spawnTraps)));
+		spawnTraps = !Boolean.parseBoolean(prop.getProperty("disableTraps", "" + (!spawnTraps)));
 		versionChecking = Boolean.parseBoolean(prop.getProperty("versionChecking", "" + versionChecking));
     }
     
