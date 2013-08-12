@@ -71,6 +71,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static int itemID = 2875, blockID = 2875, achievementID = 2500;
     public static boolean pillarGlow = true, spawnTraps = true, versionChecking = true;
     
+    public static CreativeTabs tabModjamMod = new CreativeTabModjamMod(CreativeTabs.getNextID(), "The \"You Will Die\" Mod");
+    
     public static Block blockPillar;
     public static Block blockTrap;
     
