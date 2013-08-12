@@ -1,6 +1,7 @@
 package assets.fyresmodjam;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
@@ -111,12 +112,12 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	public void preInit(FMLPreInitializationEvent event) {
 		//loadProperties();
 		
-		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+		Configuration config = new Configuration(new File(event.getSuggestedConfigurationFile().getAbsolutePath().replace("fyresmodjam", "YouWillDieMod")));
 		
 		config.load();
 		
-		itemID = config.getBlock("itemID", itemID).getInt();
-		blockID = config.getItem("blockID", blockID).getInt();
+		itemID = config.getItem("itemID", itemID + 4096).getInt() - 4096;
+		blockID = config.getBlock("blockID", blockID).getInt();
 		pillarGlow = config.get(config.CATEGORY_GENERAL, "pillarGlow", pillarGlow).getBoolean(pillarGlow);
 		spawnTraps = !(config.get(config.CATEGORY_GENERAL, "disableTraps", !spawnTraps).getBoolean(!spawnTraps));
 		versionChecking = config.get(config.CATEGORY_GENERAL, "versionChecking", versionChecking).getBoolean(versionChecking);
