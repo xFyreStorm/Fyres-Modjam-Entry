@@ -31,6 +31,7 @@ import net.minecraft.stats.Achievement;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -108,7 +109,19 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		loadProperties();
+		//loadProperties();
+		
+		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+		
+		config.load();
+		
+		itemID = config.getBlock("itemID", itemID).getInt();
+		blockID = config.getItem("blockID", blockID).getInt();
+		pillarGlow = config.get(config.CATEGORY_GENERAL, "pillarGlow", pillarGlow).getBoolean(pillarGlow);
+		spawnTraps = !(config.get(config.CATEGORY_GENERAL, "disableTraps", !spawnTraps).getBoolean(!spawnTraps));
+		versionChecking = config.get(config.CATEGORY_GENERAL, "versionChecking", versionChecking).getBoolean(versionChecking);
+		
+		config.save();
 		
 		if(versionChecking) {
             InputStream in = null;
