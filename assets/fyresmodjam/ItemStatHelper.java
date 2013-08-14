@@ -237,7 +237,7 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 			
 			boolean skip = false;
 			
-			if(CommonTickHandler.worldData.getDisadvantage().equals("Weak") || (CommonTickHandler.worldData.getDisadvantage().equals("Tougher Mobs") && event.entity instanceof EntityMob)) {
+			if((CommonTickHandler.worldData.getDisadvantage().equals("Weak") && event.source.getDamageType().equals("player")) || (CommonTickHandler.worldData.getDisadvantage().equals("Tougher Mobs") && event.entity instanceof EntityMob)) {
 				damageMultiplier -= 0.25F;
 			}
 			
@@ -254,7 +254,7 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 				}
 			}
 			
-			if(event.entity instanceof EntityLivingBase) {
+			if(!skip && event.entity instanceof EntityLivingBase) {
 				EntityLivingBase entity = (EntityLivingBase) event.entity;
 				
 				for(int i = 0; i < 4; i++) {
