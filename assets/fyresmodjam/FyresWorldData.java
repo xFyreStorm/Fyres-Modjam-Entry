@@ -24,7 +24,7 @@ import net.minecraft.world.storage.MapStorage;
 public class FyresWorldData extends WorldSavedData {
 
 	public static String[] validDisadvantages = {/*"Illiterate",*/ "Tougher Mobs", "Weak", "Explosive Traps", "Increased Mob Spawn", "Neverending Rain", "Neverending Night", "Permadeath"};
-	public static String[] disadvantageDescriptions = {/*"Item names are unreadable",*/ "Hostile enemies takes 25% less damage", "-25% melee damage", "Traps also trigger explosions when set off", "+33% hostile mob spawn rate", "Constantly rains", "Constant night", "All items dropped upon death are permanently lost"};
+	public static String[] disadvantageDescriptions = {/*"Item names are unreadable",*/ "Hostile enemies takes 25% less damage", "-25% melee damage", "Traps also trigger explosions when set off", "+33% hostile mob spawn rate", "Constantly rains", "Constant night", "Items dropped upon death are permanently lost"};
 	
 	public static String[] validTasks = {"Kill", "Burn"};
 	
@@ -175,6 +175,9 @@ public class FyresWorldData extends WorldSavedData {
 		
 		if(changeDisadvantage) {
 			currentDisadvantage = validDisadvantages[ModjamMod.r.nextInt(validDisadvantages.length)];
+			
+			MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+			while(server != null && server.isHardcore() && currentDisadvantage.equals("Permadeath")) {currentDisadvantage = validDisadvantages[ModjamMod.r.nextInt(validDisadvantages.length)];}
 			
 			/*MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 			
