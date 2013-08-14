@@ -182,26 +182,18 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 				CommonTickHandler.worldData.setDirty(true);
 			}
 		}
-	}
+	}*/
 	
 	@ForgeSubscribe
 	public void playerDrops(PlayerDropsEvent event) {
 		if(!event.entity.worldObj.isRemote) {
-			for(EntityItem i : event.drops) {
-				ItemStack stack = i.getDataWatcher().getWatchableObjectItemStack(10);
-				
-				if(CommonTickHandler.worldData.currentTask.equals("Collect") && stack.getItem().itemID == CommonTickHandler.worldData.currentTaskID) {
-					CommonTickHandler.worldData.progress -= stack.stackSize;
-					
-					PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled, ModjamMod.spawnTraps}));
-					
-					CommonTickHandler.worldData.setDirty(true);
-				}
+			if(CommonTickHandler.worldData.getDisadvantage().equals("Permadeath")) {
+				for(EntityItem i : event.drops) {i.setDead();}
 			}
 		}
 	}
 	
-	@ForgeSubscribe
+	/*@ForgeSubscribe
 	public void itemPickUp(EntityItemPickupEvent event) {
 		if(!event.entityPlayer.worldObj.isRemote) {
 			//processItemStack(event.item.getDataWatcher().getWatchableObjectItemStack(10), ModjamMod.r);
