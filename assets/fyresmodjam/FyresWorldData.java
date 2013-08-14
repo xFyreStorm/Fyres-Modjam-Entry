@@ -222,4 +222,8 @@ public class FyresWorldData extends WorldSavedData {
 		
 		markDirty();
 	}
+	
+	public String getDisadvantage() {
+		return ModjamMod.disableDisadvantages ? "None" : currentDisadvantage;
+	}
 }

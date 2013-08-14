@@ -122,7 +122,7 @@ public class PacketHandler implements IPacketHandler {
 								player.worldObj.setBlockToAir(blockX, blockY, blockZ);
 								
 								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7c\u00A7oYou failed to disarm the trap."}), (Player) player);
-								if(CommonTickHandler.worldData.currentDisadvantage.equals("Explosive Traps")) {player.worldObj.setBlockToAir(blockX, blockY, blockZ); player.worldObj.createExplosion(null, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, 1.33F, true);}
+								if(CommonTickHandler.worldData.getDisadvantage().equals("Explosive Traps")) {player.worldObj.setBlockToAir(blockX, blockY, blockZ); player.worldObj.createExplosion(null, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, 1.33F, true);}
 								player.triggerAchievement(ModjamMod.whoops);
 							}
 							

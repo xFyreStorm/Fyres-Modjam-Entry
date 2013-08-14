@@ -24,7 +24,7 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
 		
 		genning = true;
 		
-		boolean addedDungeon = random.nextInt(150) != 0;
+		boolean addedDungeon = random.nextInt(150) != 0 && ModjamMod.spawnTowers;
 		
 		for(int y = 1; y < 127; y++) {
     		for(int x = chunkX * 16; x < chunkX * 16 + 16; x++) {

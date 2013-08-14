@@ -237,7 +237,7 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 			
 			boolean skip = false;
 			
-			if(CommonTickHandler.worldData.currentDisadvantage.equals("Weak") || (CommonTickHandler.worldData.currentDisadvantage.equals("Tougher Mobs") && event.entity instanceof EntityMob)) {
+			if(CommonTickHandler.worldData.getDisadvantage().equals("Weak") || (CommonTickHandler.worldData.getDisadvantage().equals("Tougher Mobs") && event.entity instanceof EntityMob)) {
 				damageMultiplier -= 0.25F;
 			}
 			
@@ -260,7 +260,7 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 				for(int i = 0; i < 4; i++) {
 					ItemStack stack = entity.getCurrentItemOrArmor(i + 1);
 					if(stack == null || stack.getTagCompound() == null || !stack.getTagCompound().hasKey("DamageReduction")) {continue;}
-					damageMultiplier -= Float.parseFloat(stack.getTagCompound().getString("DamageReduction")) * 0.01F;
+					damageMultiplier -= Float.parseFloat(stack.getTagCompound().getString("DamageReduction").trim().replace(",", ".")) * 0.01F;
 				}
 			}
 			

@@ -25,8 +25,8 @@ public class CommandCurrentDisadvantage implements ICommand {
 			EntityPlayer entityplayer = (EntityPlayer) icommandsender;
 			
 			int index = -1;
-			for(int i = 0; i < FyresWorldData.validDisadvantages.length; i++) {if(FyresWorldData.validDisadvantages[i].equals(CommonTickHandler.worldData.currentDisadvantage)) {index = i; break;}}
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eWorld disadvantage: " + CommonTickHandler.worldData.currentDisadvantage + (index == -1 ? "" : " (" + FyresWorldData.disadvantageDescriptions[index] + ")")}), (Player) entityplayer);
+			for(int i = 0; i < FyresWorldData.validDisadvantages.length; i++) {if(FyresWorldData.validDisadvantages[i].equals(CommonTickHandler.worldData.getDisadvantage())) {index = i; break;}}
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eWorld disadvantage: " + CommonTickHandler.worldData.getDisadvantage() + (index == -1 ? "" : " (" + FyresWorldData.disadvantageDescriptions[index] + ")")}), (Player) entityplayer);
 		}
 	}
 

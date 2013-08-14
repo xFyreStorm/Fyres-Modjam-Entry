@@ -107,14 +107,14 @@ public class CommonTickHandler implements ITickHandler {
 									else {name += "s";}
 								}
 	
-								PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!" + (!worldData.currentDisadvantage.equals("None") ? " World disadvantage has been lifted!": "")}));
+								PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA world goal has been completed!" + (!worldData.getDisadvantage().equals("None") ? " World disadvantage has been lifted!": "")}));
 								PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eA new world goal has been set: " + (worldData.currentTask + " " + worldData.currentTaskAmount + " " + name + ". (" + worldData.progress + " " + worldData.currentTask + "ed)")}));
 								//PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eGoal Reward: " + worldData.rewardLevels + " experience levels"}));
 								
 								worldData.currentDisadvantage = "None";
 							}
 	
-							PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {worldData.potionValues, worldData.potionDurations, worldData.currentDisadvantage, worldData.currentTask, worldData.currentTaskID, worldData.currentTaskAmount, worldData.progress, worldData.tasksCompleted, worldData.enderDragonKilled, ModjamMod.spawnTraps, worldData.rewardLevels}));
+							PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {worldData.potionValues, worldData.potionDurations, worldData.getDisadvantage(), worldData.currentTask, worldData.currentTaskID, worldData.currentTaskAmount, worldData.progress, worldData.tasksCompleted, worldData.enderDragonKilled, ModjamMod.spawnTraps, worldData.rewardLevels}));
 	
 							worldData.setDirty(true);
 						}
@@ -131,10 +131,10 @@ public class CommonTickHandler implements ITickHandler {
 		addLater.clear();
 		
 		if(worldData != null) {
-			if(worldData.currentDisadvantage.equals("Neverending Rain")) {
+			if(worldData.getDisadvantage().equals("Neverending Rain")) {
 				if(!MinecraftServer.getServer().worldServers[0].getWorldInfo().isRaining()) {MinecraftServer.getServer().worldServers[0].getWorldInfo().setRaining(true);}
 				if(!MinecraftServer.getServer().worldServers[0].getWorldInfo().isThundering()) {MinecraftServer.getServer().worldServers[0].getWorldInfo().setThundering(true);}
-			} else if(worldData.currentDisadvantage.equals("Neverending Night")) {
+			} else if(worldData.getDisadvantage().equals("Neverending Night")) {
 				MinecraftServer.getServer().worldServers[0].getWorldInfo().setWorldTime(18000);
 			}
 		}

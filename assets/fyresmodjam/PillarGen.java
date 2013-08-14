@@ -11,7 +11,7 @@ import cpw.mods.fml.common.IWorldGenerator;
 public class PillarGen implements IWorldGenerator {
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-        if(world.provider.dimensionId == 0 && random.nextInt(50) == 0) {
+        if(ModjamMod.spawnRandomPillars && world.provider.dimensionId == 0 && random.nextInt(50) == 0) {
         	boolean placed = false;
         	
         	for(int y = 127, added = 0; y > 30 && !placed && added < 3; y--) {

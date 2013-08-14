@@ -120,7 +120,7 @@ public class BlockTrap extends BlockContainer implements IShearable {
     				((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200, 1));
     			}
     		
-    			if(CommonTickHandler.worldData.currentDisadvantage.equals("Explosive Traps")) {par5Entity.worldObj.setBlockToAir(par2, par3, par4); par5Entity.worldObj.createExplosion(null, par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, 1.33F, true);}
+    			if(CommonTickHandler.worldData.getDisadvantage().equals("Explosive Traps")) {par5Entity.worldObj.setBlockToAir(par2, par3, par4); par5Entity.worldObj.createExplosion(null, par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, 1.33F, true);}
     		
     			par1World.setBlockToAir(par2, par3, par4);
     		
@@ -145,7 +145,7 @@ public class BlockTrap extends BlockContainer implements IShearable {
     	
     	if(!par1World.isRemote && !par1World.isBlockSolidOnSide(par2, par3 - 1, par4, ForgeDirection.SOUTH, true)) {
     		par1World.setBlockToAir(par2, par3, par4);
-    		if(ModjamMod.spawnTraps && CommonTickHandler.worldData != null && CommonTickHandler.worldData.currentDisadvantage.equals("Explosive Traps")) {par1World.createExplosion(null, par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, 1.33F, true);}
+    		if(ModjamMod.spawnTraps && CommonTickHandler.worldData != null && CommonTickHandler.worldData.getDisadvantage().equals("Explosive Traps")) {par1World.createExplosion(null, par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, 1.33F, true);}
     	}
     }
     

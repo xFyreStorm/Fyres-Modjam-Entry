@@ -58,7 +58,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.1f")
+@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.1g")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
 public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	
@@ -71,7 +71,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Random r = new Random();
     
     public static int itemID = 2875, blockID = 2875, achievementID = 2500;
-    public static boolean pillarGlow = true, spawnTraps = true, versionChecking = true;
+    public static boolean pillarGlow = true, spawnTraps = true, spawnTowers = true, spawnRandomPillars = true, disableDisadvantages = false, versionChecking = true;
     
     public static CreativeTabs tabModjamMod = new CreativeTabModjamMod(CreativeTabs.getNextID(), "The \"You Will Die\" Mod");
     
@@ -87,8 +87,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Achievement whoops;
     public static AchievementPage page;
     
-    public static String version = "v0.0.1f";
-    public static String foundVersion = "v0.0.1f";
+    public static String version = "v0.0.1g";
+    public static String foundVersion = "v0.0.1g";
 	
     public static void loadProperties() {
 		Properties prop = new Properties();
@@ -120,6 +120,9 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		blockID = config.getBlock("blockID", blockID).getInt();
 		pillarGlow = config.get(config.CATEGORY_GENERAL, "pillarGlow", pillarGlow).getBoolean(pillarGlow);
 		spawnTraps = !(config.get(config.CATEGORY_GENERAL, "disableTraps", !spawnTraps).getBoolean(!spawnTraps));
+		spawnTowers = config.get(config.CATEGORY_GENERAL, "spawnTowers", spawnTowers).getBoolean(spawnTowers);
+		spawnRandomPillars = config.get(config.CATEGORY_GENERAL, "spawnRandomPillars", spawnRandomPillars).getBoolean(spawnRandomPillars);
+		disableDisadvantages = config.get(config.CATEGORY_GENERAL, "disableDisadvantages", disableDisadvantages).getBoolean(disableDisadvantages);
 		versionChecking = config.get(config.CATEGORY_GENERAL, "versionChecking", versionChecking).getBoolean(versionChecking);
 		
 		config.save();
@@ -383,7 +386,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	@Override
 	public void onPlayerLogin(EntityPlayer player) {
 		if(!player.worldObj.isRemote) {
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.currentDisadvantage, CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled, ModjamMod.spawnTraps, CommonTickHandler.worldData.rewardLevels}), (Player) player);
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.getDisadvantage(), CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled, ModjamMod.spawnTraps, CommonTickHandler.worldData.rewardLevels}), (Player) player);
 			
 			String name = CommonTickHandler.worldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[CommonTickHandler.worldData.currentTaskID] : new ItemStack(Item.itemsList[CommonTickHandler.worldData.currentTaskID], 1).getDisplayName();
 			
@@ -393,8 +396,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 			}
 			
 			int index = -1;
-			for(int i = 0; i < CommonTickHandler.worldData.validDisadvantages.length; i++) {if(CommonTickHandler.worldData.validDisadvantages[i].equals(CommonTickHandler.worldData.currentDisadvantage)) {index = i; break;}}
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eWorld disadvantage: " + CommonTickHandler.worldData.currentDisadvantage + (index == -1 ? "" : " (" + CommonTickHandler.worldData.disadvantageDescriptions[index] + ")")}), (Player) player);
+			for(int i = 0; i < CommonTickHandler.worldData.validDisadvantages.length; i++) {if(CommonTickHandler.worldData.validDisadvantages[i].equals(CommonTickHandler.worldData.getDisadvantage())) {index = i; break;}}
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eWorld disadvantage: " + CommonTickHandler.worldData.getDisadvantage() + (index == -1 ? "" : " (" + CommonTickHandler.worldData.disadvantageDescriptions[index] + ")")}), (Player) player);
 			
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eWorld goal: " + CommonTickHandler.worldData.currentTask + " " + CommonTickHandler.worldData.currentTaskAmount + " " + name + ". (" + CommonTickHandler.worldData.progress + " " + CommonTickHandler.worldData.currentTask + "ed)"}), (Player) player);
 			//PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eReward: " + CommonTickHandler.worldData.rewardLevels + " levels"}), (Player) player);
