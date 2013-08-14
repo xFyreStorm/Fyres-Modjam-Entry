@@ -69,7 +69,8 @@ Disadvantages:
     Explosive Traps - Traps trigger explosions on failed disarms,
     Increased Mob Spawn - +33% hostile mob spawn rate,
     Neverending Rain - Constantly rains,
-    Neverending Night - Constantly night
+    Neverending Night - Constantly night,
+    Permadeath (non-Hardcore worlds only) - Items drop on death are permanently lost
     
 World Goals: When a world is created, it is given a random goal. Complete the goal to remove the world disadvantage. You then receive a new goal.
 
