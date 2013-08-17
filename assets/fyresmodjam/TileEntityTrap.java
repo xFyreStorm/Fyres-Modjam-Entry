@@ -62,8 +62,9 @@ public class TileEntityTrap extends TileEntity {
     
     @SideOnly(Side.CLIENT)
     public double getMaxRenderDistanceSquared() {
+    	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
     	//EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        return 36.0F; //(player != null && player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")) ? 16.0D : 36.0D;
+        return (player != null && player.getEntityName().equals(placedBy)) ? 4096.0F: 36.0F; //(player != null && player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")) ? 16.0D : 36.0D;
     }
     
     @SideOnly(Side.CLIENT)

@@ -178,7 +178,7 @@ public class BlockTrap extends BlockContainer implements IShearable {
 			b2 = xDiff * xDiff + yDiff * yDiff + zDiff * zDiff < ((player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")) ? 16.0F : 36.0F);
 		}*/
     	
-    	return /*b2 &&*/ (player == null ? false : (player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout"))));
+    	return /*b2 &&*/ (player == null ? false : (player.isSneaking() /*|| (te != null && player.getEntityName().equals(te.placedBy))*/ || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout"))));
     }
     
     public int damageDropped(int par1) {
@@ -197,8 +197,11 @@ public class BlockTrap extends BlockContainer implements IShearable {
     	
     	if(par5EntityLivingBase != null && par5EntityLivingBase instanceof EntityPlayer) {
     		EntityPlayer player = (EntityPlayer) par5EntityLivingBase;
-    		TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
-    		if(te != null && te instanceof TileEntityTrap) {((TileEntityTrap) te).placedBy = player.getEntityName();}
+    		
+    		if(!player.capabilities.isCreativeMode) {
+    			TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
+    			if(te != null && te instanceof TileEntityTrap) {((TileEntityTrap) te).placedBy = player.getEntityName();}
+    		}
     	}
     }
     
