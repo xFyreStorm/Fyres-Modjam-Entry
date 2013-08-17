@@ -90,8 +90,6 @@ public class ItemMysteryPotion extends Item {
         return par1ItemStack.getItemDamage() < 13 ? EnumAction.drink : super.getItemUseAction(par1ItemStack);
     }
 	
-	public static ItemStack temp = new ItemStack(Item.potion.itemID, 1, 0);
-	
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
 		if(par1ItemStack.getItemDamage() < 13) {
         	par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
@@ -109,8 +107,7 @@ public class ItemMysteryPotion extends Item {
             		value = CommonTickHandler.worldData.potionValues[par1ItemStack.getItemDamage() % 13];
             	}
             	
-            	temp.setItemDamage(value); 
-            	par2World.spawnEntityInWorld(new EntityMysteryPotion(par2World, par3EntityPlayer, temp, par1ItemStack));
+            	par2World.spawnEntityInWorld(new EntityMysteryPotion(par2World, par3EntityPlayer, par1ItemStack));
             }
 		}
 		

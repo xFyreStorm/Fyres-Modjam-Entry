@@ -15,12 +15,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
-public class EntityMysteryPotion extends EntityThrowable
-{
-    /**
-     * The damage value of the thrown potion that this EntityPotion represents.
-     */
-    public ItemStack potionDamage;
+public class EntityMysteryPotion extends EntityThrowable {
 
     public EntityMysteryPotion(World par1World)
     {
@@ -29,20 +24,25 @@ public class EntityMysteryPotion extends EntityThrowable
 
     public EntityMysteryPotion(World par1World, EntityLivingBase par2EntityLivingBase, int par3)
     {
-        this(par1World, par2EntityLivingBase, new ItemStack(Item.potion, 1, par3), null);
+        this(par1World, par2EntityLivingBase, null);
     }
 
-    public EntityMysteryPotion(World par1World, EntityLivingBase par2EntityLivingBase, ItemStack par3ItemStack, ItemStack par4ItemStack)
+    public EntityMysteryPotion(World par1World, EntityLivingBase par2EntityLivingBase, ItemStack par4ItemStack)
     {
         super(par1World, par2EntityLivingBase);
         
-        this.potionDamage = par3ItemStack;
-        if(par4ItemStack != null) {this.dataWatcher.updateObject(24, par4ItemStack.getItemDamage());}
+        if(par4ItemStack != null) {
+        	int damage = par4ItemStack.getItemDamage();
+        	this.dataWatcher.updateObject(24, damage);
+        	if(damage < 12) {this.dataWatcher.updateObject(25, CommonTickHandler.worldData.potionDurations[damage % 13]);}
+        }
     }
     
     public void entityInit() {
     	super.entityInit();
+    	
     	this.dataWatcher.addObject(24, 0);
+    	this.dataWatcher.addObject(25, 0);
     } 
 
     @SideOnly(Side.CLIENT)
@@ -51,10 +51,15 @@ public class EntityMysteryPotion extends EntityThrowable
         this(par1World, par2, par4, par6, new ItemStack(Item.potion, 1, par8));
     }
 
-    public EntityMysteryPotion(World par1World, double par2, double par4, double par6, ItemStack par8ItemStack)
+    public EntityMysteryPotion(World par1World, double par2, double par4, double par6, ItemStack par4ItemStack)
     {
         super(par1World, par2, par4, par6);
-        this.potionDamage = par8ItemStack;
+        
+        if(par4ItemStack != null) {
+        	int damage = par4ItemStack.getItemDamage();
+        	this.dataWatcher.updateObject(24, damage);
+        	this.dataWatcher.updateObject(25, CommonTickHandler.worldData.potionDurations[damage % 13]);
+        }
     }
 
     /**
@@ -67,35 +72,12 @@ public class EntityMysteryPotion extends EntityThrowable
 
     protected float func_70182_d()
     {
-        return 0.5F;
+    	return 0.5F;
     }
 
     protected float func_70183_g()
     {
-        return -20.0F;
-    }
-
-    public void setPotionDamage(int par1)
-    {
-        if (this.potionDamage == null)
-        {
-            this.potionDamage = new ItemStack(Item.potion, 1, 0);
-        }
-
-        this.potionDamage.setItemDamage(par1);
-    }
-
-    /**
-     * Returns the damage value of the thrown potion that this EntityPotion represents.
-     */
-    public int getPotionDamage()
-    {
-        if (this.potionDamage == null)
-        {
-            this.potionDamage = new ItemStack(Item.potion, 1, 0);
-        }
-
-        return this.potionDamage.getItemDamage();
+    	return -20.0F;
     }
 
     /**
@@ -103,60 +85,40 @@ public class EntityMysteryPotion extends EntityThrowable
      */
     protected void onImpact(MovingObjectPosition par1MovingObjectPosition)
     {
-        if (!this.worldObj.isRemote)
-        {
-            List list = Item.potion.getEffects(this.potionDamage);
+    	if (!this.worldObj.isRemote) {
+    		AxisAlignedBB axisalignedbb = this.boundingBox.expand(4.0D, 2.0D, 4.0D);
+    		List list1 = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb);
 
-            if (list != null && !list.isEmpty())
-            {
-                AxisAlignedBB axisalignedbb = this.boundingBox.expand(4.0D, 2.0D, 4.0D);
-                List list1 = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb);
+    		if(list1 != null && !list1.isEmpty()) {
+    			Iterator iterator = list1.iterator();
 
-                if (list1 != null && !list1.isEmpty())
-                {
-                    Iterator iterator = list1.iterator();
+    			while(iterator.hasNext()) {
+    				EntityLivingBase entitylivingbase = (EntityLivingBase)iterator.next();
+    				double d0 = this.getDistanceSqToEntity(entitylivingbase);
 
-                    while (iterator.hasNext())
-                    {
-                        EntityLivingBase entitylivingbase = (EntityLivingBase)iterator.next();
-                        double d0 = this.getDistanceSqToEntity(entitylivingbase);
+    				if(d0 < 16.0D) {
+    					int type = getDataWatcher().getWatchableObjectInt(24) % 13;
+    					int j = (type >= 12 ? (5 + ModjamMod.r.nextInt(26)) : getDataWatcher().getWatchableObjectInt(25)) * 20;
+    					
+    					int damage = 0;
+    					
+    					if(type >= 12) {
+    						damage = ModjamMod.r.nextInt(Potion.potionTypes.length);
+    						while(Potion.potionTypes[damage] == null) {damage = ModjamMod.r.nextInt(Potion.potionTypes.length);}
+    					} else {
+    						damage = CommonTickHandler.worldData.potionValues[getDataWatcher().getWatchableObjectInt(24) % 13];
+    					}
 
-                        if (d0 < 16.0D)
-                        {
-                            double d1 = 1.0D - Math.sqrt(d0) / 4.0D;
+    					if(Potion.potionTypes[damage].isInstant()) {
+    						Potion.potionTypes[damage].affectEntity(this.getThrower(), entitylivingbase, 1, 1);
+    					} else {
+    						entitylivingbase.addPotionEffect(new PotionEffect(damage, j, 1));
+    					}
+    				}
+    			}
+    		}
 
-                            if (entitylivingbase == par1MovingObjectPosition.entityHit)
-                            {
-                                d1 = 1.0D;
-                            }
-
-                            Iterator iterator1 = list.iterator();
-
-                            while (iterator1.hasNext())
-                            {
-                                PotionEffect potioneffect = (PotionEffect)iterator1.next();
-                                int i = potioneffect.getPotionID();
-
-                                if (Potion.potionTypes[i].isInstant())
-                                {
-                                    Potion.potionTypes[i].affectEntity(this.getThrower(), entitylivingbase, potioneffect.getAmplifier(), d1);
-                                }
-                                else
-                                {
-                                    int j = (int)(d1 * (double)potioneffect.getDuration() + 0.5D);
-
-                                    if (j > 20)
-                                    {
-                                        entitylivingbase.addPotionEffect(new PotionEffect(i, j, potioneffect.getAmplifier()));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            this.worldObj.playAuxSFX(2002, (int)Math.round(this.posX), (int)Math.round(this.posY), (int)Math.round(this.posZ), this.getPotionDamage());
+            this.worldObj.playAuxSFX(2002, (int)Math.round(this.posX), (int)Math.round(this.posY), (int)Math.round(this.posZ), 1);
             this.setDead();
         }
     }
@@ -167,20 +129,6 @@ public class EntityMysteryPotion extends EntityThrowable
     public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.readEntityFromNBT(par1NBTTagCompound);
-
-        if (par1NBTTagCompound.hasKey("Potion"))
-        {
-            this.potionDamage = ItemStack.loadItemStackFromNBT(par1NBTTagCompound.getCompoundTag("Potion"));
-        }
-        else
-        {
-            this.setPotionDamage(par1NBTTagCompound.getInteger("potionValue"));
-        }
-
-        if (this.potionDamage == null)
-        {
-            this.setDead();
-        }
     }
 
     /**
@@ -189,10 +137,5 @@ public class EntityMysteryPotion extends EntityThrowable
     public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.writeEntityToNBT(par1NBTTagCompound);
-
-        if (this.potionDamage != null)
-        {
-            par1NBTTagCompound.setCompoundTag("Potion", this.potionDamage.writeToNBT(new NBTTagCompound()));
-        }
     }
 }
