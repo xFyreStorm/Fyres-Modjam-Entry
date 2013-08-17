@@ -33,8 +33,12 @@ public class ItemMysteryPotion extends Item {
 	@SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister) {
 		if(icons == null) {
-			icons = new Icon[13];
-			for(int i = 0; i < 13; i++) {icons[i] = par1IconRegister.registerIcon("fyresmodjam:mysteryPotion_" + (i + 1));}
+			icons = new Icon[26];
+			
+			for(int i = 0; i < 13; i++) {
+				icons[i] = par1IconRegister.registerIcon("fyresmodjam:mysteryPotion_" + (i + 1));
+				icons[i + 13] = par1IconRegister.registerIcon("fyresmodjam:mysteryPotionThrowable_" + (i + 1));
+			}
 		}
 		
         this.itemIcon = icons[0];
@@ -42,36 +46,40 @@ public class ItemMysteryPotion extends Item {
 	
 	@SideOnly(Side.CLIENT)
     public Icon getIconFromDamage(int par1)  {
-        return par1 < 13 ? icons[par1] : icons[0];
+        return par1 < 26 ? icons[par1] : icons[0];
     }
 	
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
         for(int i = 0; i < 13; i++) {par3List.add(new ItemStack(par1, 1, i));}
+        for(int i = 0; i < 13; i++) {par3List.add(new ItemStack(par1, 1, i + 13));}
     }
 	
 	@SideOnly(Side.CLIENT)
 	public String getItemDisplayName(ItemStack par1ItemStack) {
-		String name = "Mystery Potion #" + (par1ItemStack.getItemDamage() + 1);
+		int damage = par1ItemStack.getItemDamage() % 13;
+		String name = "Mystery Potion #" + (damage + 1);
 		
 		String blessing = null;
 		
 		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {blessing = getBlessing();}
 		
-		if(par1ItemStack.getItemDamage() < 12) {
+		if(damage < 12) {
 			if(Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.getEntityData().hasKey("PotionKnowledge")) {
-				if(Minecraft.getMinecraft().thePlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] != -1) {
-					Potion potion = Potion.potionTypes[PacketHandler.potionValues[par1ItemStack.getItemDamage()]];
+				if(Minecraft.getMinecraft().thePlayer.getEntityData().getIntArray("PotionKnowledge")[damage] != -1) {
+					Potion potion = Potion.potionTypes[PacketHandler.potionValues[damage]];
 					name = StatCollector.translateToLocal(potion.getName()) + " Potion";
 					
 					if(!potion.isInstant()) {
-						int time = PacketHandler.potionDurations[par1ItemStack.getItemDamage()];
+						int time = PacketHandler.potionDurations[damage];
 						name += " (" + time + " seconds)";
 					}
 				}
 			}
-		} else if(par1ItemStack.getItemDamage() >= 12) {
+		} else if(damage >= 12) {
 			name = "Wildcard Potion";
 		}
+		
+		//if(par1ItemStack.getItemDamage() >= 13) {name += " (Splash)";}
 		
 		if((blessing != null && blessing.equals("Alchemist")) /*|| FyresWorldData.currentDisadvantage.equals("Illiterate")*/) {name = "\u00A7k" + name;}
 		
@@ -79,16 +87,38 @@ public class ItemMysteryPotion extends Item {
     }
 	
 	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-        return EnumAction.drink;
+        return par1ItemStack.getItemDamage() < 13 ? EnumAction.drink : super.getItemUseAction(par1ItemStack);
     }
 	
+	public static ItemStack temp = new ItemStack(Item.potion.itemID, 1, 0);
+	
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
-        par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
+		if(par1ItemStack.getItemDamage() < 13) {
+        	par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
+		} else {
+			if(!par3EntityPlayer.capabilities.isCreativeMode) {par1ItemStack.stackSize--;}
+            par2World.playSoundAtEntity(par3EntityPlayer, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+            
+            if(!par2World.isRemote) {
+            	int value = 0;
+            	
+            	if(par1ItemStack.getItemDamage() % 13 >= 12) {
+            		value = ModjamMod.r.nextInt(Potion.potionTypes.length);
+            		while(Potion.potionTypes[value] == null) {value = ModjamMod.r.nextInt(Potion.potionTypes.length);}
+            	} else {
+            		value = CommonTickHandler.worldData.potionValues[par1ItemStack.getItemDamage() % 13];
+            	}
+            	
+            	temp.setItemDamage(value); 
+            	par2World.spawnEntityInWorld(new EntityMysteryPotion(par2World, par3EntityPlayer, temp, par1ItemStack));
+            }
+		}
+		
         return par1ItemStack;
     }
 	
 	public int getMaxItemUseDuration(ItemStack par1ItemStack) {
-        return 32;
+        return par1ItemStack.getItemDamage() < 13 ? 32 : super.getMaxItemUseDuration(par1ItemStack);
     }
 	
 	public ItemStack onEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
@@ -96,33 +126,35 @@ public class ItemMysteryPotion extends Item {
         
         String blessing = (par3EntityPlayer != null && par3EntityPlayer.getEntityData().hasKey("Blessing")) ? par3EntityPlayer.getEntityData().getString("Blessing") : null;
         
-        if((blessing == null || !blessing.equals("Alchemist")) && par1ItemStack.getItemDamage() < 12) {
+        int damage = par1ItemStack.getItemDamage() % 13;
+        
+        if((blessing == null || !blessing.equals("Alchemist")) && damage < 12) {
 	        if(!par2World.isRemote) {
 	        	
-	        	int value = CommonTickHandler.worldData.potionValues[par1ItemStack.getItemDamage()];
+	        	int value = CommonTickHandler.worldData.potionValues[damage];
 	        	
 	        	if(!Potion.potionTypes[value].isInstant()) {
-	        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, CommonTickHandler.worldData.potionDurations[par1ItemStack.getItemDamage()] * 20, 1, false));
+	        		par3EntityPlayer.addPotionEffect(new PotionEffect(value, CommonTickHandler.worldData.potionDurations[damage] * 20, 1, false));
 	        	} else {
 	        		Potion.potionTypes[value].affectEntity(par3EntityPlayer, par3EntityPlayer, 1, 1);
 	        	}
 	        	
 	        	if(!par3EntityPlayer.getEntityData().hasKey("PotionKnowledge")) {par3EntityPlayer.getEntityData().setIntArray("PotionKnowledge", new int[] {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});}
 		        
-	        	if(par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] == -1) {
-	        		par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")[par1ItemStack.getItemDamage()] = 1;
+	        	if(par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")[damage] == -1) {
+	        		par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")[damage] = 1;
 		        	
 		        	PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")}), (Player) par3EntityPlayer);
 		        
-		        	Potion potion = Potion.potionTypes[CommonTickHandler.worldData.potionValues[par1ItemStack.getItemDamage()]];
+		        	Potion potion = Potion.potionTypes[CommonTickHandler.worldData.potionValues[damage]];
 					String name = StatCollector.translateToLocal(potion.getName()) + " Potion";
 					
 					if(!potion.isInstant()) {
-						int time = CommonTickHandler.worldData.potionDurations[par1ItemStack.getItemDamage()];
+						int time = CommonTickHandler.worldData.potionDurations[damage];
 						name += " (" + time + " seconds)";
 					}
 					
-					PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7oYou learnt Mystery Potion #" + (par1ItemStack.getItemDamage() + 1) + " was a " + name + "!"}), (Player) par3EntityPlayer);
+					PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7oYou learnt Mystery Potion #" + (damage + 1) + " was a " + name + "!"}), (Player) par3EntityPlayer);
 	        	}
 	        }
 	        

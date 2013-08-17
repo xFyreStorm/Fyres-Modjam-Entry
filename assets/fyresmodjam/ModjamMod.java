@@ -1,5 +1,6 @@
 package assets.fyresmodjam;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -53,6 +54,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -168,8 +170,6 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 		//Registering
 		
-		proxy.register();
-		
 		TickRegistry.registerTickHandler(new CommonTickHandler(), Side.SERVER);
 		
 		MinecraftForge.EVENT_BUS.register(this);
@@ -187,6 +187,10 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		//}
 		
 		for(int i = 0; i < 3; i++) {GameRegistry.registerWorldGenerator(new WorldGenMoreDungeons());}
+		
+		EntityRegistry.registerGlobalEntityID(EntityMysteryPotion.class, "MysteryPotion", EntityRegistry.findGlobalUniqueEntityId());
+        EntityRegistry.registerModEntity(EntityMysteryPotion.class, "MysteryPotion", 0, instance, 128, 1, true);
+        LanguageRegistry.instance().addStringLocalization("entity.MysteryPotion.name", "en_US", "Mystery Potion");
 		
 		//Item and Block loading
 		
@@ -218,6 +222,12 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		GameRegistry.addShapelessRecipe(new ItemStack(itemTrap, 1, 0), new Object[] {Block.pressurePlateIron, Block.cactus});
 		GameRegistry.addShapelessRecipe(new ItemStack(itemTrap, 1, 1), new Object[] {Block.pressurePlateIron, Block.torchWood});
 		GameRegistry.addShapelessRecipe(new ItemStack(itemTrap, 1, 2), new Object[] {Block.pressurePlateIron, new ItemStack(Item.dyePowder, 1, 0)});
+		
+		for(int i = 0; i < 13; i++) {
+			GameRegistry.addShapelessRecipe(new ItemStack(mysteryPotion, 1, i + 13), new Object[] {new ItemStack(mysteryPotion, 1, i), Item.gunpowder});
+		}
+		
+		proxy.register();
 		
 		//Entity Trackers
 		
