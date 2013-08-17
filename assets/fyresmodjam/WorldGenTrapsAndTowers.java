@@ -30,7 +30,8 @@ public class WorldGenTrapsAndTowers implements IWorldGenerator {
     		for(int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
     			for(int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
     				if(random.nextInt(200) == 0 && (world.isAirBlock(x, y, z) || (Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z) && world.getBlockId(x, y, z) != Block.waterStill.blockID && world.getBlockId(x, y, z) != Block.waterMoving.blockID && world.getBlockId(x, y, z) != Block.lavaStill.blockID && world.getBlockId(x, y, z) != Block.lavaMoving.blockID)) && (!world.isAirBlock(x, y - 1, z) && world.getBlockId(x, y - 1, z) != ModjamMod.blockTrap.blockID && !Block.blocksList[world.getBlockId(x, y - 1, z)].isBlockReplaceable(world, x, y - 1, z))) {
-    					if(ModjamMod.blockTrap.canPlaceBlockAt(world, x, y, z)) {world.setBlock(x, y, z, ModjamMod.blockTrap.blockID, random.nextInt(BlockTrap.trapTypes), 0);}
+    					boolean skip = ModjamMod.trapsBelowGroundOnly && (world.getBlockId(x, y - 1, z) == Block.grass.blockID || world.getBlockId(x, y - 1, z) == Block.sand.blockID || world.getBlockId(x, y - 1, z) == Block.wood.blockID || world.canBlockSeeTheSky(x, y, z));
+    					if(!skip && ModjamMod.blockTrap.canPlaceBlockAt(world, x, y, z)) {world.setBlock(x, y, z, ModjamMod.blockTrap.blockID, random.nextInt(BlockTrap.trapTypes), 0);}
     				}
 
     				if(ModjamMod.r.nextInt(100) == 0 && !addedDungeon && ((world.getBlockId(x, y, z) == Block.grass.blockID || (world.getBlockId(x, y, z) == Block.sand.blockID && world.isAirBlock(x, y + 1, z)))) && world.getBlockId(x, y + 1, z) != Block.waterStill.blockID && world.getBlockId(x, y + 1, z) != Block.waterMoving.blockID && world.getBlockId(x, y + 1, z) != Block.lavaStill.blockID && world.getBlockId(x, y + 1, z) != Block.lavaMoving.blockID) {
