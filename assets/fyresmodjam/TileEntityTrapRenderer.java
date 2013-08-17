@@ -30,8 +30,7 @@ public class TileEntityTrapRenderer extends TileEntitySpecialRenderer {
         GL11.glPopMatrix();
     }
 
-    public void renderBlockYour(TileEntityTrap tl, World world, int i, int j, int k, Block block)
-    {
+    public void renderBlockYour(TileEntityTrap tl, World world, int i, int j, int k, Block block) {
         Tessellator tessellator = Tessellator.instance;
         float f = block.getBlockBrightness(world, i, j, k);
         int l = world.getLightBrightnessForSkyBlocks(i, j, k, 0);
@@ -41,7 +40,7 @@ public class TileEntityTrapRenderer extends TileEntitySpecialRenderer {
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)l1, (float)l2);
        
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		boolean active = player != null && !PacketHandler.trapsDisabled && (player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")));
+		boolean active = player != null && !PacketHandler.trapsDisabled && (player.getEntityName().equals(tl.placedBy) || player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")));
 		
 		int type = world.getBlockMetadata(i, j, k);
 		

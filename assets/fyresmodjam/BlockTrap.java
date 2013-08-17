@@ -27,6 +27,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -66,7 +67,7 @@ public class BlockTrap extends BlockContainer implements IShearable {
     }
     
     public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)  {	
-    	if(par1World.isRemote && isCollidable()) {
+    	if(par1World.isRemote) {
     		PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.DISARM_TRAP, new Object[] {par2, par3, par4, par5EntityPlayer.getEntityData().hasKey("Blessing") && par5EntityPlayer.getEntityData().getString("Blessing").equals("Mechanic")}));
 	    	return false;
     	}
@@ -98,8 +99,22 @@ public class BlockTrap extends BlockContainer implements IShearable {
     
     public void addCollisionBoxesToList(World par1World, int par2, int par3, int par4, AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity) {}
     
+    /*@SideOnly(Side.CLIENT)
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
-        return null;
+    	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+    	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
+        return (player != null && te instanceof TileEntityTrap && player.getEntityName().equals(((TileEntityTrap) te).placedBy)) ? super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4) : null;
+    }*/
+    
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
+    	return super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4);
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public MovingObjectPosition collisionRayTrace(World par1World, int par2, int par3, int par4, Vec3 par5Vec3, Vec3 par6Vec3) {
+    	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+    	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
+        return (player != null && te instanceof TileEntityTrap && (player.getEntityName().equals(((TileEntityTrap) te).placedBy) || player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")))) ? super.collisionRayTrace(par1World, par2, par3, par4, par5Vec3, par6Vec3) : null;
     }
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
@@ -155,31 +170,18 @@ public class BlockTrap extends BlockContainer implements IShearable {
     }  
     
     @SideOnly(Side.CLIENT)
-    public boolean isCollidable() {return !PacketHandler.trapsDisabled && getPlayerSneaking();}
+    public boolean isCollidable() {return !PacketHandler.trapsDisabled;} //&& getPlayerSneaking();}
     
     @Override
     public boolean canPlaceBlockAt(World world, int x, int y, int z) {
     	return super.canPlaceBlockAt(world, x, y, z) && (y == 0 || world.getBlockId(x, y - 1, z) != ModjamMod.blockTrap.blockID);
     }
     
-    @SideOnly(Side.CLIENT)
+    /*@SideOnly(Side.CLIENT)
     public boolean getPlayerSneaking() {
-    	//boolean b2 = false;
-    	
     	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-    	
-    	/*if(player != null && Minecraft.getMinecraft().objectMouseOver != null) {
-    		MovingObjectPosition mouse = Minecraft.getMinecraft().objectMouseOver;
-    		
-    		double xDiff = (double) mouse.blockX + 0.5D - TileEntityRenderer.instance.playerX;
-			double yDiff = (double) mouse.blockY + 0.5D - TileEntityRenderer.instance.playerY;
-			double zDiff = (double) mouse.blockZ + 0.5D - TileEntityRenderer.instance.playerZ;
-			
-			b2 = xDiff * xDiff + yDiff * yDiff + zDiff * zDiff < ((player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")) ? 16.0F : 36.0F);
-		}*/
-    	
-    	return /*b2 &&*/ (player == null ? false : (player.isSneaking() /*|| (te != null && player.getEntityName().equals(te.placedBy))*/ || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout"))));
-    }
+    	return (player == null ? false : (player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout"))));
+    }*/
     
     public int damageDropped(int par1) {
         return par1 % trapTypes;
