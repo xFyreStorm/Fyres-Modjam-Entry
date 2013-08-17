@@ -30,7 +30,7 @@ public class ClientProxy extends CommonProxy {
     	if(event.type == RenderGameOverlayEvent.ElementType.HOTBAR) {
 	    	MovingObjectPosition mouse = Minecraft.getMinecraft().objectMouseOver;
 			
-			if(mouse != null && Minecraft.getMinecraft().theWorld != null && mouse.typeOfHit == EnumMovingObjectType.TILE && Minecraft.getMinecraft().theWorld.getBlockId(mouse.blockX, mouse.blockY, mouse.blockZ) == ModjamMod.blockPillar.blockID) {
+			if(mouse != null && Minecraft.getMinecraft().theWorld != null && mouse.typeOfHit == EnumMovingObjectType.TILE && (Minecraft.getMinecraft().theWorld.getBlockId(mouse.blockX, mouse.blockY, mouse.blockZ) == ModjamMod.blockPillar.blockID || Minecraft.getMinecraft().theWorld.getBlockId(mouse.blockX, mouse.blockY, mouse.blockZ) == ModjamMod.blockTrap.blockID)) {
 		        String key = Keyboard.getKeyName(FyresKeyHandler.examine.keyCode);
 		        String string = "Press " + key + " to Examine";
 		        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(string, (event.resolution.getScaledWidth() / 2) - (Minecraft.getMinecraft().fontRenderer.getStringWidth(string) / 2), event.resolution.getScaledHeight() / 2 + 16, Color.WHITE.getRGB());

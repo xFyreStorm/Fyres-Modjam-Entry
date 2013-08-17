@@ -65,9 +65,9 @@ public class FyresKeyHandler extends KeyHandler {
 						String placedBy = ((TileEntityTrap) te).placedBy;
 						
 						if(placedBy != null) {
-							Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eThis trap was placed by " + (placedBy.equals(player.getEntityName()) ? "you": placedBy) + ".");
+							Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eThis " + ItemTrap.names[te.getBlockMetadata() % BlockTrap.trapTypes].toLowerCase() + " was placed by " + (placedBy.equals(player.getEntityName()) ? "you": placedBy) + ".");
 						} else {
-							Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eThis trap doesn't seem to have been placed by anyone.");
+							Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eThis " + ItemTrap.names[te.getBlockMetadata() % BlockTrap.trapTypes].toLowerCase() + " doesn't seem to have been placed by anyone.");
 						}
 					} else {
 						String name = new ItemStack(minecraft.theWorld.getBlockId(x, y, z), 1, minecraft.theWorld.getBlockMetadata(x, y, z)).getDisplayName().toLowerCase();
