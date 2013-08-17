@@ -140,11 +140,20 @@ public class FyresWorldData extends WorldSavedData {
 	
 	private void checkWorldData() {
 		if(potionValues == null) {
-			potionValues = new int[12];
+			potionValues = new int[] {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 			
 			for(int i = 0; i < 12; i++) {
 				int i2 = ModjamMod.r.nextInt(Potion.potionTypes.length);
-				while(Potion.potionTypes[i2] == null) {i2 = ModjamMod.r.nextInt(Potion.potionTypes.length);}
+				
+				boolean stop = false;
+				while(Potion.potionTypes[i2] == null || !stop) {
+					stop = true;
+					i2 = ModjamMod.r.nextInt(Potion.potionTypes.length);
+					
+					for(int i3 = 0; i3 < 12; i3++) {
+						if(potionValues[i3] == i2) {stop = false; break;}
+					}
+				}
 				
 				//boolean skip = false;
 				//for(int i3 = 0; i3 < potionValues.length; i3++) {if(potionValues[i] == i3) {skip = true; break;}}
