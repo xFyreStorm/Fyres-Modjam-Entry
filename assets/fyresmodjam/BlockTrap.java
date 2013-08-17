@@ -124,15 +124,19 @@ public class BlockTrap extends BlockContainer implements IShearable {
     		
     		int type = par1World.getBlockMetadata(par2, par3, par4);
     		
+    		String blessing = null;
+			if(par5Entity.getEntityData().hasKey("Blessing")) {blessing = par5Entity.getEntityData().getString("Blessing");}
+			boolean scout = blessing != null && blessing.equals("Scout");
+    		
     		if(par5Entity instanceof EntityPlayer) {
     			if(type % trapTypes == 0) {
-    				par5Entity.attackEntityFrom(DamageSource.cactus, 8.0F);
-    				if(ModjamMod.r.nextInt(8) == 0) {((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.poison.id, 100, 1));}
+    				par5Entity.attackEntityFrom(DamageSource.cactus, 8.0F + (scout ? 2.0F : 0.0F));
+    				if(ModjamMod.r.nextInt(8 - (scout ? 2 : 0)) == 0) {((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.poison.id, 100 + (scout ? 25 : 0), 1));}
     			} else if(type % trapTypes == 1) {
-    				if(!par5Entity.isBurning()) {par5Entity.setFire(10);}
+    				if(!par5Entity.isBurning()) {par5Entity.setFire(10 + (scout ? 2 : 0));}
     			} else if(type % trapTypes == 2) {
-    				((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.blindness.id, 200, 1));
-    				((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200, 1));
+    				((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.blindness.id, 200 + (scout ? 50 : 0), 1));
+    				((EntityLivingBase) par5Entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200 + (scout ? 50 : 0), 1));
     			}
     		
     			if(CommonTickHandler.worldData.getDisadvantage().equals("Explosive Traps")) {par5Entity.worldObj.setBlockToAir(par2, par3, par4); par5Entity.worldObj.createExplosion(null, par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, 1.33F, true);}

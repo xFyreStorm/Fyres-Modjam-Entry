@@ -49,7 +49,7 @@ Blessings:
     Ninja - While sneaking you are invisible and attacks on enemies with full health do double damage,
     Mechanic - You disarm traps 3x as often and have 2x the chance to salvage disarmed traps,
     Alchemist - All potions act like wildcard potions,
-    Scout - You can see traps without sneaking,
+    Scout - You can see traps without sneaking, but take 25% more damage from traps,
     Guardian - Take 25% less damage from all sources,
     Vampire - Heal 7% of damage dealt to enemies, while in sunlight, -20% damage dealt, +20% damage received,
     Inferno - You don't take fire damage, do +50% damage while on fire, and take damage while wet,

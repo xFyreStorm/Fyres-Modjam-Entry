@@ -97,6 +97,10 @@ public class PacketHandler implements IPacketHandler {
 							
 							boolean mechanic = inputStream.readBoolean();
 							
+							String blessing = null;
+							if(player.getEntityData().hasKey("Blessing")) {blessing = player.getEntityData().getString("Blessing");}
+							boolean scout = blessing != null && blessing.equals("Scout");
+							
 							TileEntity te = player.worldObj.getBlockTileEntity(blockX, blockY, blockZ);
 							
 							boolean yours = (te == null || !(te instanceof TileEntityTrap)) ? false : player.getEntityName().equals(((TileEntityTrap) te).placedBy);
@@ -110,13 +114,13 @@ public class PacketHandler implements IPacketHandler {
 								int trapType = player.worldObj.getBlockMetadata(blockX, blockY, blockZ);
 					    		
 					    		if(trapType % BlockTrap.trapTypes == 0) {
-					    			player.attackEntityFrom(DamageSource.cactus, 4.0F);
-					    			if(ModjamMod.r.nextInt(16) == 0) {((EntityLivingBase) player).addPotionEffect(new PotionEffect(Potion.poison.id, 100, 1));}
+					    			player.attackEntityFrom(DamageSource.cactus, 4.0F + (scout ? 1 : 0));
+					    			if(ModjamMod.r.nextInt(16 - (scout ? 4 : 0)) == 0) {((EntityLivingBase) player).addPotionEffect(new PotionEffect(Potion.poison.id, 100 + (scout ? 25 : 0), 1));}
 					    		} else if(trapType % BlockTrap.trapTypes == 1) {
-					    			if(!player.isBurning()) {player.setFire(5);}
+					    			if(!player.isBurning()) {player.setFire(5 + (scout ? 1 : 0));}
 					    		} else if(trapType % BlockTrap.trapTypes == 2) {
-					    			player.addPotionEffect(new PotionEffect(Potion.blindness.id, 100, 1));
-					    			player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1));
+					    			player.addPotionEffect(new PotionEffect(Potion.blindness.id, 100 + (scout ? 25 : 0), 1));
+					    			player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100 + (scout ? 25 : 0), 1));
 					    		}
 								
 								player.worldObj.setBlockToAir(blockX, blockY, blockZ);
@@ -141,10 +145,10 @@ public class PacketHandler implements IPacketHandler {
 								Entity entity = server.getEntityByID(entityID);
 								
 								if(entity != null) {
-									String blessing = entity.getEntityData().hasKey("Blessing") ? entity.getEntityData().getString("Blessing") : null;
+									String blessing2 = entity.getEntityData().hasKey("Blessing") ? entity.getEntityData().getString("Blessing") : null;
 									
-									if(blessing != null) {
-										PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eYou notice " + entity.getTranslatedEntityName() + "\u00A7e is using Blessing of the " + blessing + "."}), (Player) player);
+									if(blessing2 != null) {
+										PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eYou notice " + entity.getTranslatedEntityName() + "\u00A7e is using Blessing of the " + blessing2 + "."}), (Player) player);
 									} else {
 										PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7eThere doesn't seem to be anything special about " + (entity instanceof EntityPlayer ? "" : "this ") + entity.getTranslatedEntityName() + "\u00A7e."}), (Player) player);
 									}
