@@ -99,7 +99,7 @@ public class EntityMysteryPotion extends EntityThrowable {
 				
 				int damage = 0;
 				
-				if(type >= 12) {
+				if(type >= 12 || (getThrower().getEntityData().hasKey("Blessing") && getThrower().getEntityData().getString("Blessing").equals("Alchemist"))) {
 					damage = ModjamMod.r.nextInt(Potion.potionTypes.length);
 					while(Potion.potionTypes[damage] == null) {damage = ModjamMod.r.nextInt(Potion.potionTypes.length);}
 				} else {
@@ -124,7 +124,7 @@ public class EntityMysteryPotion extends EntityThrowable {
     			if(getThrower() instanceof EntityPlayer) {
     				EntityPlayer par3EntityPlayer = (EntityPlayer) getThrower();
     				
-	    			if(type < 12) {
+	    			if(type < 12 && (!getThrower().getEntityData().hasKey("Blessing") || !getThrower().getEntityData().getString("Blessing").equals("Alchemist"))) {
 						if(!par3EntityPlayer.getEntityData().hasKey("PotionKnowledge")) {par3EntityPlayer.getEntityData().setIntArray("PotionKnowledge", new int[] {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1});}
 				        
 			        	if(par3EntityPlayer.getEntityData().getIntArray("PotionKnowledge")[type] == -1) {
