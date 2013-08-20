@@ -6,8 +6,10 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderSnowball;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,7 +22,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	
-	public static String[] sounds = {"pillarActivated", "coin"};
+	public static String[] sounds = {"pillarActivated"/*, "coin"*/};
 
     @ForgeSubscribe
     public void onSound(SoundLoadEvent event) {
@@ -32,10 +34,17 @@ public class ClientProxy extends CommonProxy {
     	if(event.type == RenderGameOverlayEvent.ElementType.HOTBAR) {
 	    	MovingObjectPosition mouse = Minecraft.getMinecraft().objectMouseOver;
 			
-			if(mouse != null && Minecraft.getMinecraft().theWorld != null && mouse.typeOfHit == EnumMovingObjectType.TILE && (Minecraft.getMinecraft().theWorld.getBlockId(mouse.blockX, mouse.blockY, mouse.blockZ) == ModjamMod.blockPillar.blockID || Minecraft.getMinecraft().theWorld.getBlockId(mouse.blockX, mouse.blockY, mouse.blockZ) == ModjamMod.blockTrap.blockID)) {
-		        String key = Keyboard.getKeyName(FyresKeyHandler.examine.keyCode);
-		        String string = "Press " + key + " to Examine";
-		        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(string, (event.resolution.getScaledWidth() / 2) - (Minecraft.getMinecraft().fontRenderer.getStringWidth(string) / 2), event.resolution.getScaledHeight() / 2 + 16, Color.WHITE.getRGB());
+	    	World world = Minecraft.getMinecraft().theWorld;
+	    	
+			if(mouse != null && world != null && mouse.typeOfHit == EnumMovingObjectType.TILE) {
+				TileEntity te = world.getBlockTileEntity(mouse.blockX, mouse.blockY, mouse.blockZ);
+				int id = world.getBlockId(mouse.blockX, mouse.blockY, mouse.blockZ);
+				
+				if(id == ModjamMod.blockPillar.blockID || (id == ModjamMod.blockTrap.blockID && te != null && te instanceof TileEntityTrap && ((TileEntityTrap) te).placedBy != null)) {
+			        String key = Keyboard.getKeyName(FyresKeyHandler.examine.keyCode);
+			        String string = "Press " + key + " to Examine";
+			        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(string, (event.resolution.getScaledWidth() / 2) - (Minecraft.getMinecraft().fontRenderer.getStringWidth(string) / 2), event.resolution.getScaledHeight() / 2 + 16, Color.WHITE.getRGB());
+				}
 			}
     	}
     }
