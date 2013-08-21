@@ -40,7 +40,7 @@ public class TileEntityTrapRenderer extends TileEntitySpecialRenderer {
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)l1, (float)l2);
        
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		boolean active = player != null && !PacketHandler.trapsDisabled && (player.getEntityName().equals(tl.placedBy) || player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")));
+		boolean active = player != null && (!PacketHandler.trapsDisabled || tl.placedBy != null) && (player.getEntityName().equals(tl.placedBy) || player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")));
 		
 		int type = world.getBlockMetadata(i, j, k);
 		

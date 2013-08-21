@@ -120,7 +120,7 @@ public class BlockTrap extends BlockContainer implements IShearable {
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
     	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
     	
-    	if(!par1World.isRemote && te != null && te instanceof TileEntityTrap && !par5Entity.getEntityName().equals(((TileEntityTrap) te).placedBy) && ModjamMod.spawnTraps && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
+    	if(!par1World.isRemote && te != null && te instanceof TileEntityTrap && !par5Entity.getEntityName().equals(((TileEntityTrap) te).placedBy) && (ModjamMod.spawnTraps || ((TileEntityTrap) te).placedBy != null) && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
     		
     		int type = par1World.getBlockMetadata(par2, par3, par4);
     		
@@ -164,13 +164,15 @@ public class BlockTrap extends BlockContainer implements IShearable {
     	
     	if(!par1World.isRemote && !par1World.isBlockSolidOnSide(par2, par3 - 1, par4, ForgeDirection.SOUTH, true)) {
     		par1World.setBlockToAir(par2, par3, par4);
-    		if(ModjamMod.spawnTraps && CommonTickHandler.worldData != null && CommonTickHandler.worldData.getDisadvantage().equals("Explosive Traps")) {par1World.createExplosion(null, par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, 1.33F, true);}
+    		TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
+    		if((ModjamMod.spawnTraps || (te != null && te instanceof TileEntityTrap && ((TileEntityTrap) te).placedBy != null)) && CommonTickHandler.worldData != null && CommonTickHandler.worldData.getDisadvantage().equals("Explosive Traps")) {par1World.createExplosion(null, par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, 1.33F, true);}
     	}
     }
     
     @Override
     public boolean isBlockReplaceable(World world, int x, int y, int z) {
-    	return super.isBlockReplaceable(world, x, y, z) || (world.isRemote ? PacketHandler.trapsDisabled : !ModjamMod.spawnTraps);
+    	TileEntity te = world.getBlockTileEntity(x, y, z);
+    	return super.isBlockReplaceable(world, x, y, z) || ((world.isRemote ? PacketHandler.trapsDisabled : !ModjamMod.spawnTraps) && (te == null || !(te instanceof TileEntityTrap) || ((TileEntityTrap) te).placedBy == null));
     }  
     
     @SideOnly(Side.CLIENT)
