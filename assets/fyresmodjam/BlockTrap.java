@@ -120,7 +120,7 @@ public class BlockTrap extends BlockContainer implements IShearable {
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
     	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
     	
-    	if(!par1World.isRemote && te != null && te instanceof TileEntityTrap && !par5Entity.getEntityName().equals(((TileEntityTrap) te).placedBy) && (ModjamMod.spawnTraps || ((TileEntityTrap) te).placedBy != null) && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
+    	if(!par1World.isRemote && par5Entity.ridingEntity == null && te != null && te instanceof TileEntityTrap && !par5Entity.getEntityName().equals(((TileEntityTrap) te).placedBy) && (ModjamMod.spawnTraps || ((TileEntityTrap) te).placedBy != null) && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
     		
     		int type = par1World.getBlockMetadata(par2, par3, par4);
     		
