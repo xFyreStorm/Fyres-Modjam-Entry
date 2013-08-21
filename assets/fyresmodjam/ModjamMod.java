@@ -10,6 +10,8 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Random;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -72,7 +74,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     
     public static Random r = new Random();
     
-    public static int itemID = 2875, blockID = 2875, achievementID = 2500;
+    public static int itemID = 2875, blockID = 2875, achievementID = 2500, examineKey = Keyboard.KEY_X;
     public static boolean pillarGlow = true, spawnTraps = true, spawnTowers = true, spawnRandomPillars = true, disableDisadvantages = false, versionChecking = true, trapsBelowGroundOnly = false;
     
     public static CreativeTabs tabModjamMod = new CreativeTabModjamMod(CreativeTabs.getNextID(), "The \"You Will Die\" Mod");
@@ -111,22 +113,34 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static ItemStack losingIsFunStack = new ItemStack(Item.bow, 1);
     public static ItemStack whoopsStack = new ItemStack(Item.flintAndSteel, 1, 1);
     
+    public static String configPath = null;
+    
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		//loadProperties();
 		
-		Configuration config = new Configuration(new File(event.getSuggestedConfigurationFile().getAbsolutePath().replace("fyresmodjam", "YouWillDieMod")));
+		File old = new File(event.getSuggestedConfigurationFile().getAbsolutePath().replace("fyresmodjam", "YouWillDieMod"));
+		if(old.exists()) {old.delete(); System.out.println(true);}
+		
+		configPath = event.getSuggestedConfigurationFile().getAbsolutePath().replace("fyresmodjam", "TheYouWillDieMod");
+		
+		Configuration config = new Configuration(new File(configPath));
 		
 		config.load();
 		
-		itemID = config.getItem("itemID", itemID + 4096).getInt() - 4096;
-		blockID = config.getBlock("blockID", blockID).getInt();
-		pillarGlow = config.get(config.CATEGORY_GENERAL, "pillarGlow", pillarGlow).getBoolean(pillarGlow);
-		spawnTraps = !(config.get(config.CATEGORY_GENERAL, "disableTraps", !spawnTraps).getBoolean(!spawnTraps));
-		spawnTowers = config.get(config.CATEGORY_GENERAL, "spawnTowers", spawnTowers).getBoolean(spawnTowers);
-		spawnRandomPillars = config.get(config.CATEGORY_GENERAL, "spawnRandomPillars", spawnRandomPillars).getBoolean(spawnRandomPillars);
-		disableDisadvantages = config.get(config.CATEGORY_GENERAL, "disableDisadvantages", disableDisadvantages).getBoolean(disableDisadvantages);
-		versionChecking = config.get(config.CATEGORY_GENERAL, "versionChecking", versionChecking).getBoolean(versionChecking);
+		itemID = config.getItem("item_ids", itemID + 4096).getInt() - 4096;
+		blockID = config.getBlock("block_ids", blockID).getInt();
+		
+		pillarGlow = config.get(config.CATEGORY_GENERAL, "pillar_glow", pillarGlow).getBoolean(pillarGlow);
+		spawnTraps = !(config.get(config.CATEGORY_GENERAL, "disable_traps", !spawnTraps).getBoolean(!spawnTraps));
+		spawnTowers = config.get(config.CATEGORY_GENERAL, "spawn_towers", spawnTowers).getBoolean(spawnTowers);
+		spawnRandomPillars = config.get(config.CATEGORY_GENERAL, "spawn_random_pillars", spawnRandomPillars).getBoolean(spawnRandomPillars);
+		disableDisadvantages = config.get(config.CATEGORY_GENERAL, "disable_disadvantages", disableDisadvantages).getBoolean(disableDisadvantages);
+		versionChecking = config.get(config.CATEGORY_GENERAL, "version_checking", versionChecking).getBoolean(versionChecking);
+		
+		examineKey = config.get("Keybindings", "examine_key", examineKey).getInt(examineKey);
+		
+		FyresKeyHandler.examine.keyCode = examineKey;
 		
 		config.save();
 		

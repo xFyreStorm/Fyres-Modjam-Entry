@@ -67,7 +67,7 @@ public class BlockTrap extends BlockContainer implements IShearable {
     }
     
     public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)  {	
-    	if(par1World.isRemote) {
+    	if(par1World.isRemote && par5EntityPlayer.getHeldItem() == null) {
     		PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.DISARM_TRAP, new Object[] {par2, par3, par4, par5EntityPlayer.getEntityData().hasKey("Blessing") && par5EntityPlayer.getEntityData().getString("Blessing").equals("Mechanic")}));
 	    	return false;
     	}
@@ -114,7 +114,7 @@ public class BlockTrap extends BlockContainer implements IShearable {
     public MovingObjectPosition collisionRayTrace(World par1World, int par2, int par3, int par4, Vec3 par5Vec3, Vec3 par6Vec3) {
     	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
     	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
-        return (player != null && te instanceof TileEntityTrap && (player.getEntityName().equals(((TileEntityTrap) te).placedBy) || player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")))) ? super.collisionRayTrace(par1World, par2, par3, par4, par5Vec3, par6Vec3) : null;
+        return (player != null && te instanceof TileEntityTrap && (((TileEntityTrap) te).placedBy != null || !PacketHandler.trapsDisabled) && (player.getEntityName().equals(((TileEntityTrap) te).placedBy) || player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")))) ? super.collisionRayTrace(par1World, par2, par3, par4, par5Vec3, par6Vec3) : null;
     }
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
@@ -176,7 +176,7 @@ public class BlockTrap extends BlockContainer implements IShearable {
     }  
     
     @SideOnly(Side.CLIENT)
-    public boolean isCollidable() {return !PacketHandler.trapsDisabled;} //&& getPlayerSneaking();}
+    public boolean isCollidable() {return super.isCollidable();}//!PacketHandler.trapsDisabled;} //&& getPlayerSneaking();}
     
     @Override
     public boolean canPlaceBlockAt(World world, int x, int y, int z) {
@@ -206,7 +206,7 @@ public class BlockTrap extends BlockContainer implements IShearable {
     	if(par5EntityLivingBase != null && par5EntityLivingBase instanceof EntityPlayer) {
     		EntityPlayer player = (EntityPlayer) par5EntityLivingBase;
     		
-    		if(!player.capabilities.isCreativeMode) {
+    		if(!player.capabilities.isCreativeMode || PacketHandler.trapsDisabled) {
     			TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
     			if(te != null && te instanceof TileEntityTrap) {((TileEntityTrap) te).placedBy = player.getEntityName();}
     		}

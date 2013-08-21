@@ -1,6 +1,7 @@
 package assets.fyresmodjam;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.EnumSet;
 
 import org.lwjgl.input.Keyboard;
@@ -13,6 +14,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraftforge.common.Configuration;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
@@ -76,6 +78,15 @@ public class ClientTickHandler implements ITickHandler {
 			}
 			
 			player.triggerAchievement(ModjamMod.startTheGame);
+		}
+		
+		if(FyresKeyHandler.examine.keyCode != ModjamMod.examineKey) {
+			ModjamMod.examineKey = FyresKeyHandler.examine.keyCode;
+		
+			Configuration config = new Configuration(new File(ModjamMod.configPath));
+			config.load();
+			config.get("Keybindings", "examine_key", ModjamMod.examineKey).set(ModjamMod.examineKey);
+			config.save();
 		}
 	}
 
