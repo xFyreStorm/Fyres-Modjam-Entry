@@ -51,14 +51,14 @@ Blessings:
     Alchemist - All potions act like wildcard potions,
     Scout - You can see traps without sneaking, but take 25% more damage from traps,
     Guardian - Take 25% less damage from all sources,
-    Vampire - Heal 7% of damage dealt to enemies, while in sunlight, -20% damage dealt, +20% damage received,
+    Vampire - Heal 7% of damage dealt to enemies and, in direct sunlight, you take 20% more damage and deal 20% less damage,
     Inferno - You don't take fire damage, do +50% damage while on fire, and take damage while wet,
     Diver - You can breathe under water
     
 /currentBlessing command shows your current blessing
     
 Mystery potions - each new world you make selects 12 potion types and durations. Find and drink a mystery potion to find out what it does permanently in that world! Wildcard potion always give a random effect.
-1 in 10 drop from all mobs, 100% drop rate for level 5 mobs, they also spawn in dungeon chests
+1 in 10 drop from all mobs, 100% drop rate for level 5 mobs, they also spawn in dungeon chests, can combine with gunpowder to make splash potions
 
 When a world is created, it is given a random disadvantage. You are told what it is when logging in to a world. Complete world goal to remove disadvantage.
 
