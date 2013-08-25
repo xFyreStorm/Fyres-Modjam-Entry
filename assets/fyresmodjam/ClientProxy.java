@@ -12,6 +12,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -67,5 +68,13 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void sendPlayerMessage(String message) {
 		Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(message);
+	}
+	
+	@Override
+	public void loadFromConfig(Configuration config) {
+		super.loadFromConfig(config);
+		
+		ModjamMod.examineKey = config.get("Keybindings", "examine_key", ModjamMod.examineKey).getInt(ModjamMod.examineKey);
+		FyresKeyHandler.examine.keyCode = ModjamMod.examineKey;
 	}
 }

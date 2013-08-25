@@ -31,6 +31,7 @@ public class ItemMysteryPotion extends Item {
 	}
 	
 	@SideOnly(Side.CLIENT)
+	@Override
     public void registerIcons(IconRegister par1IconRegister) {
 		if(icons == null) {
 			icons = new Icon[26];
@@ -45,8 +46,9 @@ public class ItemMysteryPotion extends Item {
     }
 	
 	@SideOnly(Side.CLIENT)
+	@Override
     public Icon getIconFromDamage(int par1)  {
-        return par1 < 26 ? icons[par1] : icons[0];
+        return icons[par1 % 26];
     }
 	
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {

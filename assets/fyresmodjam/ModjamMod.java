@@ -62,7 +62,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.2b")
+@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.2c")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
 public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	
@@ -91,8 +91,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Achievement whoops;
     public static AchievementPage page;
     
-    public static String version = "v0.0.2b";
-    public static String foundVersion = "v0.0.2b";
+    public static String version = "v0.0.2c";
+    public static String foundVersion = "v0.0.2c";
 	
     public static void loadProperties() {
 		Properties prop = new Properties();
@@ -128,19 +128,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 		config.load();
 		
-		itemID = config.getItem("item_ids", itemID + 4096).getInt() - 4096;
-		blockID = config.getBlock("block_ids", blockID).getInt();
-		
-		pillarGlow = config.get(config.CATEGORY_GENERAL, "pillar_glow", pillarGlow).getBoolean(pillarGlow);
-		spawnTraps = !(config.get(config.CATEGORY_GENERAL, "disable_traps", !spawnTraps).getBoolean(!spawnTraps));
-		spawnTowers = config.get(config.CATEGORY_GENERAL, "spawn_towers", spawnTowers).getBoolean(spawnTowers);
-		spawnRandomPillars = config.get(config.CATEGORY_GENERAL, "spawn_random_pillars", spawnRandomPillars).getBoolean(spawnRandomPillars);
-		disableDisadvantages = config.get(config.CATEGORY_GENERAL, "disable_disadvantages", disableDisadvantages).getBoolean(disableDisadvantages);
-		versionChecking = config.get(config.CATEGORY_GENERAL, "version_checking", versionChecking).getBoolean(versionChecking);
-		
-		examineKey = config.get("Keybindings", "examine_key", examineKey).getInt(examineKey);
-		
-		FyresKeyHandler.examine.keyCode = examineKey;
+		proxy.loadFromConfig(config);
 		
 		config.save();
 		
