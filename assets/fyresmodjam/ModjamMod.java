@@ -62,7 +62,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.2c")
+@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.2d")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
 public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	
@@ -85,14 +85,15 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Item itemPillar;
     public static Item mysteryPotion;
     public static Item itemTrap;
+    public static Item mysteryMushroom;
     
     public static Achievement startTheGame; 
     public static Achievement losingIsFun;
     public static Achievement whoops;
     public static AchievementPage page;
     
-    public static String version = "v0.0.2c";
-    public static String foundVersion = "v0.0.2c";
+    public static String version = "v0.0.2d";
+    public static String foundVersion = "v0.0.2d";
 	
     public static void loadProperties() {
 		Properties prop = new Properties();
@@ -203,6 +204,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		itemPillar = new ItemPillar(itemID).setUnlocalizedName("blockPillar");
 		mysteryPotion = new ItemMysteryPotion(itemID + 1).setUnlocalizedName("mysteryPotion").setCreativeTab(CreativeTabs.tabBrewing);
 		itemTrap = new ItemTrap(itemID + 2).setUnlocalizedName("itemTrap").setCreativeTab(CreativeTabs.tabBlock);
+		mysteryMushroom = new ItemMysteryMushroom(itemID + 3).setUnlocalizedName("mysteryMushroom").setCreativeTab(CreativeTabs.tabBrewing);
 		
 		GameRegistry.registerBlock(blockPillar, "blockPillar");
 		GameRegistry.registerTileEntity(TileEntityPillar.class, "Pillar Tile Entity");
@@ -216,6 +218,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		LanguageRegistry.addName(itemPillar, "Pillar");
 		LanguageRegistry.addName(mysteryPotion, "Mystery Potion");
 		LanguageRegistry.addName(itemTrap, "Trap");
+		LanguageRegistry.addName(mysteryMushroom, "Mystery Mushroom");
 		
 		LanguageRegistry.instance().addStringLocalization("commands.currentBlessing.usage", "/currentBlessing - used to check your current blessing");
 		LanguageRegistry.instance().addStringLocalization("commands.currentDisadvantage.usage", "/currentDisadvantage - used to check your current world disadvantage");
@@ -399,7 +402,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	@Override
 	public void onPlayerLogin(EntityPlayer player) {
 		if(!player.worldObj.isRemote) {
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.getDisadvantage(), CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled, ModjamMod.spawnTraps, CommonTickHandler.worldData.rewardLevels}), (Player) player);
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {CommonTickHandler.worldData.potionValues, CommonTickHandler.worldData.potionDurations, CommonTickHandler.worldData.getDisadvantage(), CommonTickHandler.worldData.currentTask, CommonTickHandler.worldData.currentTaskID, CommonTickHandler.worldData.currentTaskAmount, CommonTickHandler.worldData.progress, CommonTickHandler.worldData.tasksCompleted, CommonTickHandler.worldData.enderDragonKilled, ModjamMod.spawnTraps, CommonTickHandler.worldData.rewardLevels, CommonTickHandler.worldData.mushroomColors}), (Player) player);
 			
 			String name = CommonTickHandler.worldData.currentTask.equals("Kill") ? FyresWorldData.validMobNames[CommonTickHandler.worldData.currentTaskID] : new ItemStack(Item.itemsList[CommonTickHandler.worldData.currentTaskID], 1).getDisplayName();
 			

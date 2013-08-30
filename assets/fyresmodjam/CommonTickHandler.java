@@ -114,7 +114,7 @@ public class CommonTickHandler implements ITickHandler {
 								worldData.currentDisadvantage = "None";
 							}
 	
-							PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {worldData.potionValues, worldData.potionDurations, worldData.getDisadvantage(), worldData.currentTask, worldData.currentTaskID, worldData.currentTaskAmount, worldData.progress, worldData.tasksCompleted, worldData.enderDragonKilled, ModjamMod.spawnTraps, worldData.rewardLevels}));
+							PacketDispatcher.sendPacketToAllPlayers(PacketHandler.newPacket(PacketHandler.UPDATE_WORLD_DATA, new Object[] {worldData.potionValues, worldData.potionDurations, worldData.getDisadvantage(), worldData.currentTask, worldData.currentTaskID, worldData.currentTaskAmount, worldData.progress, worldData.tasksCompleted, worldData.enderDragonKilled, ModjamMod.spawnTraps, worldData.rewardLevels, worldData.mushroomColors}));
 	
 							worldData.setDirty(true);
 						}

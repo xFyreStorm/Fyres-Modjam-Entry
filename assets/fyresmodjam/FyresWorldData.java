@@ -1,5 +1,6 @@
 package assets.fyresmodjam;
 
+import java.awt.Color;
 import java.util.HashMap;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -32,6 +33,9 @@ public class FyresWorldData extends WorldSavedData {
 	
 	public int[] potionValues = null;
 	public int[] potionDurations = null;
+	
+	//public int[] mushroomValues = null;
+	public int[][] mushroomColors = null;
 	
 	public String currentDisadvantage = null;
 	
@@ -87,6 +91,11 @@ public class FyresWorldData extends WorldSavedData {
 		
 		if(nbttagcompound.hasKey("rewardLevels")) {rewardLevels = nbttagcompound.getInteger("rewardLevels");}
 		
+		mushroomColors = new int[13][];
+		for(int i = 0; i < 13; i++) {
+			if(nbttagcompound.hasKey("mushroomColors_" + (i + 1))) {mushroomColors[i] = nbttagcompound.getIntArray("mushroomColors_" + (i + 1));}
+		}
+		
 		if(nbttagcompound.hasKey("TempPlayerStats")) {
 			NBTTagCompound tempStats = nbttagcompound.getCompoundTag("TempPlayerStats");
 			
@@ -119,6 +128,8 @@ public class FyresWorldData extends WorldSavedData {
 		nbttagcompound.setBoolean("enderDragonKilled", enderDragonKilled);
 		
 		nbttagcompound.setInteger("rewardLevels", rewardLevels);
+		
+		for(int i = 0; i < 13; i++) {nbttagcompound.setIntArray("mushroomColors_" + (i + 1), mushroomColors[i]);}
 		
 		if(!blessingByPlayer.isEmpty()) {
 			NBTTagCompound tempPlayerStats = new NBTTagCompound();
@@ -173,6 +184,21 @@ public class FyresWorldData extends WorldSavedData {
 		
 		if(potionDurations == null) {potionDurations = new int[12];}
 		for(int i = 0; i < 12; i++) {if(potionDurations[i] != 0) {continue;} potionDurations[i] = 5 + ModjamMod.r.nextInt(26);}
+		
+		/*if(mushroomValues == null) {
+			mushroomValues = new int[13];
+			
+			for(int i = 0; i < 13; i++) {}
+		}*/
+		
+		if(mushroomColors == null) {
+			mushroomColors = new int[13][2];
+			
+			for(int i = 0; i < 13; i++) {
+				mushroomColors[i][0] = Color.HSBtoRGB(ModjamMod.r.nextFloat(), ModjamMod.r.nextFloat(), ModjamMod.r.nextFloat());
+				mushroomColors[i][1] = Color.HSBtoRGB(ModjamMod.r.nextFloat(), ModjamMod.r.nextFloat(), ModjamMod.r.nextFloat());
+			}
+		}
 		
 		boolean changeDisadvantage = currentDisadvantage == null;
 		

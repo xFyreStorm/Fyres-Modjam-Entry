@@ -35,6 +35,8 @@ public class PacketHandler implements IPacketHandler {
 	public static int[] potionValues = null;
 	public static int[] potionDurations = null;
 	
+	public static int[][] mushroomColors = null;
+	
 	public static String currentDisadvantage = null;
 	
 	public static String currentTask = null;
@@ -164,6 +166,7 @@ public class PacketHandler implements IPacketHandler {
 					
 					if(potionValues == null) {potionValues = new int[12];}
 					if(potionDurations == null) {potionDurations = new int[12];}
+					if(mushroomColors == null) {mushroomColors = new int[13][2];}
 					
 					switch(type) {
 						case UPDATE_BLESSING: player.getEntityData().setString("Blessing", inputStream.readUTF()); return;
@@ -185,6 +188,10 @@ public class PacketHandler implements IPacketHandler {
 							enderDragonKilled = inputStream.readBoolean();
 							trapsDisabled = !inputStream.readBoolean();
 							rewardLevels = inputStream.readInt();
+							
+							for(int i = 0; i < 13; i++) {
+								for(int i2 = 0; i2 < 2; i2++) {mushroomColors[i][i2] = inputStream.readInt();}
+							}
 							
 							return;
 						
@@ -208,6 +215,14 @@ public class PacketHandler implements IPacketHandler {
                 	if(data[i] instanceof Integer) {outputStream.writeInt((Integer) data[i]);}
                 	else if(data[i] instanceof int[]) {
                 		for(int i2 = 0; i2 < ((int[]) data[i]).length; i2++) {outputStream.writeInt(((int[]) data[i])[i2]);}
+                	} else if(data[i] instanceof int[][]) {
+                		int[][] values = (int[][]) data[i];
+                		
+                		for(int i2 = 0; i2 < values.length; i2++) {
+                			for(int i3 = 0; i3 < values[i2].length; i3++) {
+                				outputStream.writeInt(values[i2][i3]);
+                			}
+                		}
                 	} else if(data[i] instanceof Boolean) {outputStream.writeBoolean((Boolean) data[i]);}
                 	else if(data[i] instanceof String) {outputStream.writeUTF((String) data[i]);}
                 	else if(data[i] instanceof Byte) {outputStream.writeByte((Byte) data[i]);}
