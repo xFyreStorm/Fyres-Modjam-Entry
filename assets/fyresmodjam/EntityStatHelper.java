@@ -118,14 +118,18 @@ public class EntityStatHelper {
 			
 			boolean isClone = true;
 			
-			try {
+			/*try {
 				isClone = event.entity.getDataWatcher().getWatchableObjectByte(30) != 0;
 			} catch (Exception e) {
 				isClone = false;
 				event.entity.getDataWatcher().addObject(30, (byte) 1);
-			}
+			}*/
+			
+			isClone = event.entity.getEntityData().hasKey("isClone") ? event.entity.getEntityData().getBoolean("isClone") : false;
 			
 			if(CommonTickHandler.worldData != null && CommonTickHandler.worldData.getDisadvantage().equals("Increased Mob Spawn") && (event.entity instanceof EntityMob) && !(event.entity instanceof EntityDragon) && !isClone && ModjamMod.r.nextInt(3) == 0) {
+				
+				event.entity.getEntityData().setBoolean("isClone", true);
 				
 				Entity entityNew = null;
 				
@@ -141,7 +145,8 @@ public class EntityStatHelper {
 				
 				if(entityNew != null) {
 					entityNew.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, event.entity.rotationYaw, event.entity.rotationPitch);
-					entityNew.getDataWatcher().addObject(30, (byte) 1);
+					//entityNew.getDataWatcher().addObject(30, (byte) 1);
+					entityNew.getEntityData().setBoolean("isClone", true);
 					entityNew.dimension = event.entity.dimension;
 					CommonTickHandler.addLater.add(entityNew); //event.world.spawnEntityInWorld(entityNew);
 				}
