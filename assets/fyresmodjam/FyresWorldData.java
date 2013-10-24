@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.HashMap;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
@@ -109,6 +110,10 @@ public class FyresWorldData extends WorldSavedData {
 		}
 		
 		checkWorldData();
+		
+		/*for(int i = 0; i < 13; i++) {
+			GameRegistry.addShapelessRecipe(output, params);
+		}*/
 	} 
 
 	@Override

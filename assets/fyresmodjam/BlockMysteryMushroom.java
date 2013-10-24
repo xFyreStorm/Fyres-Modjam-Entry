@@ -169,17 +169,17 @@ public class BlockMysteryMushroom extends BlockFlower
         }
     }*/
     
-    public static int lastMeta = 0;
+    /*public static int lastMeta = 0;
     
     @SideOnly(Side.CLIENT)
     public int getRenderColor(int par1) {
         return PacketHandler.mushroomColors[lastMeta][par1];
-    }
+    }*/
     
     @SideOnly(Side.CLIENT)
     public int colorMultiplier(IBlockAccess par1IBlockAccess, int par2, int par3, int par4) {
-    	lastMeta = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
-        return PacketHandler.mushroomColors[lastMeta][renderPass];
+    	//lastMeta = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
+        return PacketHandler.mushroomColors[par1IBlockAccess.getBlockMetadata(par2, par3, par4)][renderPass];
     }
     
     public static int renderPass;
@@ -188,16 +188,17 @@ public class BlockMysteryMushroom extends BlockFlower
         return true;
     }
     
-    public boolean shouldSideBeRendered(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
-    	return super.shouldSideBeRendered(par1IBlockAccess, par2, par3, par4, par5);
-    }
-    
     public int idPicked(World par1World, int par2, int par3, int par4) {
         return ModjamMod.mysteryMushroom.itemID;
     }
     
     public int idDropped(int par1, Random par2Random, int par3) {
         return ModjamMod.mysteryMushroom.itemID;
+    }
+    
+    @Override
+    public int getRenderBlockPass() {
+        return 1;
     }
     
     //public int getRenderType() {return ClientProxy.mushroomRendererID;}

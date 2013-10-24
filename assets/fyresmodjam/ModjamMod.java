@@ -234,6 +234,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		
 		for(int i = 0; i < 13; i++) {
 			GameRegistry.addShapelessRecipe(new ItemStack(mysteryPotion, 1, i + 13), new Object[] {new ItemStack(mysteryPotion, 1, i), Item.gunpowder});
+			GameRegistry.addShapelessRecipe(new ItemStack(mysteryPotion, 1, i), new Object[] {new ItemStack(Item.potion, 1, 0), Item.leather, new ItemStack(mysteryMushroom, 1, i)});
 		}
 		
 		proxy.register();

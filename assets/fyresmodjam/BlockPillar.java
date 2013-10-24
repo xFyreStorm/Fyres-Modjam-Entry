@@ -90,7 +90,7 @@ public class BlockPillar extends BlockContainer
     		}
     	}
     	
-    	return true; 
+    	return true;
     }
 
     public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
