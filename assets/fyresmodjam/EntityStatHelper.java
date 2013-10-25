@@ -17,6 +17,7 @@ import assets.fyresmodjam.EntityStatHelper.EntityStat;
 import assets.fyresmodjam.ItemStatHelper.ItemStatTracker;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumEntitySize;
 import net.minecraft.entity.item.EntityItem;
@@ -35,6 +36,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.network.packet.Packet5PlayerInventory;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,6 +47,11 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 
 public class EntityStatHelper {
+	
+	public static String[] knowledge = {"Clueless", "Novice", "Competent", "Talented", "Expert", "Professional", "Master", "Legendary"};
+	public static int[] killCount = {0, 10, 25, 50, 100, 250, 500, 1000};
+	public static float[] damageBonus = {0, 0.01F, 0.025F, 0.05F, 0.075F, 0.1F, 0.15F, 0.25F};
+	public static String[] damageBonusString = {"0", "1", "2.5", "5", "7.5", "10", "15", "25"};
 	
 	//There's probably a better way of doing all of this. :P Oh well.
 	
@@ -77,6 +84,12 @@ public class EntityStatHelper {
 		public Object getNewValue(Random r) {return value;}
 		public String getAlteredEntityName(EntityLiving entity) {return entity.getEntityName();}
 		public void modifyEntity(Entity entity) {}
+	}
+	
+	public static String getUnalteredName(Entity entity) {
+		String s = EntityList.getEntityString(entity);
+        if(s == null) {s = "generic";}
+        return StatCollector.translateToLocal("entity." + s + ".name");
 	}
 	
 	public static HashMap<Class, EntityStatTracker> statTrackersByClass = new HashMap<Class, EntityStatTracker>();
@@ -293,10 +306,28 @@ public class EntityStatHelper {
 		}
 		
 		if(event.entity instanceof EntityPlayer) {
-			((EntityPlayer) event.entity).triggerAchievement(ModjamMod.losingIsFun);
 			
-			CommonTickHandler.worldData.blessingByPlayer.put(event.entity.getEntityName(), event.entity.getEntityData().getString("Blessing"));
-			CommonTickHandler.worldData.potionKnowledgeByPlayer.put(event.entity.getEntityName(), event.entity.getEntityData().getIntArray("PotionKnowledge"));
+			EntityPlayer player = (EntityPlayer) event.entity;
+			
+			player.triggerAchievement(ModjamMod.losingIsFun);
+			
+			CommonTickHandler.worldData.blessingByPlayer.put(player.getEntityName(), player.getEntityData().getString("Blessing"));
+			CommonTickHandler.worldData.potionKnowledgeByPlayer.put(player.getEntityName(), player.getEntityData().getIntArray("PotionKnowledge"));
+			
+		} else if(event.source != null && event.source.getEntity() != null && event.source.getEntity() instanceof EntityPlayer) {
+			
+			EntityPlayer player = (EntityPlayer) event.source.getEntity();
+			String mob = getUnalteredName(event.entity);
+			
+			if(!player.getEntityData().hasKey("KillStats")) {player.getEntityData().setCompoundTag("KillStats", new NBTTagCompound());}
+			NBTTagCompound killStats = player.getEntityData().getCompoundTag("KillStats");
+			if(!killStats.hasKey(mob + "Kills")) {killStats.setInteger(mob + "Kills", 0);}
+			killStats.setInteger(mob + "Kills", killStats.getInteger(mob + "Kills") + 1);
+			
+			for(int i = 0; i < knowledge.length; i++) {
+				if(killCount[i] == killStats.getInteger(mob + "Kills")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7o\u00A73You've become a " + knowledge[i].toLowerCase() + " " + mob.toLowerCase() + " slayer! (+" + damageBonusString[i] + "% damage against " + mob.toLowerCase() + "s.)" + (i < knowledge.length - 1 ? " " + (killCount[i + 1] - killCount[i]) + " " + mob.toLowerCase() + " kills to next rank." : "")}), (Player) player); break;}
+			}
+				
 		}
 	}
 	

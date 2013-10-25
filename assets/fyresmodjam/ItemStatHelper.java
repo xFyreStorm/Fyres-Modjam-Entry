@@ -264,8 +264,20 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 					
 					if(held != null && ((event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob") || (held.getItem().itemID == Item.bow.itemID && event.source.isProjectile())))) {
 						String s = getStat(held, "BonusDamage");
-						if(s != null) {event.ammount += Integer.parseInt(s);}
+						if(s != null) {event.ammount += Float.parseFloat(s);}
 					}
+				}
+				
+				String mob = EntityStatHelper.getUnalteredName(event.entity);
+				if(event.source.getEntity() instanceof EntityPlayer && event.source.getEntity().getEntityData().hasKey("KillStats") && event.source.getEntity().getEntityData().getCompoundTag("KillStats").hasKey(mob + "Kills")) {
+					int kills = event.source.getEntity().getEntityData().getCompoundTag("KillStats").getInteger(mob + "Kills");
+					
+					int last = 0;
+					for(int i = 0; i < EntityStatHelper.killCount.length; i++) {
+						if(kills >= EntityStatHelper.killCount[i]) {last = i; continue;} else {break;}
+					}
+					
+					damageMultiplier += EntityStatHelper.damageBonus[last];
 				}
 				
 				if(event.source.getEntity().getEntityData().hasKey("Blessing")) {

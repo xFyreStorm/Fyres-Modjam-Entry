@@ -62,7 +62,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.2d")
+@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.3a")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
 public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	
@@ -93,8 +93,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Achievement whoops;
     public static AchievementPage page;
     
-    public static String version = "v0.0.2d";
-    public static String foundVersion = "v0.0.2d";
+    public static String version = "v0.0.3a";
+    public static String foundVersion = "v0.0.3a";
 	
     public static void loadProperties() {
 		Properties prop = new Properties();
@@ -327,10 +327,13 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 			
 			public void modifyStack(ItemStack stack, Random r) {
 				int rank = Integer.parseInt(stack.getTagCompound().getString(name));
-				int bonusDamage = (rank - 1)/2 + (int) (r.nextInt(rank + 1));
+				float bonusDamage = ((float) rank - 1)/2 + (r.nextInt(rank + 1) * r.nextFloat());
 				
-				ItemStatHelper.giveStat(stack, "BonusDamage", bonusDamage);
-				ItemStatHelper.addLore(stack, bonusDamage != 0 ? "\u00A77\u00A7o  " + (bonusDamage > 0 ? "+" : "") + bonusDamage + " bonus damage" : null);
+				//ItemStatHelper.giveStat(stack, "BonusDamage", bonusDamage);
+				//ItemStatHelper.addLore(stack, bonusDamage != 0 ? "\u00A77\u00A7o  " + (bonusDamage > 0 ? "+" : "") + bonusDamage + " bonus damage" : null);
+				
+				ItemStatHelper.giveStat(stack, "BonusDamage", String.format("%.2f", bonusDamage));
+				ItemStatHelper.addLore(stack, !String.format("%.2f", bonusDamage).equals("0.00") ? "\u00A77\u00A7o  " + (bonusDamage > 0 ? "+" : "") + String.format("%.2f", bonusDamage) + " bonus damage" : null);
 				
 				ItemStatHelper.addLore(stack, "\u00A7eRank: "+ rank);
 			}
