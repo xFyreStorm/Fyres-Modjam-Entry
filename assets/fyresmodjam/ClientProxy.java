@@ -94,6 +94,9 @@ public class ClientProxy extends CommonProxy {
 		super.loadFromConfig(config);
 		
 		ModjamMod.examineKey = config.get("Keybindings", "examine_key", ModjamMod.examineKey).getInt(ModjamMod.examineKey);
+		ModjamMod.blessingKey = config.get("Keybindings", "blessing_key", ModjamMod.blessingKey).getInt(ModjamMod.blessingKey);
+		
 		FyresKeyHandler.examine.keyCode = ModjamMod.examineKey;
+		FyresKeyHandler.activateBlessing.keyCode = ModjamMod.blessingKey;
 	}
 }

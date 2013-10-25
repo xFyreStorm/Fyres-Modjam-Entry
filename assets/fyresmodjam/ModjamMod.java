@@ -74,7 +74,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     
     public static Random r = new Random();
     
-    public static int itemID = 2875, blockID = 2875, achievementID = 2500, examineKey = Keyboard.KEY_X;
+    public static int itemID = 2875, blockID = 2875, achievementID = 2500, examineKey = Keyboard.KEY_X, blessingKey = Keyboard.KEY_K;
     public static boolean pillarGlow = true, spawnTraps = true, spawnTowers = true, spawnRandomPillars = true, disableDisadvantages = false, versionChecking = true, trapsBelowGroundOnly = false;
     
     public static CreativeTabs tabModjamMod = new CreativeTabModjamMod(CreativeTabs.getNextID(), "The \"You Will Die\" Mod");

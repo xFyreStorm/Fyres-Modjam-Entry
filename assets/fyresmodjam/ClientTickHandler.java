@@ -9,6 +9,7 @@ import org.lwjgl.input.Keyboard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -77,6 +78,18 @@ public class ClientTickHandler implements ITickHandler {
 				if(sendPacket) {PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.UPDATE_PLAYER_ITEMS));}
 			}
 			
+			/*for(Object o : player.worldObj.loadedEntityList) {
+				if(o == null) {continue;}
+				
+				if(EntityStatHelper.hasStat((Entity) o, "Blessing") && EntityStatHelper.hasStat((Entity) o, "BlessingActive")) {
+					Entity entity = (Entity) o;
+					
+					if(EntityStatHelper.getStat(entity, "Blessing").equals("Berserker") && EntityStatHelper.getStat(entity, "BlessingActive").equals("true")) {
+						for(int i = 0; i < 2; i++) {player.worldObj.spawnParticle("reddust", player.posX - 0.5D + ModjamMod.r.nextDouble(), player.posY - player.height + ModjamMod.r.nextDouble() * player.height, player.posZ - 0.5D + ModjamMod.r.nextDouble(), 0.0D, 0.0D, 0.0D);}
+					}
+				}
+			}*/
+			
 			player.triggerAchievement(ModjamMod.startTheGame);
 		}
 		
@@ -86,6 +99,7 @@ public class ClientTickHandler implements ITickHandler {
 			Configuration config = new Configuration(new File(ModjamMod.configPath));
 			config.load();
 			config.get("Keybindings", "examine_key", ModjamMod.examineKey).set(ModjamMod.examineKey);
+			config.get("Keybindings", "blessing_key", ModjamMod.blessingKey).set(ModjamMod.blessingKey);
 			config.save();
 		}
 	}

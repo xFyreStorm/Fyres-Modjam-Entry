@@ -107,10 +107,11 @@ public class CommonTickHandler implements ITickHandler {
 				EntityStatHelper.giveStat(player, "BlessingTimer", timer);
 				
 				PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_STATS, new Object[] {1, "BlessingCounter", "" + counter}), (Player) player);
+				//PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_STATS, new Object[] {2, "BlessingCounter", "" + counter, "BlessingActive", "" + blessingActive}), (Player) player);
 			}
 
 			for(Object o : s.loadedEntityList) {
-				if(o == null) {continue;}
+				if(o == null || !(o instanceof Entity)) {continue;}
 
 				if(o instanceof EntityItem) {
 					EntityItem item = (EntityItem) o;
