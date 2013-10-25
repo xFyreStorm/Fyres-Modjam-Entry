@@ -16,6 +16,13 @@ public class CommonProxy {
 		ModjamMod.blockID = config.getBlock("block_ids",ModjamMod. blockID).getInt();
 		
 		ModjamMod.pillarGlow = config.get(config.CATEGORY_GENERAL, "pillar_glow", ModjamMod.pillarGlow).getBoolean(ModjamMod.pillarGlow);
+		
+		ModjamMod.pillarGenChance = config.get(config.CATEGORY_GENERAL, "pillar_gen_difficulty", ModjamMod.pillarGenChance).getInt();
+		ModjamMod.maxPillarsPerChunk = config.get(config.CATEGORY_GENERAL, "max_pillars_per_chunk", ModjamMod.maxPillarsPerChunk).getInt();
+		ModjamMod.towerGenChance = config.get(config.CATEGORY_GENERAL, "tower_gen_difficulty", ModjamMod.towerGenChance).getInt();
+		ModjamMod.trapGenChance = config.get(config.CATEGORY_GENERAL, "trap_gen_difficulty", ModjamMod.trapGenChance).getInt();
+		ModjamMod.mushroomReplaceChance = config.get(config.CATEGORY_GENERAL, "mushroom_replace_difficulty", ModjamMod.mushroomReplaceChance).getInt();
+		
 		ModjamMod.spawnTraps = !(config.get(config.CATEGORY_GENERAL, "disable_traps", !ModjamMod.spawnTraps).getBoolean(!ModjamMod.spawnTraps));
 		ModjamMod.spawnTowers = config.get(config.CATEGORY_GENERAL, "spawn_towers", ModjamMod.spawnTowers).getBoolean(ModjamMod.spawnTowers);
 		ModjamMod.spawnRandomPillars = config.get(config.CATEGORY_GENERAL, "spawn_random_pillars", ModjamMod.spawnRandomPillars).getBoolean(ModjamMod.spawnRandomPillars);

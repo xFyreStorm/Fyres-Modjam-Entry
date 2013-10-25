@@ -37,17 +37,17 @@ public class WorldGenTrapsTowersAndMore implements IWorldGenerator {
 		
 		genning = true;
 		
-		boolean addedDungeon = random.nextInt(225) != 0 || !ModjamMod.spawnTowers;
+		boolean addedDungeon = !ModjamMod.spawnTowers || random.nextInt(ModjamMod.towerGenChance) != 0;
 		
 		for(int y = 1; y < 127; y++) {
     		for(int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
     			for(int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
-    				if(random.nextInt(300) == 0 && (world.isAirBlock(x, y, z) || (Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z) && world.getBlockId(x, y, z) != Block.waterStill.blockID && world.getBlockId(x, y, z) != Block.waterMoving.blockID && world.getBlockId(x, y, z) != Block.lavaStill.blockID && world.getBlockId(x, y, z) != Block.lavaMoving.blockID)) && (!world.isAirBlock(x, y - 1, z) && world.getBlockId(x, y - 1, z) != ModjamMod.blockTrap.blockID && !Block.blocksList[world.getBlockId(x, y - 1, z)].isBlockReplaceable(world, x, y - 1, z))) {
+    				if( (world.isAirBlock(x, y, z) || (Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z) && world.getBlockId(x, y, z) != Block.waterStill.blockID && world.getBlockId(x, y, z) != Block.waterMoving.blockID && world.getBlockId(x, y, z) != Block.lavaStill.blockID && world.getBlockId(x, y, z) != Block.lavaMoving.blockID)) && (!world.isAirBlock(x, y - 1, z) && world.getBlockId(x, y - 1, z) != ModjamMod.blockTrap.blockID && !Block.blocksList[world.getBlockId(x, y - 1, z)].isBlockReplaceable(world, x, y - 1, z)) && random.nextInt(ModjamMod.trapGenChance) == 0) {
     					boolean skip = ModjamMod.trapsBelowGroundOnly && (world.getBlockId(x, y - 1, z) == Block.grass.blockID || world.getBlockId(x, y - 1, z) == Block.sand.blockID || world.getBlockId(x, y - 1, z) == Block.wood.blockID || world.canBlockSeeTheSky(x, y, z));
     					if(!skip && ModjamMod.blockTrap.canPlaceBlockAt(world, x, y, z)) {world.setBlock(x, y, z, ModjamMod.blockTrap.blockID, random.nextInt(BlockTrap.trapTypes), 0);}
     				}
     				
-    				if((world.getBlockId(x, y, z) == Block.mushroomBrown.blockID || world.getBlockId(x, y, z) == Block.mushroomRed.blockID) && random.nextInt(20) == 0) {
+    				if((world.getBlockId(x, y, z) == Block.mushroomBrown.blockID || world.getBlockId(x, y, z) == Block.mushroomRed.blockID) && random.nextInt(ModjamMod.mushroomReplaceChance) == 0) {
     					world.setBlock(x, y, z, ModjamMod.mysteryMushroomBlock.blockID, random.nextInt(13), 0);
     				}
 

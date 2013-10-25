@@ -93,8 +93,9 @@ public class ClientTickHandler implements ITickHandler {
 			player.triggerAchievement(ModjamMod.startTheGame);
 		}
 		
-		if(FyresKeyHandler.examine.keyCode != ModjamMod.examineKey) {
+		if(FyresKeyHandler.examine.keyCode != ModjamMod.examineKey || FyresKeyHandler.activateBlessing.keyCode != ModjamMod.blessingKey) {
 			ModjamMod.examineKey = FyresKeyHandler.examine.keyCode;
+			ModjamMod.blessingKey = FyresKeyHandler.activateBlessing.keyCode;
 		
 			Configuration config = new Configuration(new File(ModjamMod.configPath));
 			config.load();

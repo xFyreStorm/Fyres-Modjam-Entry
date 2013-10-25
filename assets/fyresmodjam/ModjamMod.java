@@ -75,6 +75,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Random r = new Random();
     
     public static int itemID = 2875, blockID = 2875, achievementID = 2500, examineKey = Keyboard.KEY_X, blessingKey = Keyboard.KEY_K;
+    public static int pillarGenChance = 75, maxPillarsPerChunk = 3, towerGenChance = 225, trapGenChance = 300, mushroomReplaceChance = 20;
     public static boolean pillarGlow = true, spawnTraps = true, spawnTowers = true, spawnRandomPillars = true, disableDisadvantages = false, versionChecking = true, trapsBelowGroundOnly = false;
     
     public static CreativeTabs tabModjamMod = new CreativeTabModjamMod(CreativeTabs.getNextID(), "The \"You Will Die\" Mod");
@@ -107,6 +108,13 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		blockID = Integer.parseInt(prop.getProperty("blockID", "" + blockID));
 		//achievementID = Integer.parseInt(prop.getProperty("achievementID", "" + achievementID));
 		pillarGlow = Boolean.parseBoolean(prop.getProperty("pillarGlow", "" + pillarGlow));
+		
+		pillarGenChance = Integer.parseInt(prop.getProperty("pillarGenChance", "" + pillarGenChance));
+		maxPillarsPerChunk = Integer.parseInt(prop.getProperty("maxPillarsPerChunk", "" + maxPillarsPerChunk));
+		towerGenChance = Integer.parseInt(prop.getProperty("towerGenChance", "" + towerGenChance));
+		trapGenChance = Integer.parseInt(prop.getProperty("trapGenChance", "" + trapGenChance));
+		mushroomReplaceChance = Integer.parseInt(prop.getProperty("mushroomReplaceChance", "" + mushroomReplaceChance));
+		
 		spawnTraps = !Boolean.parseBoolean(prop.getProperty("disableTraps", "" + (!spawnTraps)));
 		trapsBelowGroundOnly = Boolean.parseBoolean(prop.getProperty("trapsBelowGroundOnly", "" + trapsBelowGroundOnly));
 		versionChecking = Boolean.parseBoolean(prop.getProperty("versionChecking", "" + versionChecking));
