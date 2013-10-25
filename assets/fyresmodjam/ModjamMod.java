@@ -272,7 +272,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 					level = Integer.parseInt(entity.getEntityData().getString(name));
 				} catch (Exception e) {e.printStackTrace();}
 				
-				int healthGain = (level - 1) * 5 + (level == 5 ? 5 : 0);
+				int healthGain = (int) ((level - 1) * (((EntityLivingBase) entity).getMaxHealth()/4) + (level == 5 ? ((EntityLivingBase) entity).getMaxHealth()/4 : 0));
 				
 				if(healthGain != 0) {
 					((EntityLivingBase) entity).getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(((EntityLivingBase) entity).getMaxHealth() + healthGain);
