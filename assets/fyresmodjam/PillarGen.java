@@ -11,13 +11,13 @@ import cpw.mods.fml.common.IWorldGenerator;
 public class PillarGen implements IWorldGenerator {
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-        if(ModjamMod.spawnRandomPillars && world.provider.dimensionId == 0 && random.nextInt(50) == 0) {
+        if(ModjamMod.spawnRandomPillars && world.provider.dimensionId == 0 && random.nextInt(75) == 0) {
         	boolean placed = false;
         	
         	for(int y = 127, added = 0; y > 30 && !placed && added < 3; y--) {
         		for(int x = chunkX * 16; x < chunkX * 16 + 16 && !placed && added < 3; x++) {
         			for(int z = chunkZ * 16; z < chunkZ * 16 + 16 && !placed && added < 3; z++) {
-        				if(random.nextInt(10) != 0 || world.isAirBlock(x, y, z) || Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z) || world.getBlockId(x, y, z) == ModjamMod.blockTrap.blockID || world.getBlockId(x, y, z) == Block.leaves.blockID) {continue;}
+        				if(random.nextInt(15) != 0 || world.isAirBlock(x, y, z) || Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z) || world.getBlockId(x, y, z) == ModjamMod.blockTrap.blockID || world.getBlockId(x, y, z) == Block.leaves.blockID) {continue;}
         				
         				Block block = ModjamMod.blockPillar;
         		        

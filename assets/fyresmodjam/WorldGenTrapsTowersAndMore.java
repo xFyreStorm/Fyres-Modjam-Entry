@@ -13,23 +13,36 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.DungeonHooks;
 import cpw.mods.fml.common.IWorldGenerator;
 
-public class WorldGenTrapsTowerAndMore implements IWorldGenerator {
+public class WorldGenTrapsTowersAndMore implements IWorldGenerator {
 
-	public static final WeightedRandomChestContent[] field_111189_a = new WeightedRandomChestContent[] {new WeightedRandomChestContent(Item.ingotIron.itemID, 0, 1, 4, 10), new WeightedRandomChestContent(Item.bread.itemID, 0, 1, 1, 10), new WeightedRandomChestContent(Item.wheat.itemID, 0, 1, 4, 10), new WeightedRandomChestContent(Item.gunpowder.itemID, 0, 1, 4, 10), new WeightedRandomChestContent(Item.silk.itemID, 0, 1, 4, 10), new WeightedRandomChestContent(Item.bucketEmpty.itemID, 0, 1, 1, 10), new WeightedRandomChestContent(Item.redstone.itemID, 0, 1, 4, 10), new WeightedRandomChestContent(Item.nameTag.itemID, 0, 1, 1, 10)};
+	public static final WeightedRandomChestContent[] field_111189_a = new WeightedRandomChestContent[] {
+		new WeightedRandomChestContent(Item.ingotIron.itemID, 0, 1, 4, 10),
+		new WeightedRandomChestContent(Item.bread.itemID, 0, 1, 1, 10),
+		new WeightedRandomChestContent(Item.wheat.itemID, 0, 1, 4, 10),
+		new WeightedRandomChestContent(Item.gunpowder.itemID, 0, 1, 4, 10),
+		new WeightedRandomChestContent(Item.silk.itemID, 0, 1, 4, 10),
+		new WeightedRandomChestContent(Item.bucketEmpty.itemID, 0, 1, 1, 10),
+		new WeightedRandomChestContent(Item.redstone.itemID, 0, 1, 4, 10),
+		new WeightedRandomChestContent(Item.nameTag.itemID, 0, 1, 1, 10),
+	};
 
 	public static boolean genning = false;
+	
+	public static final String TOWER_CHESTS = "towerChests";
+	
+	public static ChestGenHooks chestGenInfo = new ChestGenHooks(TOWER_CHESTS, field_111189_a, 8, 8);
 	
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		
 		genning = true;
 		
-		boolean addedDungeon = random.nextInt(150) != 0 || !ModjamMod.spawnTowers;
+		boolean addedDungeon = random.nextInt(225) != 0 || !ModjamMod.spawnTowers;
 		
 		for(int y = 1; y < 127; y++) {
     		for(int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
     			for(int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
-    				if(random.nextInt(200) == 0 && (world.isAirBlock(x, y, z) || (Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z) && world.getBlockId(x, y, z) != Block.waterStill.blockID && world.getBlockId(x, y, z) != Block.waterMoving.blockID && world.getBlockId(x, y, z) != Block.lavaStill.blockID && world.getBlockId(x, y, z) != Block.lavaMoving.blockID)) && (!world.isAirBlock(x, y - 1, z) && world.getBlockId(x, y - 1, z) != ModjamMod.blockTrap.blockID && !Block.blocksList[world.getBlockId(x, y - 1, z)].isBlockReplaceable(world, x, y - 1, z))) {
+    				if(random.nextInt(300) == 0 && (world.isAirBlock(x, y, z) || (Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z) && world.getBlockId(x, y, z) != Block.waterStill.blockID && world.getBlockId(x, y, z) != Block.waterMoving.blockID && world.getBlockId(x, y, z) != Block.lavaStill.blockID && world.getBlockId(x, y, z) != Block.lavaMoving.blockID)) && (!world.isAirBlock(x, y - 1, z) && world.getBlockId(x, y - 1, z) != ModjamMod.blockTrap.blockID && !Block.blocksList[world.getBlockId(x, y - 1, z)].isBlockReplaceable(world, x, y - 1, z))) {
     					boolean skip = ModjamMod.trapsBelowGroundOnly && (world.getBlockId(x, y - 1, z) == Block.grass.blockID || world.getBlockId(x, y - 1, z) == Block.sand.blockID || world.getBlockId(x, y - 1, z) == Block.wood.blockID || world.canBlockSeeTheSky(x, y, z));
     					if(!skip && ModjamMod.blockTrap.canPlaceBlockAt(world, x, y, z)) {world.setBlock(x, y, z, ModjamMod.blockTrap.blockID, random.nextInt(BlockTrap.trapTypes), 0);}
     				}
@@ -70,8 +83,8 @@ public class WorldGenTrapsTowerAndMore implements IWorldGenerator {
     									TileEntityChest tileentitychest = (TileEntityChest) world.getBlockTileEntity(x + x2, y + y2, z + z2);
 
     									if(tileentitychest != null) {
-    										ChestGenHooks info = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
-    										WeightedRandomChestContent.generateChestContents(random, info.getItems(random), tileentitychest, info.getCount(random));
+    										//ChestGenHooks info = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
+    										WeightedRandomChestContent.generateChestContents(random, (y2/6 >= floors - 1 ? ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST) : chestGenInfo).getItems(random), tileentitychest, chestGenInfo.getCount(random));
     									}
     									
     									world.setBlock(x + x2, y + y2 - 1, z + z2, Block.obsidian.blockID);
