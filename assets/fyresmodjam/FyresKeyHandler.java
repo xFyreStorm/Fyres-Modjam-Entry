@@ -90,7 +90,7 @@ public class FyresKeyHandler extends KeyHandler {
 					String blessing = player.getEntityData().getString("Blessing");
 					Object[] params = null;
 					
-					if(blessing != null && blessing.equals("Mechanic")) {
+					if(blessing != null && blessing.equals("Mechanic") && minecraft.objectMouseOver != null) {
 						MovingObjectPosition o = minecraft.objectMouseOver;
 						if(o.typeOfHit == EnumMovingObjectType.TILE) {params = new Object[] {minecraft.objectMouseOver.blockX, minecraft.objectMouseOver.blockY, minecraft.objectMouseOver.blockZ};}
 					}
