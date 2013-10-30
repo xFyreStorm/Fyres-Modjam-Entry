@@ -7,8 +7,10 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -53,60 +55,76 @@ public class BlockPillar extends BlockContainer
     }
 
     public int idPicked(World par1World, int par2, int par3, int par4) {
-        return ModjamMod.itemPillar.itemID;
+    	return ModjamMod.itemPillar.itemID;
     }
 
     public boolean canHarvestBlock(EntityPlayer par1EntityPlayer, int par2) {
-        return false;
+    	return false;
     }
-    
+
     public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)  {
     	if(par1World.getBlockMetadata(par2, par3, par4) % 2 == 1) {par3--;}
-    	
+
     	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
-    	
-    	if(te != null && te instanceof TileEntityPillar && (!par5EntityPlayer.getEntityData().hasKey("Blessing") || !par5EntityPlayer.getEntityData().getString("Blessing").equals(((TileEntityPillar) te).blessing))) {
-    		
-    		boolean skip = false;
-    		
-    		for(int i = 0; i < par1World.loadedEntityList.size(); i++) {
-    			Entity e = (Entity) par1World.loadedEntityList.get(i);
-    			
-    			if(e instanceof EntityMob) {
-    				double xDiff = par2 - e.posX;
-    				double yDiff = par3 - e.posY;
-    				double zDiff = par4 - e.posZ;
-    				
-    				if(Math.abs(yDiff) > 4) {continue;}
-    				
-    				double dist = Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
-    				
-    				if(dist <= 14) {skip = true;}
+
+    	if(par5EntityPlayer.getHeldItem() == null || par5EntityPlayer.getHeldItem().getItem() == null || par5EntityPlayer.getHeldItem().getItemDamage() != 1 || par5EntityPlayer.getHeldItem().getItem().itemID != ModjamMod.sceptre.itemID) {
+    		if(te != null && te instanceof TileEntityPillar && (!par5EntityPlayer.getEntityData().hasKey("Blessing") || !par5EntityPlayer.getEntityData().getString("Blessing").equals(((TileEntityPillar) te).blessing))) {
+
+    			boolean skip = false;
+
+    			for(int i = 0; i < par1World.loadedEntityList.size(); i++) {
+    				Entity e = (Entity) par1World.loadedEntityList.get(i);
+
+    				if(e instanceof EntityMob) {
+    					double xDiff = par2 - e.posX;
+    					double yDiff = par3 - e.posY;
+    					double zDiff = par4 - e.posZ;
+
+    					if(Math.abs(yDiff) > 4) {continue;}
+
+    					double dist = Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
+
+    					if(dist <= 14) {skip = true;}
+    				}
+    			}
+
+    			if(!skip) {
+    				if(((TileEntityPillar) te).blessing != null) {
+    					EntityStatHelper.giveStat(par5EntityPlayer, "Blessing", ((TileEntityPillar) te).blessing);
+    					EntityStatHelper.giveStat(par5EntityPlayer, "BlessingActive", false);
+    					EntityStatHelper.giveStat(par5EntityPlayer, "BlessingCounter", 0);
+    					EntityStatHelper.giveStat(par5EntityPlayer, "BlessingCooldown", 0);
+
+    					if(par1World.isRemote) {
+    						//Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("Activated blessing of the " + ((TileEntityPillar) te).blessing + ".");
+    					} else {
+    						par1World.playSoundAtEntity(par5EntityPlayer, "fyresmodjam:pillarActivated", 1.0F, 1.0F);
+    						PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"Activated blessing of the " + ((TileEntityPillar) te).blessing + "."}), (Player) par5EntityPlayer);
+    					}
+    				}
+    			} else {
+    				if(!par1World.isRemote) {
+    					//Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7cCannot activate pillar with monsters nearby!");
+    					PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7cCannot activate pillar with monsters nearby!"}), (Player) par5EntityPlayer);
+    				}
     			}
     		}
-    		
-    		if(!skip) {
-    			if(((TileEntityPillar) te).blessing != null) {
-	    			EntityStatHelper.giveStat(par5EntityPlayer, "Blessing", ((TileEntityPillar) te).blessing);
-	    			EntityStatHelper.giveStat(par5EntityPlayer, "BlessingActive", false);
-	    			EntityStatHelper.giveStat(par5EntityPlayer, "BlessingCounter", 0);
-	    			EntityStatHelper.giveStat(par5EntityPlayer, "BlessingCooldown", 0);
-	    			
-	    			if(par1World.isRemote) {
-	    				//Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("Activated blessing of the " + ((TileEntityPillar) te).blessing + ".");
-	    			} else {
-	    				par1World.playSoundAtEntity(par5EntityPlayer, "fyresmodjam:pillarActivated", 1.0F, 1.0F);
-	    				PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"Activated blessing of the " + ((TileEntityPillar) te).blessing + "."}), (Player) par5EntityPlayer);
-	    			}
-    			}
-    		} else {
-    			if(!par1World.isRemote) {
-    				//Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7cCannot activate pillar with monsters nearby!");
-    				PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7cCannot activate pillar with monsters nearby!"}), (Player) par5EntityPlayer);
+    	} else if(!par1World.isRemote) {
+    		int damage = 0;
+
+    		if(te != null && te instanceof TileEntityPillar) {
+    			for(int i = 0; i < TileEntityPillar.validBlessings.length; i++) {
+    				if(TileEntityPillar.validBlessings[i].equals(((TileEntityPillar) te).blessing)) {damage = i + 1; break;}
     			}
     		}
+
+    		if(!par5EntityPlayer.capabilities.isCreativeMode) {par5EntityPlayer.getHeldItem().stackSize--;}
+    		par1World.spawnEntityInWorld(new EntityItem(par1World, par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, new ItemStack(ModjamMod.itemPillar, 1, damage)));
+    		par1World.setBlockToAir(par2, par3, par4);
+
+    		PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7oThe pillar deconstructs before you."}), (Player) par5EntityPlayer);
     	}
-    	
+
     	return true;
     }
 

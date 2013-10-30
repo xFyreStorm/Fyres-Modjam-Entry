@@ -75,7 +75,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Random r = new Random();
     
     public static int itemID = 2875, blockID = 2875, achievementID = 2500, examineKey = Keyboard.KEY_X, blessingKey = Keyboard.KEY_K;
-    public static int pillarGenChance = 75, maxPillarsPerChunk = 3, towerGenChance = 225, trapGenChance = 300, mushroomReplaceChance = 20;
+    public static int pillarGenChance = 75, maxPillarsPerChunk = 3, towerGenChance = 225, trapGenChance = 300, mushroomReplaceChance = 15;
     public static boolean pillarGlow = true, spawnTraps = true, spawnTowers = true, spawnRandomPillars = true, disableDisadvantages = false, versionChecking = true, trapsBelowGroundOnly = false, showAllPillarsInCreative = false, enableWeaponKillStats = true, enableMobKillStats = true;
     
     public static CreativeTabs tabModjamMod = new CreativeTabModjamMod(CreativeTabs.getNextID(), "The \"You Will Die\" Mod");
@@ -88,6 +88,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Item mysteryPotion;
     public static Item itemTrap;
     public static Item mysteryMushroom;
+    public static Item sceptre;
     
     public static Achievement startTheGame; 
     public static Achievement losingIsFun;
@@ -225,6 +226,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		mysteryPotion = new ItemMysteryPotion(itemID + 1).setUnlocalizedName("mysteryPotion").setCreativeTab(CreativeTabs.tabBrewing);
 		itemTrap = new ItemTrap(itemID + 2).setUnlocalizedName("itemTrap").setCreativeTab(CreativeTabs.tabBlock);
 		mysteryMushroom = new ItemMysteryMushroom(itemID + 3).setUnlocalizedName("mysteryMushroom").setCreativeTab(CreativeTabs.tabBrewing);
+		sceptre = new ItemObsidianSceptre(itemID + 4).setUnlocalizedName("sceptre").setCreativeTab(CreativeTabs.tabTools).setFull3D();
 		
 		GameRegistry.registerBlock(blockPillar, "blockPillar");
 		GameRegistry.registerTileEntity(TileEntityPillar.class, "Pillar Tile Entity");
@@ -240,6 +242,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		LanguageRegistry.addName(mysteryPotion, "Mystery Potion");
 		LanguageRegistry.addName(itemTrap, "Trap");
 		LanguageRegistry.addName(mysteryMushroom, "Mystery Mushroom");
+		LanguageRegistry.addName(sceptre, "Obsidian Sceptre");
 		
 		LanguageRegistry.instance().addStringLocalization("commands.currentBlessing.usage", "/currentBlessing - used to check your current blessing");
 		LanguageRegistry.instance().addStringLocalization("commands.currentDisadvantage.usage", "/currentDisadvantage - used to check your current world disadvantage");
@@ -256,6 +259,9 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 			GameRegistry.addShapelessRecipe(new ItemStack(mysteryPotion, 1, i + 13), new Object[] {new ItemStack(mysteryPotion, 1, i), Item.gunpowder});
 			GameRegistry.addShapelessRecipe(new ItemStack(mysteryPotion, 1, i), new Object[] {new ItemStack(Item.potion, 1, 0), Item.leather, new ItemStack(mysteryMushroom, 1, i)});
 		}
+		
+		GameRegistry.addRecipe(new ItemStack(sceptre, 1, 0), "X", "Y", "X", 'X', Block.obsidian, 'Y', Block.whiteStone);
+		GameRegistry.addShapelessRecipe(new ItemStack(sceptre, 1, 1), new Object[] {new ItemStack(sceptre, 1, 0), Item.enderPearl, Item.book});
 		
 		proxy.register();
 		
