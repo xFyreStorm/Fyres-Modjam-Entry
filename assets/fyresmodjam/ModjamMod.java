@@ -76,7 +76,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     
     public static int itemID = 2875, blockID = 2875, achievementID = 2500, examineKey = Keyboard.KEY_X, blessingKey = Keyboard.KEY_K;
     public static int pillarGenChance = 75, maxPillarsPerChunk = 3, towerGenChance = 225, trapGenChance = 300, mushroomReplaceChance = 20;
-    public static boolean pillarGlow = true, spawnTraps = true, spawnTowers = true, spawnRandomPillars = true, disableDisadvantages = false, versionChecking = true, trapsBelowGroundOnly = false, showAllPillarsInCreative = false;
+    public static boolean pillarGlow = true, spawnTraps = true, spawnTowers = true, spawnRandomPillars = true, disableDisadvantages = false, versionChecking = true, trapsBelowGroundOnly = false, showAllPillarsInCreative = false, enableWeaponKillStats = true, enableMobKillStats = true;
     
     public static CreativeTabs tabModjamMod = new CreativeTabModjamMod(CreativeTabs.getNextID(), "The \"You Will Die\" Mod");
     
@@ -237,6 +237,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		LanguageRegistry.instance().addStringLocalization("commands.currentDisadvantage.usage", "/currentDisadvantage - used to check your current world disadvantage");
 		LanguageRegistry.instance().addStringLocalization("commands.currentGoal.usage", "/currentGoal - used to check your current world goal");
 		LanguageRegistry.instance().addStringLocalization("commands.creatureKnowledge.usage", "/creatureKnowledge [page] - used to check your current creature knowledge stats");
+		LanguageRegistry.instance().addStringLocalization("commands.weaponKnowledge.usage", "/weaponKnowledge [page] - used to check your current weapon knowledge stats");
 		LanguageRegistry.instance().addStringLocalization("fyresmodjam.newVersion", "\u00A7bA newer version of the \"You Will Die\" Mod has been found (" + foundVersion + ").");
 		
 		GameRegistry.addShapelessRecipe(new ItemStack(itemTrap, 1, 0), new Object[] {Block.pressurePlateIron, Block.cactus});
@@ -498,6 +499,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		event.registerServerCommand(new CommandCurrentDisadvantage());
 		event.registerServerCommand(new CommandCurrentWorldTask());
 		event.registerServerCommand(new CommandKillStats());
+		event.registerServerCommand(new CommandWeaponStats());
 	}
 
 	public static Achievement getNewAchievement(int id, int x, int y, ItemStack stack, String name, String displayName, String desc, Achievement prereq, boolean independent) {

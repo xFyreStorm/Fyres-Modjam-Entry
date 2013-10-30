@@ -30,5 +30,8 @@ public class CommonProxy {
 		ModjamMod.versionChecking = config.get(config.CATEGORY_GENERAL, "version_checking", ModjamMod.versionChecking).getBoolean(ModjamMod.versionChecking);
 		
 		ModjamMod.showAllPillarsInCreative = config.get(config.CATEGORY_GENERAL, "show_all_pillars_in_creative", ModjamMod.showAllPillarsInCreative).getBoolean(ModjamMod.showAllPillarsInCreative);
+		
+		ModjamMod.enableMobKillStats = config.get(config.CATEGORY_GENERAL, "enable_mob_kill_stats", ModjamMod.enableMobKillStats).getBoolean(ModjamMod.enableMobKillStats);
+		ModjamMod.enableWeaponKillStats = config.get(config.CATEGORY_GENERAL, "enable_weapon_kill_stats", ModjamMod.enableWeaponKillStats).getBoolean(ModjamMod.enableWeaponKillStats);
 	}
 }

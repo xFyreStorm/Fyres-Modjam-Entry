@@ -331,8 +331,10 @@ public class EntityStatHelper {
 			if(!killStats.hasKey(mob + "Kills")) {killStats.setInteger(mob + "Kills", 0);}
 			killStats.setInteger(mob + "Kills", killStats.getInteger(mob + "Kills") + 1);
 			
-			for(int i = 0; i < knowledge.length; i++) {
-				if(killCount[i] == killStats.getInteger(mob + "Kills")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7o\u00A73You've become a " + knowledge[i].toLowerCase() + " " + mob.toLowerCase() + " slayer! (+" + damageBonusString[i] + "% damage against " + mob.toLowerCase() + "s.)" + (i < knowledge.length - 1 ? " " + (killCount[i + 1] - killCount[i]) + " " + mob.toLowerCase() + " kills to next rank." : "")}), (Player) player); break;}
+			if(ModjamMod.enableMobKillStats) {
+				for(int i = 0; i < knowledge.length; i++) {
+					if(killCount[i] == killStats.getInteger(mob + "Kills")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7o\u00A73You've become a " + knowledge[i].toLowerCase() + " " + mob.toLowerCase() + " slayer! (+" + damageBonusString[i] + "% damage against " + mob.toLowerCase() + "s.)" + (i < knowledge.length - 1 ? " " + (killCount[i + 1] - killCount[i]) + " " + mob.toLowerCase() + " kills to next rank." : "")}), (Player) player); break;}
+				}
 			}
 			
 			String weapon = "misc";
@@ -346,8 +348,10 @@ public class EntityStatHelper {
 			if(!weaponStats.hasKey(weapon + "Kills")) {weaponStats.setInteger(weapon + "Kills", 0);}
 			weaponStats.setInteger(weapon + "Kills", weaponStats.getInteger(weapon + "Kills") + 1);
 			
-			for(int i = 0; i < knowledge.length; i++) {
-				if(killCount[i] * 2 == weaponStats.getInteger(weapon + "Kills")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7o\u00A73You've become a " + knowledge[i].toLowerCase() + " " + weapon.toLowerCase() + " user! (+" + damageBonusString[i] + "% damage with " + weapon.toLowerCase() + "s.)" + (i < knowledge.length - 1 ? " " + (killCount[i + 1] * 2 - killCount[i] * 2) + " " + weapon.toLowerCase() + " kills to next rank." : "")}), (Player) player); break;}
+			if(ModjamMod.enableWeaponKillStats) {
+				for(int i = 0; i < knowledge.length; i++) {
+					if(killCount[i] * 2 == weaponStats.getInteger(weapon + "Kills")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7o\u00A73You've become a " + knowledge[i].toLowerCase() + " " + weapon.toLowerCase() + " user! (+" + damageBonusString[i] + "% damage with " + weapon.toLowerCase() + "s.)" + (i < knowledge.length - 1 ? " " + (killCount[i + 1] * 2 - killCount[i] * 2) + " " + weapon.toLowerCase() + " kills to next rank." : "")}), (Player) player); break;}
+				}
 			}
 				
 		}

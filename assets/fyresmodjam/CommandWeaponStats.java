@@ -15,29 +15,28 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class CommandKillStats implements ICommand {
+public class CommandWeaponStats implements ICommand {
 
 	public int compareTo(Object arg0) {return 0;}
 
-	public String getCommandName() {return "creatureKnowledge";}
+	public String getCommandName() {return "weaponKnowledge";}
 
-	public String getCommandUsage(ICommandSender icommandsender) {return "commands.creatureKnowledge.usage";}
+	public String getCommandUsage(ICommandSender icommandsender) {return "commands.weaponKnowledge.usage";}
 
 	public List getCommandAliases() {return null;}
 
 	public void processCommand(ICommandSender icommandsender, String[] astring) {
 		int page = astring.length > 0 ? Integer.parseInt(astring[0]) - 1 : 0, maxPage = 0;
-		
 		if(icommandsender instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer) icommandsender;
+
+			String message = "\u00A7c\u00A7oWeapon kill stats not enabled.";
 			
-			String message = "\u00A7c\u00A7oMob kill stats not enabled.";
-			
-			if(ModjamMod.enableMobKillStats) {
-				message = "@Creature Knowledge:"; //\u00A7e\u00A7o
+			if(ModjamMod.enableWeaponKillStats) {
+				message = "@Weapon Knowledge:"; //\u00A7e\u00A7o
 				
-				if(entityplayer.getEntityData().hasKey("KillStats")) {
-					NBTTagCompound killStats = entityplayer.getEntityData().getCompoundTag("KillStats");
+				if(entityplayer.getEntityData().hasKey("WeaponStats")) {
+					NBTTagCompound killStats = entityplayer.getEntityData().getCompoundTag("WeaponStats");
 					
 					ArrayList<Object> objects = new ArrayList<Object>();
 					objects.addAll(killStats.getTags());
@@ -54,7 +53,7 @@ public class CommandKillStats implements ICommand {
 					if(page > maxPage) {page = maxPage;}
 					if(page < 0) {page = 0;}
 					
-					message = "@Creature Knowledge (page " + (page + 1) + "/" + (maxPage + 1) +  "):";
+					message = "@Weapon Knowledge (page " + (page + 1) + "/" + (maxPage + 1) +  "):";
 					
 					int count = 0, skip = 0;
 					for(Object o : objects) {
@@ -68,7 +67,7 @@ public class CommandKillStats implements ICommand {
 								if(kills >= EntityStatHelper.killCount[i]) {last = i; continue;} else {break;}
 							}
 							
-							message += "@\u00A7b    " + EntityStatHelper.knowledge[last] + " " + mob.toLowerCase() + " slayer\u00A73 " + (last > 0 ? "+" + EntityStatHelper.damageBonusString[last] + "% damage bonus (" : "(") + kills + " kill(s)" + (last < EntityStatHelper.knowledge.length - 1 ? ", " + (EntityStatHelper.killCount[last + 1] - kills + " kill(s) to next rank)") : ")");
+							message += "@\u00A7b    " + EntityStatHelper.knowledge[last] + " " + mob.toLowerCase() + " user\u00A73 " + (last > 0 ? "+" + EntityStatHelper.damageBonusString[last] + "% damage bonus (" : "(") + kills + " kill(s)" + (last < EntityStatHelper.knowledge.length - 1 ? ", " + (EntityStatHelper.killCount[last + 1] - kills + " kill(s) to next rank)") : ")");
 							count++;
 							
 							if(count >= 4) {break;}
