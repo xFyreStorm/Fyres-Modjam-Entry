@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -275,6 +276,24 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 					int last = 0;
 					for(int i = 0; i < EntityStatHelper.killCount.length; i++) {
 						if(kills >= EntityStatHelper.killCount[i]) {last = i; continue;} else {break;}
+					}
+					
+					damageMultiplier += EntityStatHelper.damageBonus[last];
+				}
+				
+				String weapon = "misc";
+				
+				if(event.source.getEntity() instanceof EntityPlayer && event.source.getEntity().getEntityData().hasKey("WeaponStats") && event.source.getEntity().getEntityData().getCompoundTag("WeaponStats").hasKey(weapon + "Kills")) {
+					EntityPlayer player = (EntityPlayer) event.source.getEntity();
+					if(player.getHeldItem() != null && player.getHeldItem().getItem() != null && player.getHeldItem().getItem() instanceof ItemSword || player.getHeldItem().getItem() instanceof ItemBow || player.getHeldItem().getItem() instanceof ItemAxe) {
+						weapon = EntityStatHelper.getUnalteredItemName(player.getHeldItem().getItem());
+					}
+					
+					int kills = event.source.getEntity().getEntityData().getCompoundTag("WeaponStats").getInteger(weapon + "Kills");
+					
+					int last = 0;
+					for(int i = 0; i < EntityStatHelper.killCount.length; i++) {
+						if(kills >= EntityStatHelper.killCount[i] * 2) {last = i; continue;} else {break;}
 					}
 					
 					damageMultiplier += EntityStatHelper.damageBonus[last];

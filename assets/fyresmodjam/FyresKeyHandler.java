@@ -64,7 +64,7 @@ public class FyresKeyHandler extends KeyHandler {
 								int index = 0;
 								for(int i = 0; i < TileEntityPillar.validBlessings.length; i++) {if(TileEntityPillar.validBlessings[i].equals(((TileEntityPillar) te).blessing)) {index = i; break;}}
 								
-								String s = "\u00A7eBlessing of the " + ((TileEntityPillar) te).blessing + ": " + TileEntityPillar.blessingDescriptions[index] + ".";
+								String s = "@\u00A7eBlessing of the " + ((TileEntityPillar) te).blessing + ": " + TileEntityPillar.blessingDescriptions[index] + ".";
 								
 								for(String s2 : s.split("@")) {
 									Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(s2);

@@ -27,7 +27,10 @@ import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -90,6 +93,10 @@ public class EntityStatHelper {
 		String s = EntityList.getEntityString(entity);
         if(s == null) {s = "generic";}
         return StatCollector.translateToLocal("entity." + s + ".name");
+	}
+	
+	public static String getUnalteredItemName(Item item) {
+        return StatCollector.translateToLocal(item.getUnlocalizedName() + ".name");
 	}
 	
 	public static HashMap<Class, EntityStatTracker> statTrackersByClass = new HashMap<Class, EntityStatTracker>();
@@ -326,6 +333,21 @@ public class EntityStatHelper {
 			
 			for(int i = 0; i < knowledge.length; i++) {
 				if(killCount[i] == killStats.getInteger(mob + "Kills")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7o\u00A73You've become a " + knowledge[i].toLowerCase() + " " + mob.toLowerCase() + " slayer! (+" + damageBonusString[i] + "% damage against " + mob.toLowerCase() + "s.)" + (i < knowledge.length - 1 ? " " + (killCount[i + 1] - killCount[i]) + " " + mob.toLowerCase() + " kills to next rank." : "")}), (Player) player); break;}
+			}
+			
+			String weapon = "misc";
+			
+			if(player.getHeldItem() != null && player.getHeldItem().getItem() != null && player.getHeldItem().getItem() instanceof ItemSword || player.getHeldItem().getItem() instanceof ItemBow || player.getHeldItem().getItem() instanceof ItemAxe) {
+				weapon = getUnalteredItemName(player.getHeldItem().getItem());
+			}
+			
+			if(!player.getEntityData().hasKey("WeaponStats")) {player.getEntityData().setCompoundTag("WeaponStats", new NBTTagCompound());}
+			NBTTagCompound weaponStats = player.getEntityData().getCompoundTag("WeaponStats");
+			if(!weaponStats.hasKey(weapon + "Kills")) {weaponStats.setInteger(weapon + "Kills", 0);}
+			weaponStats.setInteger(weapon + "Kills", weaponStats.getInteger(weapon + "Kills") + 1);
+			
+			for(int i = 0; i < knowledge.length; i++) {
+				if(killCount[i] * 2 == weaponStats.getInteger(weapon + "Kills")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7o\u00A73You've become a " + knowledge[i].toLowerCase() + " " + weapon.toLowerCase() + " user! (+" + damageBonusString[i] + "% damage with " + weapon.toLowerCase() + "s.)" + (i < knowledge.length - 1 ? " " + (killCount[i + 1] * 2 - killCount[i] * 2) + " " + weapon.toLowerCase() + " kills to next rank." : "")}), (Player) player); break;}
 			}
 				
 		}
