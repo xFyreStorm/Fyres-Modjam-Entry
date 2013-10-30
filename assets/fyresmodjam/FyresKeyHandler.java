@@ -41,52 +41,62 @@ public class FyresKeyHandler extends KeyHandler {
 
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
-		if(tickEnd) {
-			if(kb.equals(examine)) {
-				Minecraft minecraft = Minecraft.getMinecraft();
-				EntityPlayer player = minecraft.thePlayer;
-				
-				if(player != null && minecraft.objectMouseOver != null) {
-					
-					MovingObjectPosition o = minecraft.objectMouseOver;
-					
-					if(o.typeOfHit == EnumMovingObjectType.TILE) {
-						int x = minecraft.objectMouseOver.blockX;
-						int y = minecraft.objectMouseOver.blockY;
-						int z = minecraft.objectMouseOver.blockZ; 
+		if(tickEnd && Minecraft.getMinecraft().inGameHasFocus) {
+			Minecraft minecraft = Minecraft.getMinecraft();
+			EntityPlayer player = minecraft.thePlayer;
+			
+			if(player != null) {
+				if(kb.equals(examine)) {
+					if(minecraft.objectMouseOver != null) {
 						
-						if(minecraft.theWorld.getBlockId(x, y, z) == ModjamMod.blockPillar.blockID && minecraft.theWorld.getBlockMetadata(x, y, z) == 1) {y--;}
+						MovingObjectPosition o = minecraft.objectMouseOver;
 						
-						TileEntity te = minecraft.theWorld.getBlockTileEntity(x, y, z);
-						
-						if(te != null && te instanceof TileEntityPillar) {
-							int index = 0;
-							for(int i = 0; i < TileEntityPillar.validBlessings.length; i++) {if(TileEntityPillar.validBlessings[i].equals(((TileEntityPillar) te).blessing)) {index = i; break;}}
+						if(o.typeOfHit == EnumMovingObjectType.TILE) {
+							int x = minecraft.objectMouseOver.blockX;
+							int y = minecraft.objectMouseOver.blockY;
+							int z = minecraft.objectMouseOver.blockZ; 
 							
-							String s = "\u00A7eBlessing of the " + ((TileEntityPillar) te).blessing + ": " + TileEntityPillar.blessingDescriptions[index] + ".";
+							if(minecraft.theWorld.getBlockId(x, y, z) == ModjamMod.blockPillar.blockID && (minecraft.theWorld.getBlockMetadata(x, y, z) % 2) == 1) {y--;}
 							
-							for(String s2 : s.split("@")) {
-								Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(s2);
-							}
+							TileEntity te = minecraft.theWorld.getBlockTileEntity(x, y, z);
 							
-						} else if(te != null && te instanceof TileEntityTrap) {
-							String placedBy = ((TileEntityTrap) te).placedBy;
-							
-							if(placedBy != null) {
-								Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eThis " + ItemTrap.names[te.getBlockMetadata() % BlockTrap.trapTypes].toLowerCase() + " was placed by " + (placedBy.equals(player.getEntityName()) ? "you": placedBy) + ".");
+							if(te != null && te instanceof TileEntityPillar) {
+								int index = 0;
+								for(int i = 0; i < TileEntityPillar.validBlessings.length; i++) {if(TileEntityPillar.validBlessings[i].equals(((TileEntityPillar) te).blessing)) {index = i; break;}}
+								
+								String s = "\u00A7eBlessing of the " + ((TileEntityPillar) te).blessing + ": " + TileEntityPillar.blessingDescriptions[index] + ".";
+								
+								for(String s2 : s.split("@")) {
+									Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(s2);
+								}
+								
+							} else if(te != null && te instanceof TileEntityTrap) {
+								String placedBy = ((TileEntityTrap) te).placedBy;
+								
+								if(placedBy != null) {
+									Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eThis " + ItemTrap.names[te.getBlockMetadata() % BlockTrap.trapTypes].toLowerCase() + " was placed by " + (placedBy.equals(player.getEntityName()) ? "you": placedBy) + ".");
+								} else {
+									Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eThis " + ItemTrap.names[te.getBlockMetadata() % BlockTrap.trapTypes].toLowerCase() + " doesn't seem to have been placed by anyone.");
+								}
 							} else {
-								Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eThis " + ItemTrap.names[te.getBlockMetadata() % BlockTrap.trapTypes].toLowerCase() + " doesn't seem to have been placed by anyone.");
+								String name = new ItemStack(minecraft.theWorld.getBlockId(x, y, z), 1, minecraft.theWorld.getBlockMetadata(x, y, z)).getDisplayName().toLowerCase();
+								Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eIt's a " + name + (!name.contains("block") ? " block." : "."));
 							}
-						} else {
-							String name = new ItemStack(minecraft.theWorld.getBlockId(x, y, z), 1, minecraft.theWorld.getBlockMetadata(x, y, z)).getDisplayName().toLowerCase();
-							Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eIt's a " + name + (!name.contains("block") ? " block." : "."));
+						} else if(o.typeOfHit == EnumMovingObjectType.ENTITY && o.entityHit != null) {
+							PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.EXAMINE_MOB, new Object[] {o.entityHit.dimension, o.entityHit.entityId}));
 						}
-					} else if(o.typeOfHit == EnumMovingObjectType.ENTITY && o.entityHit != null) {
-						PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.EXAMINE_MOB, new Object[] {o.entityHit.dimension, o.entityHit.entityId}));
 					}
+				} else if(kb.equals(activateBlessing)) {
+					String blessing = player.getEntityData().getString("Blessing");
+					Object[] params = null;
+					
+					if(blessing != null && blessing.equals("Mechanic")) {
+						MovingObjectPosition o = minecraft.objectMouseOver;
+						if(o.typeOfHit == EnumMovingObjectType.TILE) {params = new Object[] {minecraft.objectMouseOver.blockX, minecraft.objectMouseOver.blockY, minecraft.objectMouseOver.blockZ};}
+					}
+					
+					PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.ACTIVATE_BLESSING, params));
 				}
-			} else if(kb.equals(activateBlessing)) {
-				PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.ACTIVATE_BLESSING));
 			}
 		}
 	}

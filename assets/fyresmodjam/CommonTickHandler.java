@@ -58,10 +58,10 @@ public class CommonTickHandler implements ITickHandler {
 				int coolDown = 0, counter = 0, timer = 0;
 				boolean blessingActive = EntityStatHelper.hasStat(player, "BlessingActive") ? Boolean.parseBoolean(EntityStatHelper.getStat(player, "BlessingActive")) : false;
 				
-				if(EntityStatHelper.hasStat(player, "BlessingCooldown")) {
+				/*if(EntityStatHelper.hasStat(player, "BlessingCooldown")) {
 					coolDown = Integer.parseInt(EntityStatHelper.getStat(player, "BlessingCooldown"));
 					if(coolDown > 0) {coolDown--;}
-				}
+				}*/
 				
 				if(EntityStatHelper.hasStat(player, "BlessingTimer")) {
 					timer = Integer.parseInt(EntityStatHelper.getStat(player, "BlessingTimer"));
@@ -77,7 +77,7 @@ public class CommonTickHandler implements ITickHandler {
 							
 							if(counter == 0) {
 								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7cYou calm down."}), (Player) player);
-								coolDown = 100; timer = 0; blessingActive = false;
+								coolDown = (int) (player.worldObj.getWorldTime() + 1200); timer = 0; blessingActive = false;
 							}
 						}
 					}
@@ -91,8 +91,6 @@ public class CommonTickHandler implements ITickHandler {
 						player.setAir(0);
 					} else if(blessing.equals("Inferno") && player.isWet() && player.ticksExisted % 10 == 0) {
 						player.attackEntityFrom(DamageSource.drown, 1.0F);
-					} else if(blessing.equals("Inferno") && player.isWet() && player.ticksExisted % 10 == 0) {
-						player.attackEntityFrom(DamageSource.drown, 1.0F);
 					}/* else if(blessing.equals("Healer")) {
 						if(player.worldObj.getGameRules().getGameRuleBooleanValue("naturalRegeneration") && ((player.worldObj.difficultySetting == 0 && player.func_110143_aJ() < player.func_110138_aP() && player.ticksExisted % 20 * 12 == 0) || (player.getFoodStats().getFoodLevel() >= 18 && player.getEntityData().getInteger("foodTickTimer") >= 80 && player.shouldHeal()))) {
 							player.heal(1.0F);
@@ -102,7 +100,7 @@ public class CommonTickHandler implements ITickHandler {
 				}
 				
 				EntityStatHelper.giveStat(player, "BlessingActive", blessingActive);
-				EntityStatHelper.giveStat(player, "BlessingCooldown", coolDown);
+				if(coolDown != 0) {EntityStatHelper.giveStat(player, "BlessingCooldown", coolDown);}
 				EntityStatHelper.giveStat(player, "BlessingCounter", counter);
 				EntityStatHelper.giveStat(player, "BlessingTimer", timer);
 				

@@ -34,6 +34,23 @@ public class BlockPillar extends BlockContainer
     public int idDropped(int par1, Random par2Random, int par3) {
         return 0;
     }
+    
+    public int getDamageValue(World par1World, int par2, int par3, int par4) {
+    	int damage = 0;
+    	
+    	if(ModjamMod.showAllPillarsInCreative) {
+	    	int meta = par1World.getBlockMetadata(par2, par3, par4);
+	    	TileEntity te = par1World.getBlockTileEntity(par2, par3 - (meta == 1 ? 1 : 0), par4);
+	    	
+	    	if(te != null && te instanceof TileEntityPillar) {
+	    		for(int i = 0; i < TileEntityPillar.validBlessings.length; i++) {
+	    			if(TileEntityPillar.validBlessings[i].equals(((TileEntityPillar) te).blessing)) {damage = i + 1; break;}
+	    		}
+	    	}
+    	}
+    	
+    	return damage;
+    }
 
     public int idPicked(World par1World, int par2, int par3, int par4) {
         return ModjamMod.itemPillar.itemID;
@@ -44,7 +61,7 @@ public class BlockPillar extends BlockContainer
     }
     
     public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)  {
-    	if(par1World.getBlockMetadata(par2, par3, par4) == 1) {par3--;}
+    	if(par1World.getBlockMetadata(par2, par3, par4) % 2 == 1) {par3--;}
     	
     	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
     	
@@ -99,7 +116,7 @@ public class BlockPillar extends BlockContainer
         if (!par1World.isRemote && !WorldGenTrapsTowersAndMore.genning) {
             int i1 = par1World.getBlockMetadata(par2, par3, par4);
 
-            if (i1 == 0) {
+            if (i1 % 2 == 0) {
                 if (par1World.isAirBlock(par2, par3 + 1, par4) || par1World.getBlockId(par2, par3 + 1, par4) != par1World.getBlockId(par2, par3, par4)) {
                     //this.dropBlockAsItem(par1World, par2, par3, par4, i1, 0);
                     par1World.setBlockToAir(par2, par3, par4);
@@ -120,7 +137,7 @@ public class BlockPillar extends BlockContainer
     public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4) {
         int l = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
 
-        if (l == 0) {
+        if (l % 2 == 0) {
             this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
         } else {
             this.setBlockBounds(0.0F, -1.0F, 0.0F, 1.0F, 1.0F, 1.0F);
@@ -137,7 +154,7 @@ public class BlockPillar extends BlockContainer
     }
 
     public boolean hasTileEntity(int metadata) {
-        return metadata == 0;
+        return metadata % 2 == 0;
     }
 
     @Override

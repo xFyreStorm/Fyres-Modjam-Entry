@@ -28,5 +28,7 @@ public class CommonProxy {
 		ModjamMod.spawnRandomPillars = config.get(config.CATEGORY_GENERAL, "spawn_random_pillars", ModjamMod.spawnRandomPillars).getBoolean(ModjamMod.spawnRandomPillars);
 		ModjamMod.disableDisadvantages = config.get(config.CATEGORY_GENERAL, "disable_disadvantages", ModjamMod.disableDisadvantages).getBoolean(ModjamMod.disableDisadvantages);
 		ModjamMod.versionChecking = config.get(config.CATEGORY_GENERAL, "version_checking", ModjamMod.versionChecking).getBoolean(ModjamMod.versionChecking);
+		
+		ModjamMod.showAllPillarsInCreative = config.get(config.CATEGORY_GENERAL, "show_all_pillars_in_creative", ModjamMod.showAllPillarsInCreative).getBoolean(ModjamMod.showAllPillarsInCreative);
 	}
 }

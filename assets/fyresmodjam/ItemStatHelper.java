@@ -307,7 +307,9 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 					} else if(blessing.equals("Inferno") && event.source.getEntity().isBurning()) {
 						damageMultiplier += 0.5F;
 					} else if(blessing.equals("Berserker") && EntityStatHelper.hasStat(event.source.getEntity(), "BlessingActive") ? Boolean.parseBoolean(EntityStatHelper.getStat(event.source.getEntity(), "BlessingActive")) : false) {
-						damageMultiplier += 0.33F;
+						damageMultiplier += 0.4F;
+					} else if(event.source.getEntity() instanceof EntityLivingBase && blessing.equals("Loner")) {
+						damageMultiplier += 0.4F * (1.0F - (((EntityLivingBase) event.source.getEntity()).getHealth() / ((EntityLivingBase) event.source.getEntity()).getMaxHealth()));
 					}
 				}
 			}

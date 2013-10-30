@@ -98,8 +98,7 @@ public class PacketHandler implements IPacketHandler {
 							
 							if(!EntityStatHelper.hasStat(player, "BlessingCooldown")) {EntityStatHelper.giveStat(player, "BlessingCooldown", 0);}
 							
-							if(EntityStatHelper.getStat(player, "BlessingCooldown").equals("0")) {
-								
+							if(EntityStatHelper.getStat(player, "BlessingCooldown").equals("0") || Integer.parseInt(EntityStatHelper.getStat(player, "BlessingCooldown")) <= player.worldObj.getWorldTime()) {
 								if(!blessingActive) {
 									if(blessing != null) {
 										if(blessing.equals("Berserker")) {
@@ -109,6 +108,22 @@ public class PacketHandler implements IPacketHandler {
 											} else {
 												PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7cYou have no berserk counters."}), (Player) player);
 											}
+										} else if(blessing.equals("Mechanic")) {
+											x = inputStream.readInt();
+											y = inputStream.readInt();
+											z = inputStream.readInt();
+											
+											TileEntity te = player.worldObj.getBlockTileEntity(x, y, z);
+											
+											if(te != null && te instanceof TileEntityTrap) {
+												PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7oYou disarm and salvage the trap."}), (Player) player);
+												player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, x + 0.5F, y, z + 0.5F, new ItemStack(ModjamMod.itemTrap.itemID, 1, player.worldObj.getBlockMetadata(x, y, z) % BlockTrap.trapTypes)));
+												player.worldObj.setBlockToAir(x, y, z);
+											
+												EntityStatHelper.giveStat(player, "BlessingCooldown", (int) ((player.worldObj.getWorldTime() / 24000) + 24000));
+											} else {
+												PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7oNo selected trap."}), (Player) player);
+											}
 										}
 									}
 								} else {
@@ -117,14 +132,14 @@ public class PacketHandler implements IPacketHandler {
 									if(blessing != null) {
 										if(blessing.equals("Berserker")) {
 											PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7cYou calm down."}), (Player) player);
-											EntityStatHelper.giveStat(player, "BlessingCooldown", 100);
+											EntityStatHelper.giveStat(player, "BlessingCooldown", (int) (player.worldObj.getWorldTime() + 1200));
 										}
 									}
 									
 									EntityStatHelper.giveStat(player, "BlessingTimer", 0);
 								}
 							} else {
-								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7cBlessing is on cooldown. (" + Integer.parseInt(EntityStatHelper.getStat(player, "BlessingCooldown"))/20 + "s)"}), (Player) player);
+								PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7cBlessing is on cooldown. (" + (Integer.parseInt(EntityStatHelper.getStat(player, "BlessingCooldown")) - player.worldObj.getWorldTime())/20 + "s)"}), (Player) player);
 							}
 							
 							EntityStatHelper.giveStat(player, "BlessingActive", blessingActive);

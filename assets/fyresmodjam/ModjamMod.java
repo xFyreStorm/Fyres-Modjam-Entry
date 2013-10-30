@@ -76,7 +76,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     
     public static int itemID = 2875, blockID = 2875, achievementID = 2500, examineKey = Keyboard.KEY_X, blessingKey = Keyboard.KEY_K;
     public static int pillarGenChance = 75, maxPillarsPerChunk = 3, towerGenChance = 225, trapGenChance = 300, mushroomReplaceChance = 20;
-    public static boolean pillarGlow = true, spawnTraps = true, spawnTowers = true, spawnRandomPillars = true, disableDisadvantages = false, versionChecking = true, trapsBelowGroundOnly = false;
+    public static boolean pillarGlow = true, spawnTraps = true, spawnTowers = true, spawnRandomPillars = true, disableDisadvantages = false, versionChecking = true, trapsBelowGroundOnly = false, showAllPillarsInCreative = false;
     
     public static CreativeTabs tabModjamMod = new CreativeTabModjamMod(CreativeTabs.getNextID(), "The \"You Will Die\" Mod");
     
@@ -97,7 +97,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static String version = "v0.0.3a";
     public static String foundVersion = "v0.0.3a";
 	
-    public static void loadProperties() {
+    /*public static void loadProperties() {
 		Properties prop = new Properties();
 		
 		try {
@@ -118,7 +118,9 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		spawnTraps = !Boolean.parseBoolean(prop.getProperty("disableTraps", "" + (!spawnTraps)));
 		trapsBelowGroundOnly = Boolean.parseBoolean(prop.getProperty("trapsBelowGroundOnly", "" + trapsBelowGroundOnly));
 		versionChecking = Boolean.parseBoolean(prop.getProperty("versionChecking", "" + versionChecking));
-    }
+		
+		showAllPillarsInCreative = Boolean.parseBoolean(prop.getProperty("showAllPillarsInCreative", "" + showAllPillarsInCreative));
+    }*/
     
     public static ItemStack losingIsFunStack = new ItemStack(Item.bow, 1);
     public static ItemStack whoopsStack = new ItemStack(Item.flintAndSteel, 1, 1);
@@ -234,6 +236,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		LanguageRegistry.instance().addStringLocalization("commands.currentBlessing.usage", "/currentBlessing - used to check your current blessing");
 		LanguageRegistry.instance().addStringLocalization("commands.currentDisadvantage.usage", "/currentDisadvantage - used to check your current world disadvantage");
 		LanguageRegistry.instance().addStringLocalization("commands.currentGoal.usage", "/currentGoal - used to check your current world goal");
+		LanguageRegistry.instance().addStringLocalization("commands.creatureKnowledge.usage", "/creatureKnowledge [page] - used to check your current creature knowledge stats");
 		LanguageRegistry.instance().addStringLocalization("fyresmodjam.newVersion", "\u00A7bA newer version of the \"You Will Die\" Mod has been found (" + foundVersion + ").");
 		
 		GameRegistry.addShapelessRecipe(new ItemStack(itemTrap, 1, 0), new Object[] {Block.pressurePlateIron, Block.cactus});
@@ -494,6 +497,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		event.registerServerCommand(new CommandCurrentBlessing());
 		event.registerServerCommand(new CommandCurrentDisadvantage());
 		event.registerServerCommand(new CommandCurrentWorldTask());
+		event.registerServerCommand(new CommandKillStats());
 	}
 
 	public static Achievement getNewAchievement(int id, int x, int y, ItemStack stack, String name, String displayName, String desc, Achievement prereq, boolean independent) {
