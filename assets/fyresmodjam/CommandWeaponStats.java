@@ -64,10 +64,10 @@ public class CommandWeaponStats implements ICommand {
 							
 							int last = 0;
 							for(int i = 0; i < EntityStatHelper.killCount.length; i++) {
-								if(kills >= EntityStatHelper.killCount[i]) {last = i; continue;} else {break;}
+								if(kills >= EntityStatHelper.killCount[i] * 2) {last = i; continue;} else {break;}
 							}
 							
-							message += "@\u00A7b    " + EntityStatHelper.knowledge[last] + " " + mob.toLowerCase() + " user\u00A73 " + (last > 0 ? "+" + EntityStatHelper.damageBonusString[last] + "% damage bonus (" : "(") + kills + " kill(s)" + (last < EntityStatHelper.knowledge.length - 1 ? ", " + (EntityStatHelper.killCount[last + 1] - kills + " kill(s) to next rank)") : ")");
+							message += "@\u00A7b    " + EntityStatHelper.knowledge[last] + " " + mob.toLowerCase() + " user\u00A73 " + (last > 0 ? "+" + EntityStatHelper.damageBonusString[last] + "% damage bonus (" : "(") + kills + " kill(s)" + (last < EntityStatHelper.knowledge.length - 1 ? ", " + (EntityStatHelper.killCount[last + 1] * 2 - kills + " kill(s) to next rank)") : ")");
 							count++;
 							
 							if(count >= 4) {break;}

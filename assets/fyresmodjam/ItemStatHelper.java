@@ -236,7 +236,7 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 			
 			if(event.entity.getEntityData().hasKey("Blessing")) {
 				if(event.entity.getEntityData().getString("Blessing").equals("Guardian")) {
-					damageMultiplier -= 0.25F;
+					damageMultiplier -= 0.20F;
 				} else if(event.entity.getEntityData().getString("Blessing").equals("Inferno") && (event.source.isFireDamage() || event.source.getDamageType().equals("inFire")  || event.source.getDamageType().equals("onFire")  || event.source.getDamageType().equals("lava"))) {
 					skip = true;
 					damageMultiplier = 0;
@@ -305,11 +305,11 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 					if(event.source.getEntity() instanceof EntityLivingBase) {held = ((EntityLivingBase) event.source.getEntity()).getHeldItem();}
 					
 					if(blessing.equals("Warrior") && (event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob"))) {
-						damageMultiplier += 0.25F;
+						damageMultiplier += 0.2F;
 					} else if(blessing.equals("Hunter") && event.source.isProjectile()) {
-						damageMultiplier += 0.25F;
+						damageMultiplier += 0.2F;
 					} else if(blessing.equals("Miner") && held != null && held.getItem() instanceof ItemPickaxe) {
-						damageMultiplier += 0.25F;
+						damageMultiplier += 0.2F;
 					} else if(blessing.equals("Lumberjack") && held != null && held.getItem() instanceof ItemAxe) {
 						damageMultiplier += 0.15F;
 					} else if(event.entityLiving != null && blessing.equals("Ninja") && event.source.getEntity().isSneaking() && event.entityLiving.getHealth() == event.entityLiving.getMaxHealth()) {
@@ -323,11 +323,11 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 							damageMultiplier -= 0.2F;
 						}
 					} else if(blessing.equals("Inferno") && event.source.getEntity().isBurning()) {
-						damageMultiplier += 0.5F;
+						damageMultiplier += 0.35F;
 					} else if(blessing.equals("Berserker") && EntityStatHelper.hasStat(event.source.getEntity(), "BlessingActive") ? Boolean.parseBoolean(EntityStatHelper.getStat(event.source.getEntity(), "BlessingActive")) : false) {
-						damageMultiplier += 0.4F;
+						damageMultiplier += 0.3F;
 					} else if(event.source.getEntity() instanceof EntityLivingBase && blessing.equals("Loner")) {
-						damageMultiplier += 0.4F * (1.0F - (((EntityLivingBase) event.source.getEntity()).getHealth() / ((EntityLivingBase) event.source.getEntity()).getMaxHealth()));
+						damageMultiplier += 0.35F * (1.0F - (((EntityLivingBase) event.source.getEntity()).getHealth() / ((EntityLivingBase) event.source.getEntity()).getMaxHealth()));
 					}
 				}
 			}

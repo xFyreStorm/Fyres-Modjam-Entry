@@ -53,8 +53,8 @@ public class EntityStatHelper {
 	
 	public static String[] knowledge = {"Clueless", "Novice", "Competent", "Talented", "Expert", "Professional", "Master", "Legendary"};
 	public static int[] killCount = {0, 10, 25, 50, 100, 250, 500, 1000};
-	public static float[] damageBonus = {0, 0.01F, 0.025F, 0.05F, 0.075F, 0.1F, 0.15F, 0.25F};
-	public static String[] damageBonusString = {"0", "1", "2.5", "5", "7.5", "10", "15", "25"};
+	public static float[] damageBonus = {0, 0.01F, 0.025F, 0.05F, 0.075F, 0.1F, 0.15F, 0.2F};
+	public static String[] damageBonusString = {"0", "1", "2.5", "5", "7.5", "10", "15", "20"};
 	
 	//There's probably a better way of doing all of this. :P Oh well.
 	
