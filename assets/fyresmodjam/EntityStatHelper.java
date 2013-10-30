@@ -31,6 +31,7 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -335,11 +336,22 @@ public class EntityStatHelper {
 				for(int i = 0; i < knowledge.length; i++) {
 					if(killCount[i] == killStats.getInteger(mob + "Kills")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7o\u00A73You've become a " + knowledge[i].toLowerCase() + " " + mob.toLowerCase() + " slayer! (+" + damageBonusString[i] + "% damage against " + mob.toLowerCase() + "s.)" + (i < knowledge.length - 1 ? " " + (killCount[i + 1] - killCount[i]) + " " + mob.toLowerCase() + " kills to next rank." : "")}), (Player) player); break;}
 				}
+				
+				int count = 0;
+				
+				for(Object object : killStats.getTags()) {
+					if(object == null || !(object instanceof NBTBase)) {continue;}
+					if(killStats.getInteger(((NBTBase) object).getName()) >= killCount[2]) {count++;}
+				}
+				
+				if(count >= 5) {player.triggerAchievement(ModjamMod.theHunt);}
 			}
 			
 			String weapon = "misc";
 			
-			if(player.getHeldItem() != null && player.getHeldItem().getItem() != null && player.getHeldItem().getItem() instanceof ItemSword || player.getHeldItem().getItem() instanceof ItemBow || player.getHeldItem().getItem() instanceof ItemAxe) {
+			if(player.getHeldItem() == null) {
+				weapon = "fist";
+			} else if(player.getHeldItem().getItem() != null && player.getHeldItem().getItem() instanceof ItemSword || player.getHeldItem().getItem() instanceof ItemBow || player.getHeldItem().getItem() instanceof ItemAxe) {
 				weapon = getUnalteredItemName(player.getHeldItem().getItem());
 			}
 			
@@ -352,6 +364,15 @@ public class EntityStatHelper {
 				for(int i = 0; i < knowledge.length; i++) {
 					if(killCount[i] * 2 == weaponStats.getInteger(weapon + "Kills")) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7o\u00A73You've become a " + knowledge[i].toLowerCase() + " " + weapon.toLowerCase() + " user! (+" + damageBonusString[i] + "% damage with " + weapon.toLowerCase() + "s.)" + (i < knowledge.length - 1 ? " " + (killCount[i + 1] * 2 - killCount[i] * 2) + " " + weapon.toLowerCase() + " kills to next rank." : "")}), (Player) player); break;}
 				}
+				
+				int count = 0;
+				
+				for(Object object : weaponStats.getTags()) {
+					if(object == null || !(object instanceof NBTBase)) {continue;}
+					if(weaponStats.getInteger(((NBTBase) object).getName()) >= killCount[1] * 2) {count++;}
+				}
+				
+				if(count >= 10) {player.triggerAchievement(ModjamMod.jackOfAllTrades);}
 			}
 				
 		}

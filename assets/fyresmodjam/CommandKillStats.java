@@ -50,7 +50,7 @@ public class CommandKillStats implements ICommand {
 						}
 					});
 					
-					maxPage = Math.min(0, (killStats.getTags().size() - 1)/4);
+					maxPage = Math.max(0, (killStats.getTags().size())/4);
 					if(page > maxPage) {page = maxPage;}
 					if(page < 0) {page = 0;}
 					

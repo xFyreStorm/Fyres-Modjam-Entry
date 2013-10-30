@@ -284,7 +284,10 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 				String weapon = "misc";
 				if(ModjamMod.enableWeaponKillStats && event.source.getEntity() instanceof EntityPlayer && event.source.getEntity().getEntityData().hasKey("WeaponStats") && event.source.getEntity().getEntityData().getCompoundTag("WeaponStats").hasKey(weapon + "Kills")) {
 					EntityPlayer player = (EntityPlayer) event.source.getEntity();
-					if(player.getHeldItem() != null && player.getHeldItem().getItem() != null && player.getHeldItem().getItem() instanceof ItemSword || player.getHeldItem().getItem() instanceof ItemBow || player.getHeldItem().getItem() instanceof ItemAxe) {
+					
+					if(player.getHeldItem() == null) {
+						weapon = "fist";
+					} else if(player.getHeldItem().getItem() != null && player.getHeldItem().getItem() instanceof ItemSword || player.getHeldItem().getItem() instanceof ItemBow || player.getHeldItem().getItem() instanceof ItemAxe) {
 						weapon = EntityStatHelper.getUnalteredItemName(player.getHeldItem().getItem());
 					}
 					

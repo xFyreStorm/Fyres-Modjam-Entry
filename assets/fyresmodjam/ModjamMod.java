@@ -92,6 +92,10 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Achievement startTheGame; 
     public static Achievement losingIsFun;
     public static Achievement whoops;
+    
+    public static Achievement theHunt;
+    public static Achievement jackOfAllTrades;
+    
     public static AchievementPage page;
     
     public static String version = "v0.0.3a";
@@ -175,7 +179,11 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		startTheGame = getNewAchievement(achievementID, 0, 0, new ItemStack(Item.swordIron, 1), "startTheGame", "You Will Die", "Join a world with this mod installed", null, true);
 		losingIsFun = getNewAchievement(achievementID + 1, -2, 0, losingIsFunStack, "losingIsFun", "Losing Is Fun", "Experience \"fun\"", startTheGame, false);
 		whoops = getNewAchievement(achievementID + 2, 2, 0, whoopsStack, "whoops", "Whoops", "Fail to disarm a trap", startTheGame, false);
-		page = new AchievementPage("The \"You Will Die\" Mod", startTheGame, losingIsFun, whoops);
+		
+		theHunt = getNewAchievement(achievementID + 3, 0, -2, new ItemStack(Item.bow, 1), "theHunt", "The Hunt", "Become a competent slayer of 5 or more different creatures", startTheGame, false);
+		jackOfAllTrades = getNewAchievement(achievementID + 4, 0, 2, new ItemStack(Block.workbench, 1), "jackOfAllTrades", "Jack of All Trades", "Become a novice user of at least 10 different weapons", startTheGame, false);
+		
+		page = new AchievementPage("The \"You Will Die\" Mod", startTheGame, losingIsFun, whoops, theHunt, jackOfAllTrades);
 		
 		AchievementPage.registerAchievementPage(page);
 	}
