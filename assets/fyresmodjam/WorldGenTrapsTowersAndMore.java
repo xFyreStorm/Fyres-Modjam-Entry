@@ -42,7 +42,7 @@ public class WorldGenTrapsTowersAndMore implements IWorldGenerator {
 		for(int y = 1; y < 127; y++) {
     		for(int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
     			for(int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
-    				if( (world.isAirBlock(x, y, z) || (Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z) && world.getBlockId(x, y, z) != Block.waterStill.blockID && world.getBlockId(x, y, z) != Block.waterMoving.blockID && world.getBlockId(x, y, z) != Block.lavaStill.blockID && world.getBlockId(x, y, z) != Block.lavaMoving.blockID)) && (!world.isAirBlock(x, y - 1, z) && world.getBlockId(x, y - 1, z) != ModjamMod.blockTrap.blockID && !Block.blocksList[world.getBlockId(x, y - 1, z)].isBlockReplaceable(world, x, y - 1, z)) && random.nextInt(ModjamMod.trapGenChance) == 0) {
+    				if((world.isAirBlock(x, y, z) || (Block.blocksList[world.getBlockId(x, y, z)].isBlockReplaceable(world, x, y, z) && world.getBlockId(x, y, z) != Block.waterStill.blockID && world.getBlockId(x, y, z) != Block.waterMoving.blockID && world.getBlockId(x, y, z) != Block.lavaStill.blockID && world.getBlockId(x, y, z) != Block.lavaMoving.blockID)) && (!world.isAirBlock(x, y - 1, z) && world.getBlockId(x, y - 1, z) != ModjamMod.blockTrap.blockID && !Block.blocksList[world.getBlockId(x, y - 1, z)].isBlockReplaceable(world, x, y - 1, z)) && random.nextInt(ModjamMod.trapGenChance) == 0) {
     					boolean skip = ModjamMod.trapsBelowGroundOnly && (world.getBlockId(x, y - 1, z) == Block.grass.blockID || world.getBlockId(x, y - 1, z) == Block.sand.blockID || world.getBlockId(x, y - 1, z) == Block.wood.blockID || world.canBlockSeeTheSky(x, y, z));
     					if(!skip && ModjamMod.blockTrap.canPlaceBlockAt(world, x, y, z)) {world.setBlock(x, y, z, ModjamMod.blockTrap.blockID, random.nextInt(BlockTrap.trapTypes), 0);}
     				}
@@ -53,6 +53,8 @@ public class WorldGenTrapsTowersAndMore implements IWorldGenerator {
 
     				if(!addedDungeon && ((world.getBlockId(x, y, z) == Block.grass.blockID || (world.getBlockId(x, y, z) == Block.sand.blockID && world.isAirBlock(x, y + 1, z)))) && world.getBlockId(x, y + 1, z) != Block.waterStill.blockID && world.getBlockId(x, y + 1, z) != Block.waterMoving.blockID && world.getBlockId(x, y + 1, z) != Block.lavaStill.blockID && world.getBlockId(x, y + 1, z) != Block.lavaMoving.blockID && ModjamMod.r.nextInt(100) == 0) {
     					
+    					boolean obsidian = ModjamMod.r.nextInt(100) == 0;
+    					
     					y--;
     					
     					int floors = 3 + random.nextInt(6);
@@ -61,40 +63,48 @@ public class WorldGenTrapsTowersAndMore implements IWorldGenerator {
     						for(int x2 = -5; x2 <= 5; x2++) {
     							for(int z2 = -5; z2 <= 5; z2++) {
     								
+    								if(((y2/6) % 2 == 0 ^ y2 % 6 < 2) && x2 == -2 && z2 == -5 && y2 > 1 && y2 <= floors * 6 - 4) {
+										world.setBlock(x + x2, y + y2, z + z2 + 2, Block.ladder.blockID, 3, 0);
+									}
+									
+									if(((y2/6) % 2 == 1 ^ y2 % 6 < 2) && x2 == 2 && z2 == 5 && y2 > 1 && y2 <= floors * 6 - 4) {
+										world.setBlock(x + x2, y + y2, z + z2 - 2, Block.ladder.blockID, 2, 0);
+									}
+    								
     								if((x2 * x2 + z2 * z2 <= 25) && ((y2 % 6 == 0 || y2 % 6 == 1) || z2 > 3 + (y2 < 6 ? 1 : 0) || z2 < -3 || Math.abs(x2) > 3 + (y2 < 5 ? 1 : 0))) {
     									if(world.getBlockId(x + x2, y + y2, z + z2) != Block.ladder.blockID && world.getBlockId(x + x2, y + y2, z + z2) != Block.obsidian.blockID) {
     										//if(y2 >= 5 && (y2 % 5 == 2 || y2 % 5 == 3) && (Math.abs(x2) == 2 || Math.abs(z2) == 2)) {
     										//	world.setBlock(x + x2, y + y2, z + z2, Block.fenceIron.blockID);
     										//} else {
-    											if(Math.abs(x2) <= 1 && Math.abs(z2) <= 1 && y2 != floors * 6 && y2 != 1 && y2 % 6 == 1) {
+    											if(!obsidian && Math.abs(x2) <= 1 && Math.abs(z2) <= 1 && y2 != floors * 6 && y2 != 1 && y2 % 6 == 1) {
     												world.setBlock(x + x2, y + y2, z + z2, Block.obsidian.blockID);
     											} else {
-    												world.setBlock(x + x2, y + y2, z + z2, random.nextBoolean() ? Block.cobblestoneMossy.blockID : Block.cobblestone.blockID);
+    												world.setBlock(x + x2, y + y2, z + z2, !obsidian ? (random.nextBoolean() ? Block.cobblestoneMossy.blockID : Block.cobblestone.blockID) : Block.obsidian.blockID);
     											}
     										//}
     									}
-    									
-    									if(x2 == 0 && z2 == -5 && y2 > 1 && y2 <= floors * 6 - 4) {
-    										world.setBlock(x + x2, y + y2, z + z2 + 2, Block.ladder.blockID, 3, 0);
-    									}
-    								} else if(y2 % 6 == 2 && x2 == 0 && z2 == 3 && (y2/6 >= floors - 1 || random.nextInt(3) == 0) && y2 >= 5) {
+    								} else if(y2 % 6 == 2 && x2 == 0 && z2 == ((y2/6) % 2 == 1 ? 3 : -3) && (y2/6 >= floors - 1 || random.nextInt(3) == 0) && y2 >= 5) {
     									world.setBlock(x + x2, y + y2, z + z2, Block.chest.blockID, 0, 2);
+    									
+    									boolean b = (y2/6) % 2 == 1;
     									
     									TileEntityChest tileentitychest = (TileEntityChest) world.getBlockTileEntity(x + x2, y + y2, z + z2);
 
     									if(tileentitychest != null) {
     										//ChestGenHooks info = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
-    										WeightedRandomChestContent.generateChestContents(random, (y2/6 >= floors - 1 ? ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST) : chestGenInfo).getItems(random), tileentitychest, chestGenInfo.getCount(random));
+    										WeightedRandomChestContent.generateChestContents(random, ((y2/6 >= floors - 1 || obsidian) ? ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST) : chestGenInfo).getItems(random), tileentitychest, chestGenInfo.getCount(random));
     									}
     									
-    									world.setBlock(x + x2, y + y2 - 1, z + z2, Block.obsidian.blockID);
-    									world.setBlock(x + x2, y + y2 + 2, z + z2, Block.obsidian.blockID);
-    									world.setBlock(x + x2, y + y2, z + z2 + 1, Block.obsidian.blockID);
-    									world.setBlock(x + x2, y + y2 + 1, z + z2 + 1, Block.obsidian.blockID);
-    									world.setBlock(x + x2 + 1, y + y2, z + z2, Block.obsidian.blockID);
-    									world.setBlock(x + x2 - 1, y + y2, z + z2, Block.obsidian.blockID);
-    									world.setBlock(x + x2 + 1, y + y2 + 1, z + z2, Block.obsidian.blockID);
-    									world.setBlock(x + x2 - 1, y + y2 + 1, z + z2, Block.obsidian.blockID);
+    									if(!obsidian) {
+	    									world.setBlock(x + x2, y + y2 - 1, z + z2, Block.obsidian.blockID);
+	    									world.setBlock(x + x2, y + y2 + 2, z + z2, Block.obsidian.blockID);
+	    									world.setBlock(x + x2, y + y2, z + z2 + (b ? 1 : -1), Block.obsidian.blockID);
+	    									world.setBlock(x + x2, y + y2 + 1, z + z2 + (b ? 1 : -1), Block.obsidian.blockID);
+	    									world.setBlock(x + x2 + 1, y + y2, z + z2, Block.obsidian.blockID);
+	    									world.setBlock(x + x2 - 1, y + y2, z + z2, Block.obsidian.blockID);
+	    									world.setBlock(x + x2 + 1, y + y2 + 1, z + z2, Block.obsidian.blockID);
+	    									world.setBlock(x + x2 - 1, y + y2 + 1, z + z2, Block.obsidian.blockID);
+    									}
     								} else if(y2 % 6 == 2 && x2 == 0 && z2 == 0) {
     									if(y2 != 2) {
 	    									world.setBlock(x + x2, y + y2, z + z2, Block.mobSpawner.blockID, 0, 2);
@@ -117,6 +127,20 @@ public class WorldGenTrapsTowersAndMore implements IWorldGenerator {
     							}
 	    					}
     					}
+    					
+    					int changes = 0, y2 = -1;
+    					
+    					do {
+    						changes = 0;
+    						
+    						for(int x2 = -5; x2 <= 5; x2++) {
+    							for(int z2 = -5; z2 <= 5; z2++) {
+    								if(x2 * x2 + z2 * z2 <= 25 && world.isAirBlock(x + x2, y + y2, z + z2)) {world.setBlock(x + x2, y + y2, z + z2, !obsidian ? (random.nextBoolean() ? Block.cobblestoneMossy.blockID : Block.cobblestone.blockID) : Block.obsidian.blockID); changes++;}
+    							}
+    						}
+    						
+    						y2--;
+    					} while(changes != 0 && y + y2 >= 0);
     					
     					addedDungeon = true;
     					
