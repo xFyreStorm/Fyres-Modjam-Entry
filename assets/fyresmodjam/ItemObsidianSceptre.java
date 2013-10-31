@@ -40,4 +40,9 @@ public class ItemObsidianSceptre extends Item {
     public Icon getIconFromDamage(int par1) {
         return par1 == 0 ? icon : icon2;
     }
+	
+	@SideOnly(Side.CLIENT)
+    public boolean hasEffect(ItemStack par1ItemStack) {
+		return par1ItemStack.getItemDamage() > 0;
+	}
 }
