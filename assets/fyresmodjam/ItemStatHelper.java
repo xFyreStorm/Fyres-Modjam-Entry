@@ -240,6 +240,9 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 				} else if(event.entity.getEntityData().getString("Blessing").equals("Inferno") && (event.source.isFireDamage() || event.source.getDamageType().equals("inFire")  || event.source.getDamageType().equals("onFire")  || event.source.getDamageType().equals("lava"))) {
 					skip = true;
 					damageMultiplier = 0;
+				} else if(event.entity.getEntityData().getString("Blessing").equals("Paratrooper") && event.source.getDamageType().equals("fall")) {
+					skip = true;
+					damageMultiplier = 0;
 				} else if(event.entity.getEntityData().getString("Blessing").equals("Vampire")) {
 					if(event.entity.getBrightness(1.0F) > 0.5F && event.entity.worldObj.canBlockSeeTheSky((int) (event.entity.posX), (int) (event.entity.posY), (int) (event.entity.posZ))) {
 						damageMultiplier += 0.2F;
