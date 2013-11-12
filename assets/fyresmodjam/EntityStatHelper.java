@@ -16,6 +16,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import assets.fyresmodjam.EntityStatHelper.EntityStat;
 import assets.fyresmodjam.ItemStatHelper.ItemStatTracker;
 
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -251,8 +252,15 @@ public class EntityStatHelper {
 					if(event.source.getEntity().getEntityData().hasKey("Blessing")) {
 						String blessing = event.source.getEntity().getEntityData().getString("Blessing");
 						
-						if(blessing.equals("Thief") && ModjamMod.r.nextInt(10) == 0) {
-							if(!event.entity.worldObj.isRemote) {event.entity.dropItem(Item.goldNugget.itemID, 1);}
+						if(blessing.equals("Thief") && ModjamMod.r.nextInt(20) == 0) {
+							if(!event.entity.worldObj.isRemote) {
+								
+								//((EntityLivingBase) event.entity).dropFewItems(true, event.source.getEntity() instanceof EntityPlayer ? EnchantmentHelper.getLootingModifier((EntityLivingBase) event.source.getEntity()) : 0);
+								//((EntityLivingBase) event.entity).dropEquipment(true, event.source.getEntity() instanceof EntityPlayer ? EnchantmentHelper.getLootingModifier((EntityLivingBase) event.source.getEntity()) : 0);
+				                
+								event.entity.dropItem(Item.goldNugget.itemID, 1);
+							}
+							
 							//event.entity.worldObj.playSoundAtEntity(event.entity, "fyresmodjam:coin", 1.0F, 1.0F);
 						}
 					}

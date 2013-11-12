@@ -268,7 +268,7 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 					
 					if(held != null && ((event.source.getDamageType().equals("player") || event.source.getDamageType().equals("mob") || (held.getItem().itemID == Item.bow.itemID && event.source.isProjectile())))) {
 						String s = getStat(held, "BonusDamage");
-						if(s != null) {event.ammount += Float.parseFloat(s);}
+						if(s != null) {event.ammount += Float.parseFloat(s.trim().replace(",", "."));}
 					}
 				}
 				
