@@ -4,6 +4,15 @@ import java.awt.Color;
 
 import org.lwjgl.input.Keyboard;
 
+import assets.fyresmodjam.entities.EntityMysteryPotion;
+import assets.fyresmodjam.entities.renderers.RenderMysteryPotion;
+import assets.fyresmodjam.handlers.ClientTickHandler;
+import assets.fyresmodjam.handlers.FyresKeyHandler;
+import assets.fyresmodjam.tileentities.TileEntityPillar;
+import assets.fyresmodjam.tileentities.TileEntityTrap;
+import assets.fyresmodjam.tileentities.renderers.TileEntityPillarRenderer;
+import assets.fyresmodjam.tileentities.renderers.TileEntityTrapRenderer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.entity.player.EntityPlayer;

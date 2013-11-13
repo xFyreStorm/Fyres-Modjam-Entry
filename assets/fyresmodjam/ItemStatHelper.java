@@ -16,6 +16,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import assets.fyresmodjam.EntityStatHelper.EntityStat;
 import assets.fyresmodjam.EntityStatHelper.EntityStatTracker;
 import assets.fyresmodjam.ItemStatHelper.ItemStat;
+import assets.fyresmodjam.handlers.CommonTickHandler;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
