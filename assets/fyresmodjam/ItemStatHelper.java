@@ -39,6 +39,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.network.packet.Packet5PlayerInventory;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -235,18 +236,23 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 			}
 			
 			if(event.entity.getEntityData().hasKey("Blessing")) {
-				if(event.entity.getEntityData().getString("Blessing").equals("Guardian")) {
+				String blessing = event.entity.getEntityData().getString("Blessing");
+				
+				if(blessing.equals("Guardian")) {
 					damageMultiplier -= 0.20F;
-				} else if(event.entity.getEntityData().getString("Blessing").equals("Inferno") && (event.source.isFireDamage() || event.source.getDamageType().equals("inFire")  || event.source.getDamageType().equals("onFire")  || event.source.getDamageType().equals("lava"))) {
+				} else if(blessing.equals("Inferno") && (event.source.isFireDamage() || event.source.getDamageType().equals("inFire")  || event.source.getDamageType().equals("onFire")  || event.source.getDamageType().equals("lava"))) {
 					skip = true;
 					damageMultiplier = 0;
-				} else if(event.entity.getEntityData().getString("Blessing").equals("Paratrooper") && event.source.getDamageType().equals("fall")) {
+				} else if(blessing.equals("Paratrooper") && event.source.getDamageType().equals("fall")) {
 					skip = true;
 					damageMultiplier = 0;
-				} else if(event.entity.getEntityData().getString("Blessing").equals("Vampire")) {
+				} else if(blessing.equals("Vampire")) {
 					if(event.entity.getBrightness(1.0F) > 0.5F && event.entity.worldObj.canBlockSeeTheSky((int) (event.entity.posX), (int) (event.entity.posY), (int) (event.entity.posZ))) {
 						damageMultiplier += 0.2F;
 					}
+				} else if(blessing.equals("Porcupine") && event.source.getEntity() != null && event.source.getEntity() instanceof EntityLivingBase && !event.source.isProjectile() && (event.source.damageType.equals("mob") || event.source.getDamageType().equals("player"))) {
+					DamageSource damage = DamageSource.causeThornsDamage(event.entity);
+					((EntityLivingBase) event.source.getEntity()).attackEntityFrom(damage, event.ammount * 0.07F);
 				}
 			}
 			
