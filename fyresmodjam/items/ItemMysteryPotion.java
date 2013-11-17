@@ -28,7 +28,7 @@ import net.minecraft.world.World;
 
 public class ItemMysteryPotion extends Item {
 
-	public static Icon[] icons = null;
+	public Icon[] icons = null;
 	
 	public ItemMysteryPotion(int par1) {
 		super(par1);
@@ -37,13 +37,11 @@ public class ItemMysteryPotion extends Item {
 	
 	@SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister) {
-		if(icons == null) {
-			icons = new Icon[26];
+		icons = new Icon[26];
 			
-			for(int i = 0; i < 13; i++) {
-				icons[i] = par1IconRegister.registerIcon("fyresmodjam:mysteryPotion_" + (i + 1));
-				icons[i + 13] = par1IconRegister.registerIcon("fyresmodjam:mysteryPotionThrowable_" + (i + 1));
-			}
+		for(int i = 0; i < 13; i++) {
+			icons[i] = par1IconRegister.registerIcon("fyresmodjam:mysteryPotion_" + (i + 1));
+			icons[i + 13] = par1IconRegister.registerIcon("fyresmodjam:mysteryPotionThrowable_" + (i + 1));
 		}
 		
         this.itemIcon = icons[0];

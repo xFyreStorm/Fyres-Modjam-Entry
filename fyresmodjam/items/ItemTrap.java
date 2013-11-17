@@ -24,7 +24,7 @@ public class ItemTrap extends Item {
 
 	private static final IBehaviorDispenseItem dispenseTrap = new BehaviorDispenseTrap();
 	
-	public static Icon[] icons;
+	public Icon[] icons;
 	public static String[] iconLocations = new String[] {"fyresmodjam:itemTrap", "fyresmodjam:trap2", "fyresmodjam:trap3"};
 
 	public ItemTrap(int par1) {
@@ -35,10 +35,8 @@ public class ItemTrap extends Item {
 	
 	@SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister) {
-		if(icons == null) {
-    		icons = new Icon[iconLocations.length];
-    		for(int i = 0; i < iconLocations.length; i++) {icons[i] = par1IconRegister.registerIcon(iconLocations[i]);}
-    	}
+    	icons = new Icon[iconLocations.length];
+    	for(int i = 0; i < iconLocations.length; i++) {icons[i] = par1IconRegister.registerIcon(iconLocations[i]);}
     	
         this.itemIcon = icons[0];
     }

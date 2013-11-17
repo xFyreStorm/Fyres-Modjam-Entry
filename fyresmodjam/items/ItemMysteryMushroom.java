@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 
 public class ItemMysteryMushroom extends Item {
 
-	public static Icon overlay, icon;
+	public Icon overlay, icon;
 	
 	public ItemMysteryMushroom(int par1) {
 		super(par1);
@@ -31,8 +31,8 @@ public class ItemMysteryMushroom extends Item {
 	
 	@SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister) {
-		if(icon == null) {icon = par1IconRegister.registerIcon("fyresmodjam:mushroom");}
-		if(overlay == null) {overlay = par1IconRegister.registerIcon("fyresmodjam:mushroom_overlay");}
+		icon = par1IconRegister.registerIcon("fyresmodjam:mushroom");
+		overlay = par1IconRegister.registerIcon("fyresmodjam:mushroom_overlay");
         this.itemIcon = icon;
     }
 	

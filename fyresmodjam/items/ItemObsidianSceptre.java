@@ -12,7 +12,7 @@ import net.minecraft.util.Icon;
 
 public class ItemObsidianSceptre extends Item {
 
-	Icon icon, icon2;
+	public Icon icon, icon2;
 	
 	public ItemObsidianSceptre(int par1) {
 		super(par1);
@@ -21,8 +21,8 @@ public class ItemObsidianSceptre extends Item {
 
 	@SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister) {
-		if(icon == null) {icon = par1IconRegister.registerIcon("fyresmodjam:unenchantedSceptre");}
-		if(icon2 == null) {icon2 = par1IconRegister.registerIcon("fyresmodjam:enchantedSceptre");}
+		icon = par1IconRegister.registerIcon("fyresmodjam:unenchantedSceptre");
+		icon2 = par1IconRegister.registerIcon("fyresmodjam:enchantedSceptre");
         this.itemIcon = icon;
     }
 	
