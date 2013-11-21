@@ -27,10 +27,10 @@ import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-import fyresmodjam.EntityStatHelper;
-import fyresmodjam.ItemStatHelper;
 import fyresmodjam.ModjamMod;
 import fyresmodjam.blocks.BlockTrap;
+import fyresmodjam.misc.EntityStatHelper;
+import fyresmodjam.misc.ItemStatHelper;
 import fyresmodjam.tileentities.TileEntityTrap;
 
 public class PacketHandler implements IPacketHandler {

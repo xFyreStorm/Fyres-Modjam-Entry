@@ -1,10 +1,11 @@
-package fyresmodjam;
+package fyresmodjam.worldgen;
 
 import java.awt.Color;
 import java.util.HashMap;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import fyresmodjam.ModjamMod;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;

@@ -8,9 +8,9 @@ import java.util.List;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
-import fyresmodjam.EntityStatHelper;
 import fyresmodjam.ModjamMod;
 import fyresmodjam.handlers.PacketHandler;
+import fyresmodjam.misc.EntityStatHelper;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;

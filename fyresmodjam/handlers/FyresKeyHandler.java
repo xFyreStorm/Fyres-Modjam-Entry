@@ -79,11 +79,9 @@ public class FyresKeyHandler extends KeyHandler {
 							} else if(te != null && te instanceof TileEntityTrap) {
 								String placedBy = ((TileEntityTrap) te).placedBy;
 								
-								if(placedBy != null) {
-									Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eThis " + ItemTrap.names[te.getBlockMetadata() % BlockTrap.trapTypes].toLowerCase() + " was placed by " + (placedBy.equals(player.getEntityName()) ? "you": placedBy) + ".");
-								} else {
-									Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eThis " + ItemTrap.names[te.getBlockMetadata() % BlockTrap.trapTypes].toLowerCase() + " doesn't seem to have been placed by anyone.");
-								}
+								String s = (placedBy != null ? "\u00A7eThis " + ItemTrap.names[te.getBlockMetadata() % BlockTrap.trapTypes].toLowerCase() + " was placed by " + (placedBy.equals(player.getEntityName()) ? "you": placedBy) + "." : "\u00A7eThis " + ItemTrap.names[te.getBlockMetadata() % BlockTrap.trapTypes].toLowerCase() + " doesn't seem to have been placed by anyone.");
+								s += " Trap is set to " + TileEntityTrap.settings[((TileEntityTrap) te).setting] + ".";
+								Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(s);
 							} else {
 								String name = new ItemStack(minecraft.theWorld.getBlockId(x, y, z), 1, minecraft.theWorld.getBlockMetadata(x, y, z)).getDisplayName().toLowerCase();
 								Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eIt's a " + name + (!name.contains("block") ? " block." : "."));

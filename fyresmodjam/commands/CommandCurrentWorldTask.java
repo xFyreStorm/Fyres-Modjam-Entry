@@ -5,9 +5,9 @@ import java.util.List;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
-import fyresmodjam.FyresWorldData;
 import fyresmodjam.handlers.CommonTickHandler;
 import fyresmodjam.handlers.PacketHandler;
+import fyresmodjam.worldgen.FyresWorldData;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;

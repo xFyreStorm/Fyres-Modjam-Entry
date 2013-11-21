@@ -1,4 +1,4 @@
-package fyresmodjam;
+package fyresmodjam.misc;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -12,10 +12,11 @@ import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
-import fyresmodjam.EntityStatHelper.EntityStat;
-import fyresmodjam.EntityStatHelper.EntityStatTracker;
-import fyresmodjam.ItemStatHelper.ItemStat;
+import fyresmodjam.ModjamMod;
 import fyresmodjam.handlers.CommonTickHandler;
+import fyresmodjam.misc.EntityStatHelper.EntityStat;
+import fyresmodjam.misc.EntityStatHelper.EntityStatTracker;
+import fyresmodjam.misc.ItemStatHelper.ItemStat;
 
 
 import net.minecraft.entity.Entity;

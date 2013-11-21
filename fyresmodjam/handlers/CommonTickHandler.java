@@ -21,9 +21,9 @@ import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
-import fyresmodjam.EntityStatHelper;
-import fyresmodjam.FyresWorldData;
 import fyresmodjam.ModjamMod;
+import fyresmodjam.misc.EntityStatHelper;
+import fyresmodjam.worldgen.FyresWorldData;
 
 public class CommonTickHandler implements ITickHandler {
 	public static FyresWorldData worldData = null;

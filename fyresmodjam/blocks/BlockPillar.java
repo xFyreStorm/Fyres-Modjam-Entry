@@ -19,9 +19,9 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import fyresmodjam.EntityStatHelper;
 import fyresmodjam.ModjamMod;
 import fyresmodjam.handlers.PacketHandler;
+import fyresmodjam.misc.EntityStatHelper;
 import fyresmodjam.tileentities.TileEntityPillar;
 import fyresmodjam.worldgen.WorldGenTrapsTowersAndMore;
 

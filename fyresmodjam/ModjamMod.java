@@ -57,10 +57,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
-import fyresmodjam.EntityStatHelper.EntityStat;
-import fyresmodjam.EntityStatHelper.EntityStatTracker;
-import fyresmodjam.ItemStatHelper.ItemStat;
-import fyresmodjam.ItemStatHelper.ItemStatTracker;
 import fyresmodjam.blocks.BlockMysteryMushroom;
 import fyresmodjam.blocks.BlockPillar;
 import fyresmodjam.blocks.BlockTrap;
@@ -79,13 +75,20 @@ import fyresmodjam.items.ItemObsidianSceptre;
 import fyresmodjam.items.ItemPillar;
 import fyresmodjam.items.ItemTrap;
 import fyresmodjam.misc.CreativeTabModjamMod;
+import fyresmodjam.misc.EntityStatHelper;
+import fyresmodjam.misc.ItemStatHelper;
+import fyresmodjam.misc.EntityStatHelper.EntityStat;
+import fyresmodjam.misc.EntityStatHelper.EntityStatTracker;
+import fyresmodjam.misc.ItemStatHelper.ItemStat;
+import fyresmodjam.misc.ItemStatHelper.ItemStatTracker;
 import fyresmodjam.tileentities.TileEntityPillar;
 import fyresmodjam.tileentities.TileEntityTrap;
+import fyresmodjam.worldgen.FyresWorldData;
 import fyresmodjam.worldgen.PillarGen;
 import fyresmodjam.worldgen.WorldGenMoreDungeons;
 import fyresmodjam.worldgen.WorldGenTrapsTowersAndMore;
 
-@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.3a")
+@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.3b")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
 public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	
@@ -122,8 +125,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     
     public static AchievementPage page;
     
-    public static String version = "v0.0.3a";
-    public static String foundVersion = "v0.0.3a";
+    public static String version = "v0.0.3b";
+    public static String foundVersion = "v0.0.3b";
 	
     /*public static void loadProperties() {
 		Properties prop = new Properties();
@@ -154,6 +157,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static ItemStack whoopsStack = new ItemStack(Item.flintAndSteel, 1, 1);
     
     public static String configPath = null;
+    
+    public static final String versionOrder = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -192,8 +197,10 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
                     if(in != null) {in.close();}
                 } catch (Exception e) {e.printStackTrace();}
             }
+            
+            String[] versionSplit = version.replace("v", "").split("\\."), foundSplit = foundVersion.replace("v", "").split("\\.");
 
-            if(!version.equals(foundVersion)) {
+            if(!version.equals(foundVersion) && (Integer.parseInt(versionSplit[0]) < Integer.parseInt(foundSplit[0]) ? (Integer.parseInt(versionSplit[1]) < Integer.parseInt(foundSplit[1]) ? (Integer.parseInt("" + versionSplit[2].charAt(0)) < Integer.parseInt("" + foundSplit[2].charAt(0)) ? (versionOrder.indexOf(versionSplit[2].charAt(1)) < versionOrder.indexOf(foundSplit[2].charAt(1))) : false): false) : false)) {
                 System.out.println("A newer version of the \"You Will Die\" Mod has been found (" + foundVersion + ").");
             } else {
                 System.out.println("No newer version of the \"You Will Die\" Mod has been found.");

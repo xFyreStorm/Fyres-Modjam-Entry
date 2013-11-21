@@ -26,6 +26,7 @@ import fyresmodjam.entities.EntityMysteryPotion;
 import fyresmodjam.entities.renderers.RenderMysteryPotion;
 import fyresmodjam.handlers.ClientTickHandler;
 import fyresmodjam.handlers.FyresKeyHandler;
+import fyresmodjam.misc.EntityStatHelper;
 import fyresmodjam.tileentities.TileEntityPillar;
 import fyresmodjam.tileentities.TileEntityTrap;
 import fyresmodjam.tileentities.renderers.TileEntityPillarRenderer;
@@ -54,6 +55,11 @@ public class ClientProxy extends CommonProxy {
 				if(id == ModjamMod.blockPillar.blockID || (id == ModjamMod.blockTrap.blockID && te != null && te instanceof TileEntityTrap && ((TileEntityTrap) te).placedBy != null)) {
 			        String key = Keyboard.getKeyName(FyresKeyHandler.examine.keyCode);
 			        String string = "Press " + key + " to Examine";
+			        
+			        if(Minecraft.getMinecraft().thePlayer != null && ((TileEntityTrap) te).placedBy.equals(Minecraft.getMinecraft().thePlayer.getEntityName())) {
+			        	string = Minecraft.getMinecraft().thePlayer.isSneaking() ? "Use to disarm (Stand to toggle setting)" : "Use to toggle setting (Sneak to disarm)";
+			        }
+			        
 			        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(string, (event.resolution.getScaledWidth() / 2) - (Minecraft.getMinecraft().fontRenderer.getStringWidth(string) / 2), event.resolution.getScaledHeight() / 2 + 16, Color.WHITE.getRGB());
 				}
 			}

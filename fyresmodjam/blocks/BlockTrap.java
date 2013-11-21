@@ -73,10 +73,19 @@ public class BlockTrap extends BlockContainer implements IShearable {
     }
     
     public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)  {	
-    	if(par1World.isRemote && par5EntityPlayer.getHeldItem() == null) {
-    		PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.DISARM_TRAP, new Object[] {par2, par3, par4, par5EntityPlayer.getEntityData().hasKey("Blessing") && par5EntityPlayer.getEntityData().getString("Blessing").equals("Mechanic")}));
-	    	return false;
-    	}
+    	if(par5EntityPlayer.getHeldItem() == null) {
+			TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
+			
+			if(!par5EntityPlayer.isSneaking() && te != null && te instanceof TileEntityTrap && ((TileEntityTrap) te).placedBy != null && ((TileEntityTrap) te).placedBy.equals(par5EntityPlayer.getEntityName())) {
+				if(!par1World.isRemote) {
+					((TileEntityTrap) te).setting++; if(((TileEntityTrap) te).setting >= TileEntityTrap.settings.length) {((TileEntityTrap) te).setting = 0;}
+					PacketDispatcher.sendPacketToAllPlayers(te.getDescriptionPacket());
+					PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7e\u00A7oSet to: " + TileEntityTrap.settings[((TileEntityTrap) te).setting] + "."}), (Player) par5EntityPlayer);
+				}
+			} else {
+				if(par1World.isRemote) {PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.DISARM_TRAP, new Object[] {par2, par3, par4, par5EntityPlayer.getEntityData().hasKey("Blessing") && par5EntityPlayer.getEntityData().getString("Blessing").equals("Mechanic")}));}
+			}
+		}
     	
     	return true;
     }
@@ -120,13 +129,13 @@ public class BlockTrap extends BlockContainer implements IShearable {
     public MovingObjectPosition collisionRayTrace(World par1World, int par2, int par3, int par4, Vec3 par5Vec3, Vec3 par6Vec3) {
     	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
     	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
-        return (player != null && te instanceof TileEntityTrap && (((TileEntityTrap) te).placedBy != null || !PacketHandler.trapsDisabled) && (player.getEntityName().equals(((TileEntityTrap) te).placedBy) || player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")))) ? super.collisionRayTrace(par1World, par2, par3, par4, par5Vec3, par6Vec3) : null;
+        return (player != null && te instanceof TileEntityTrap && (((TileEntityTrap) te).placedBy != null || !PacketHandler.trapsDisabled) && (player.getEntityName().equals(((TileEntityTrap) te).placedBy) || ((TileEntityTrap) te).setting != 0 || player.isSneaking() || (player.getEntityData().hasKey("Blessing") && player.getEntityData().getString("Blessing").equals("Scout")))) ? super.collisionRayTrace(par1World, par2, par3, par4, par5Vec3, par6Vec3) : null;
     }
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
     	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
     	
-    	if(!par1World.isRemote && par5Entity.ridingEntity == null && te != null && te instanceof TileEntityTrap && !par5Entity.getEntityName().equals(((TileEntityTrap) te).placedBy) && (ModjamMod.spawnTraps || ((TileEntityTrap) te).placedBy != null) && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
+    	if(!par1World.isRemote && par5Entity.ridingEntity == null && te != null && te instanceof TileEntityTrap && ((TileEntityTrap) te).setting != 3 && (!par5Entity.getEntityName().equals(((TileEntityTrap) te).placedBy) || (par5Entity instanceof EntityPlayer && ((TileEntityTrap) te).setting >= 2)) && (ModjamMod.spawnTraps || ((TileEntityTrap) te).placedBy != null) && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
     		
     		int type = par1World.getBlockMetadata(par2, par3, par4);
     		
