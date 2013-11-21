@@ -12,7 +12,7 @@ public class CommonProxy {
 	public void sendPlayerMessage(String message) {}
 
 	public void loadFromConfig(Configuration config) {
-		ModjamMod.itemID = config.getItem("item_ids", ModjamMod.itemID + 4096).getInt() - 4096;
+		ModjamMod.itemID = config.getItem("item_ids", ModjamMod.itemID).getInt();
 		ModjamMod.blockID = config.getBlock("block_ids",ModjamMod. blockID).getInt();
 		
 		ModjamMod.pillarGlow = config.get(config.CATEGORY_GENERAL, "pillar_glow", ModjamMod.pillarGlow).getBoolean(ModjamMod.pillarGlow);
