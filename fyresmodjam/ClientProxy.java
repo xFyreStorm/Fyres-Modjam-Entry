@@ -56,7 +56,7 @@ public class ClientProxy extends CommonProxy {
 			        String key = Keyboard.getKeyName(FyresKeyHandler.examine.keyCode);
 			        String string = "Press " + key + " to Examine";
 			        
-			        if(Minecraft.getMinecraft().thePlayer != null && ((TileEntityTrap) te).placedBy.equals(Minecraft.getMinecraft().thePlayer.getEntityName())) {
+			        if(Minecraft.getMinecraft().thePlayer != null && te instanceof TileEntityTrap && ((TileEntityTrap) te).placedBy.equals(Minecraft.getMinecraft().thePlayer.getEntityName())) {
 			        	string = Minecraft.getMinecraft().thePlayer.isSneaking() ? "Use to disarm (Stand to toggle setting)" : "Use to toggle setting (Sneak to disarm)";
 			        }
 			        
