@@ -33,6 +33,7 @@ public class CommonProxy {
 		
 		ModjamMod.enableMobKillStats = config.get(config.CATEGORY_GENERAL, "enable_mob_kill_stats", ModjamMod.enableMobKillStats).getBoolean(ModjamMod.enableMobKillStats);
 		ModjamMod.enableWeaponKillStats = config.get(config.CATEGORY_GENERAL, "enable_weapon_kill_stats", ModjamMod.enableWeaponKillStats).getBoolean(ModjamMod.enableWeaponKillStats);
+		ModjamMod.enableCraftingStats = config.get(config.CATEGORY_GENERAL, "enable_crafting_stats", ModjamMod.enableCraftingStats).getBoolean(ModjamMod.enableCraftingStats);
 		
 		ModjamMod.trapsBelowGroundOnly = config.get(config.CATEGORY_GENERAL, "traps_below_ground_only", ModjamMod.trapsBelowGroundOnly).getBoolean(ModjamMod.trapsBelowGroundOnly);
 	}

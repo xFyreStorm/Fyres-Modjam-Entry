@@ -14,6 +14,7 @@ import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 import fyresmodjam.ModjamMod;
 import fyresmodjam.handlers.CommonTickHandler;
+import fyresmodjam.handlers.PacketHandler;
 import fyresmodjam.misc.EntityStatHelper.EntityStat;
 import fyresmodjam.misc.EntityStatHelper.EntityStatTracker;
 import fyresmodjam.misc.ItemStatHelper.ItemStat;
@@ -33,6 +34,7 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -53,7 +55,7 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 
-public class ItemStatHelper /*implements ICraftingHandler*/ {
+public class ItemStatHelper implements ICraftingHandler {
 	
 	//There's probably a better way of doing all of this. :P Oh well.
 	
@@ -403,9 +405,36 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 		}*/
 	}
 
-	/*@Override
+	@Override
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
-		if(player != null && !player.worldObj.isRemote) {
+		
+		if(!player.worldObj.isRemote) {
+			String itemName = null;
+			
+			if(item.getItem() != null && item.getItem() instanceof ItemSword || item.getItem() instanceof ItemBow || item.getItem() instanceof ItemAxe) {itemName = EntityStatHelper.getUnalteredItemName(item.getItem());}
+			
+			if(ModjamMod.enableCraftingStats && itemName != null) {
+				if(!player.getEntityData().hasKey("CraftingStats")) {player.getEntityData().setCompoundTag("CraftingStats", new NBTTagCompound());}
+				NBTTagCompound craftingStats = player.getEntityData().getCompoundTag("CraftingStats");
+				if(!craftingStats.hasKey(itemName)) {craftingStats.setInteger(itemName, 0);}
+				craftingStats.setInteger(itemName, craftingStats.getInteger(itemName) + 1);
+				
+				for(int i = 0; i < EntityStatHelper.knowledge.length; i++) {
+					if(EntityStatHelper.killCount[i] == craftingStats.getInteger(itemName)) {PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.SEND_MESSAGE, new Object[] {"\u00A7o\u00A73You've become a " + EntityStatHelper.knowledge[i].toLowerCase() + " " + itemName.toLowerCase() + " smith! (" + (i < EntityStatHelper.knowledge.length - 1 ? (EntityStatHelper.killCount[i + 1] * 2 - EntityStatHelper.killCount[i] * 2) + " " + itemName.toLowerCase() + " crafts to next rank." : "")}), (Player) player); break;}
+				}
+				
+				/*int count = 0;
+				
+				for(Object object : craftingStats.getTags()) {
+					if(object == null || !(object instanceof NBTBase)) {continue;}
+					if(craftingStats.getInteger(((NBTBase) object).getName()) >= EntityStatHelper.killCount[1]) {count++;}
+				}
+				
+				if(count >= 10) {player.triggerAchievement(ModjamMod.);}*/
+			}
+		}
+		
+		/*if(player != null && !player.worldObj.isRemote) {
 			for(int i = 0; i < craftMatrix.getSizeInventory(); i++) {
 				ItemStack stack = craftMatrix.getStackInSlot(i);
 				
@@ -439,10 +468,10 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 			
 				CommonTickHandler.worldData.setDirty(true);
 			}
-		}
+		}*/
 	}
 
-	@Override
+	/*@Override
 	public void onSmelting(EntityPlayer player, ItemStack item) {
 		if(player != null && !player.worldObj.isRemote) {
 			if(CommonTickHandler.worldData.currentTask.equals("Collect") && item.getItem().itemID == CommonTickHandler.worldData.currentTaskID) {
@@ -469,6 +498,8 @@ public class ItemStatHelper /*implements ICraftingHandler*/ {
 	
 	public void register() {
 		MinecraftForge.EVENT_BUS.register(this);
-		//GameRegistry.registerCraftingHandler(this);
+		GameRegistry.registerCraftingHandler(this);
 	}
+
+	public void onSmelting(EntityPlayer player, ItemStack item) {}
 }

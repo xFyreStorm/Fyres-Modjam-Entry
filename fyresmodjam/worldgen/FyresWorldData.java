@@ -59,6 +59,7 @@ public class FyresWorldData extends WorldSavedData {
 	
 	public HashMap<String, NBTTagCompound> killStatsByPlayer = new HashMap<String, NBTTagCompound>();
 	public HashMap<String, NBTTagCompound> weaponStatsByPlayer = new HashMap<String, NBTTagCompound>();
+	public HashMap<String, NBTTagCompound> craftingStatsByPlayer = new HashMap<String, NBTTagCompound>();
 	
 	public static int[] validItems = {Block.blockDiamond.blockID, Block.blockGold.blockID, Block.blockEmerald.blockID, Block.blockLapis.blockID, Item.diamond.itemID, Item.emerald.itemID, Item.ingotGold.itemID, Item.netherStar.itemID, Item.ghastTear.itemID};
 
@@ -112,6 +113,7 @@ public class FyresWorldData extends WorldSavedData {
 				potionKnowledgeByPlayer.put(player.getName(), player.getIntArray("PotionKnowledge"));
 				if(player.hasKey("KillStats")) {killStatsByPlayer.put(player.getName(), player.getCompoundTag("KillStats"));}
 				if(player.hasKey("WeaponStats")) {weaponStatsByPlayer.put(player.getName(), player.getCompoundTag("WeaponStats"));}
+				if(player.hasKey("CraftingStats")) {craftingStatsByPlayer.put(player.getName(), player.getCompoundTag("CraftingStats"));}
 			}
 		}
 		
@@ -154,6 +156,7 @@ public class FyresWorldData extends WorldSavedData {
 				player.setIntArray("PotionKnowledge", potionKnowledgeByPlayer.get(s));
 				if(killStatsByPlayer.containsKey(s)) {player.setCompoundTag("KillStats", killStatsByPlayer.get(s));}
 				if(weaponStatsByPlayer.containsKey(s)) {player.setCompoundTag("WeaponStats", weaponStatsByPlayer.get(s));}
+				if(craftingStatsByPlayer.containsKey(s)) {player.setCompoundTag("CraftingStats", craftingStatsByPlayer.get(s));}
 				
 				tempPlayerStats.setTag(s, player);
 			}

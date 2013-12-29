@@ -64,6 +64,7 @@ import fyresmodjam.blocks.BlockCrystalStand;
 import fyresmodjam.blocks.BlockMysteryMushroom;
 import fyresmodjam.blocks.BlockPillar;
 import fyresmodjam.blocks.BlockTrap;
+import fyresmodjam.commands.CommandCraftingStats;
 import fyresmodjam.commands.CommandCurrentBlessing;
 import fyresmodjam.commands.CommandCurrentDisadvantage;
 import fyresmodjam.commands.CommandCurrentWorldTask;
@@ -96,9 +97,9 @@ import fyresmodjam.worldgen.PillarGen;
 import fyresmodjam.worldgen.WorldGenMoreDungeons;
 import fyresmodjam.worldgen.WorldGenTrapsTowersAndMore;
 
-@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.3c")
+@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.3d")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
-public class ModjamMod extends CommandHandler implements IPlayerTracker, ICraftingHandler {
+public class ModjamMod extends CommandHandler implements IPlayerTracker {
 	
 	@SidedProxy(clientSide = "fyresmodjam.ClientProxy", serverSide = "fyresmodjam.CommonProxy")
     public static CommonProxy proxy;
@@ -110,7 +111,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker, ICrafti
     
     public static int itemID = 6971, blockID = 2875, achievementID = 2500, examineKey = Keyboard.KEY_X, blessingKey = Keyboard.KEY_K;
     public static int pillarGenChance = 75, maxPillarsPerChunk = 3, towerGenChance = 225, trapGenChance = 300, mushroomReplaceChance = 15;
-    public static boolean pillarGlow = true, spawnTraps = true, spawnTowers = true, spawnRandomPillars = true, disableDisadvantages = false, versionChecking = true, trapsBelowGroundOnly = false, showAllPillarsInCreative = false, enableWeaponKillStats = true, enableMobKillStats = true;
+    public static boolean pillarGlow = true, spawnTraps = true, spawnTowers = true, spawnRandomPillars = true, disableDisadvantages = false, versionChecking = true, trapsBelowGroundOnly = false, showAllPillarsInCreative = false, enableWeaponKillStats = true, enableMobKillStats = true, enableCraftingStats = true;
     
     public static CreativeTabs tabModjamMod = new CreativeTabModjamMod(CreativeTabs.getNextID(), "The \"You Will Die\" Mod");
     
@@ -139,8 +140,9 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker, ICrafti
     
     public static AchievementPage page;
     
-    public static String version = "v0.0.3c";
-    public static String foundVersion = "v0.0.3c";
+    public static String version = "v0.0.3d";
+    public static String foundVersion = "v0.0.3d";
+    public static boolean newerVersion = false;
 	
     /*public static void loadProperties() {
 		Properties prop = new Properties();
@@ -214,8 +216,9 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker, ICrafti
             
             String[] versionSplit = version.replace("v", "").split("\\."), foundSplit = foundVersion.replace("v", "").split("\\.");
 
-            if(!version.equals(foundVersion) && (Integer.parseInt(versionSplit[0]) < Integer.parseInt(foundSplit[0]) ? (Integer.parseInt(versionSplit[1]) < Integer.parseInt(foundSplit[1]) ? (Integer.parseInt("" + versionSplit[2].charAt(0)) < Integer.parseInt("" + foundSplit[2].charAt(0)) ? (versionOrder.indexOf(versionSplit[2].charAt(1)) < versionOrder.indexOf(foundSplit[2].charAt(1))) : false): false) : false)) {
+           if(!version.equals(foundVersion) && (Integer.parseInt(versionSplit[0]) < Integer.parseInt(foundSplit[0]) ? (Integer.parseInt(versionSplit[1]) < Integer.parseInt(foundSplit[1]) ? (Integer.parseInt("" + versionSplit[2].charAt(0)) < Integer.parseInt("" + foundSplit[2].charAt(0)) ? (versionOrder.indexOf(versionSplit[2].charAt(1)) < versionOrder.indexOf(foundSplit[2].charAt(1))) : false) : false) : false)) {
                 System.out.println("A newer version of the \"You Will Die\" Mod has been found (" + foundVersion + ").");
+                newerVersion = true;
             } else {
                 System.out.println("No newer version of the \"You Will Die\" Mod has been found.");
             }
@@ -308,6 +311,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker, ICrafti
 		LanguageRegistry.instance().addStringLocalization("commands.currentGoal.usage", "/currentGoal - used to check your current world goal");
 		LanguageRegistry.instance().addStringLocalization("commands.creatureKnowledge.usage", "/creatureKnowledge [page] - used to check your current creature knowledge stats");
 		LanguageRegistry.instance().addStringLocalization("commands.weaponKnowledge.usage", "/weaponKnowledge [page] - used to check your current weapon knowledge stats");
+		LanguageRegistry.instance().addStringLocalization("commands.craftingKnowledge.usage", "/craftingKnowledge [page] - used to check your current crafting knowledge stats");
 		LanguageRegistry.instance().addStringLocalization("fyresmodjam.newVersion", "\u00A7bA newer version of the \"You Will Die\" Mod has been found (" + foundVersion + ").");
 		
 		GameRegistry.addShapelessRecipe(new ItemStack(itemTrap, 1, 0), new Object[] {Block.pressurePlateIron, Block.cactus});
@@ -529,7 +533,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker, ICrafti
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.newPacket(PacketHandler.UPDATE_POTION_KNOWLEDGE, new Object[] {player.getEntityData().getIntArray("PotionKnowledge")}), (Player) player);
 		}
 		
-		if(versionChecking && !version.equals(foundVersion)) {player.addChatMessage("fyresmodjam.newVersion");}
+		if(versionChecking && newerVersion) {player.addChatMessage("fyresmodjam.newVersion");}
 		
 		//player.triggerAchievement(startTheGame);
 	}
@@ -578,6 +582,7 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker, ICrafti
 		event.registerServerCommand(new CommandCurrentWorldTask());
 		event.registerServerCommand(new CommandKillStats());
 		event.registerServerCommand(new CommandWeaponStats());
+		event.registerServerCommand(new CommandCraftingStats());
 	}
 
 	public static Achievement getNewAchievement(int id, int x, int y, ItemStack stack, String name, String displayName, String desc, Achievement prereq, boolean independent) {
@@ -588,10 +593,4 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker, ICrafti
 		achievement.registerAchievement();
 		return achievement;
 	}
-
-	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
-		
-	}
-
-	public void onSmelting(EntityPlayer player, ItemStack item) {}
 }

@@ -192,6 +192,24 @@ public class EntityStatHelper {
 					CommonTickHandler.worldData.potionKnowledgeByPlayer.remove(event.entity.getEntityName());
 					CommonTickHandler.worldData.markDirty();
 				}
+				
+				if(!event.entity.getEntityData().hasKey("KillStats") && CommonTickHandler.worldData.killStatsByPlayer.containsKey(event.entity.getEntityName())) {
+					event.entity.getEntityData().setCompoundTag("KillStats", CommonTickHandler.worldData.killStatsByPlayer.get(event.entity.getEntityName()));
+					CommonTickHandler.worldData.killStatsByPlayer.remove(event.entity.getEntityName());
+					CommonTickHandler.worldData.markDirty();
+				}
+				
+				if(!event.entity.getEntityData().hasKey("WeaponStats") && CommonTickHandler.worldData.weaponStatsByPlayer.containsKey(event.entity.getEntityName())) {
+					event.entity.getEntityData().setCompoundTag("WeaponStats", CommonTickHandler.worldData.weaponStatsByPlayer.get(event.entity.getEntityName()));
+					CommonTickHandler.worldData.killStatsByPlayer.remove(event.entity.getEntityName());
+					CommonTickHandler.worldData.markDirty();
+				}
+				
+				if(!event.entity.getEntityData().hasKey("CraftingStats") && CommonTickHandler.worldData.craftingStatsByPlayer.containsKey(event.entity.getEntityName())) {
+					event.entity.getEntityData().setCompoundTag("CraftingStats", CommonTickHandler.worldData.craftingStatsByPlayer.get(event.entity.getEntityName()));
+					CommonTickHandler.worldData.craftingStatsByPlayer.remove(event.entity.getEntityName());
+					CommonTickHandler.worldData.markDirty();
+				}
 			}
 		}
 	}
@@ -334,7 +352,8 @@ public class EntityStatHelper {
 			CommonTickHandler.worldData.blessingByPlayer.put(player.getEntityName(), player.getEntityData().getString("Blessing"));
 			CommonTickHandler.worldData.potionKnowledgeByPlayer.put(player.getEntityName(), player.getEntityData().getIntArray("PotionKnowledge"));
 			if(player.getEntityData() != null && player.getEntityData().hasKey("KillStats")) {CommonTickHandler.worldData.killStatsByPlayer.put(player.getEntityName(), player.getEntityData().getCompoundTag("KillStats"));}
-			if(player.getEntityData() != null && player.getEntityData().hasKey("WeaponStats")) {CommonTickHandler.worldData.killStatsByPlayer.put(player.getEntityName(), player.getEntityData().getCompoundTag("WeaponStats"));}
+			if(player.getEntityData() != null && player.getEntityData().hasKey("WeaponStats")) {CommonTickHandler.worldData.weaponStatsByPlayer.put(player.getEntityName(), player.getEntityData().getCompoundTag("WeaponStats"));}
+			if(player.getEntityData() != null && player.getEntityData().hasKey("CraftingStats")) {CommonTickHandler.worldData.craftingStatsByPlayer.put(player.getEntityName(), player.getEntityData().getCompoundTag("CraftingStats"));}
 			
 		} else if(event.source != null && event.source.getEntity() != null && event.source.getEntity() instanceof EntityPlayer) {
 			
