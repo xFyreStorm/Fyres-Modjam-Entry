@@ -333,6 +333,8 @@ public class EntityStatHelper {
 			
 			CommonTickHandler.worldData.blessingByPlayer.put(player.getEntityName(), player.getEntityData().getString("Blessing"));
 			CommonTickHandler.worldData.potionKnowledgeByPlayer.put(player.getEntityName(), player.getEntityData().getIntArray("PotionKnowledge"));
+			if(player.getEntityData() != null && player.getEntityData().hasKey("KillStats")) {CommonTickHandler.worldData.killStatsByPlayer.put(player.getEntityName(), player.getEntityData().getCompoundTag("KillStats"));}
+			if(player.getEntityData() != null && player.getEntityData().hasKey("WeaponStats")) {CommonTickHandler.worldData.killStatsByPlayer.put(player.getEntityName(), player.getEntityData().getCompoundTag("WeaponStats"));}
 			
 		} else if(event.source != null && event.source.getEntity() != null && event.source.getEntity() instanceof EntityPlayer) {
 			

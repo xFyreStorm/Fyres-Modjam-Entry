@@ -83,8 +83,12 @@ public class FyresKeyHandler extends KeyHandler {
 								s += " Trap is set to " + TileEntityTrap.settings[((TileEntityTrap) te).setting] + ".";
 								Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(s);
 							} else {
-								String name = new ItemStack(minecraft.theWorld.getBlockId(x, y, z), 1, minecraft.theWorld.getBlockMetadata(x, y, z)).getDisplayName().toLowerCase();
-								Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eIt's a " + name + (!name.contains("block") ? " block." : "."));
+								ItemStack stack = new ItemStack(minecraft.theWorld.getBlockId(x, y, z), 1, minecraft.theWorld.getBlockMetadata(x, y, z));
+								
+								if(stack.getItem() != null) {
+									String name = stack.getDisplayName().toLowerCase(); //stack.hasDisplayName() ? stack.getDisplayName().toLowerCase() : stack.getUnlocalizedName();
+									Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage("\u00A7eIt's a " + name + (!name.contains("block") ? " block." : "."));
+								}
 							}
 						} else if(o.typeOfHit == EnumMovingObjectType.ENTITY && o.entityHit != null) {
 							PacketDispatcher.sendPacketToServer(PacketHandler.newPacket(PacketHandler.EXAMINE_MOB, new Object[] {o.entityHit.dimension, o.entityHit.entityId}));

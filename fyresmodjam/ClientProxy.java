@@ -5,6 +5,10 @@ import java.awt.Color;
 import org.lwjgl.input.Keyboard;
 
 
+
+
+
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,8 +31,12 @@ import fyresmodjam.entities.renderers.RenderMysteryPotion;
 import fyresmodjam.handlers.ClientTickHandler;
 import fyresmodjam.handlers.FyresKeyHandler;
 import fyresmodjam.misc.EntityStatHelper;
+import fyresmodjam.tileentities.TileEntityCrystal;
+import fyresmodjam.tileentities.TileEntityCrystalStand;
 import fyresmodjam.tileentities.TileEntityPillar;
 import fyresmodjam.tileentities.TileEntityTrap;
+import fyresmodjam.tileentities.renderers.TileEntityCrystalRenderer;
+import fyresmodjam.tileentities.renderers.TileEntityCrystalStandRenderer;
 import fyresmodjam.tileentities.renderers.TileEntityPillarRenderer;
 import fyresmodjam.tileentities.renderers.TileEntityTrapRenderer;
 
@@ -56,7 +64,7 @@ public class ClientProxy extends CommonProxy {
 			        String key = Keyboard.getKeyName(FyresKeyHandler.examine.keyCode);
 			        String string = "Press " + key + " to Examine";
 			        
-			        if(Minecraft.getMinecraft().thePlayer != null && te instanceof TileEntityTrap && ((TileEntityTrap) te).placedBy.equals(Minecraft.getMinecraft().thePlayer.getEntityName())) {
+			        if(te != null && Minecraft.getMinecraft().thePlayer != null && te instanceof TileEntityTrap && ((TileEntityTrap) te).placedBy.equals(Minecraft.getMinecraft().thePlayer.getEntityName())) {
 			        	string = Minecraft.getMinecraft().thePlayer.isSneaking() ? "Use to disarm (Stand to toggle setting)" : "Use to toggle setting (Sneak to disarm)";
 			        }
 			        
@@ -90,6 +98,8 @@ public class ClientProxy extends CommonProxy {
 	     
 	     ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPillar.class, new TileEntityPillarRenderer());
 	     ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrap.class, new TileEntityTrapRenderer());
+	     ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrystal.class, new TileEntityCrystalRenderer());
+	     ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrystalStand.class, new TileEntityCrystalStandRenderer());
 	     
 	     RenderingRegistry.registerEntityRenderingHandler(EntityMysteryPotion.class, new RenderMysteryPotion(ModjamMod.mysteryPotion));
 	     

@@ -25,6 +25,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemAxe;
@@ -39,6 +40,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -57,6 +59,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
+import fyresmodjam.blocks.BlockCrystal;
+import fyresmodjam.blocks.BlockCrystalStand;
 import fyresmodjam.blocks.BlockMysteryMushroom;
 import fyresmodjam.blocks.BlockPillar;
 import fyresmodjam.blocks.BlockTrap;
@@ -69,10 +73,12 @@ import fyresmodjam.entities.EntityMysteryPotion;
 import fyresmodjam.handlers.CommonTickHandler;
 import fyresmodjam.handlers.GUIHandler;
 import fyresmodjam.handlers.PacketHandler;
+import fyresmodjam.items.ItemCrystal;
 import fyresmodjam.items.ItemMysteryMushroom;
 import fyresmodjam.items.ItemMysteryPotion;
 import fyresmodjam.items.ItemObsidianSceptre;
 import fyresmodjam.items.ItemPillar;
+import fyresmodjam.items.ItemScroll;
 import fyresmodjam.items.ItemTrap;
 import fyresmodjam.misc.CreativeTabModjamMod;
 import fyresmodjam.misc.EntityStatHelper;
@@ -81,6 +87,8 @@ import fyresmodjam.misc.EntityStatHelper.EntityStat;
 import fyresmodjam.misc.EntityStatHelper.EntityStatTracker;
 import fyresmodjam.misc.ItemStatHelper.ItemStat;
 import fyresmodjam.misc.ItemStatHelper.ItemStatTracker;
+import fyresmodjam.tileentities.TileEntityCrystal;
+import fyresmodjam.tileentities.TileEntityCrystalStand;
 import fyresmodjam.tileentities.TileEntityPillar;
 import fyresmodjam.tileentities.TileEntityTrap;
 import fyresmodjam.worldgen.FyresWorldData;
@@ -88,9 +96,9 @@ import fyresmodjam.worldgen.PillarGen;
 import fyresmodjam.worldgen.WorldGenMoreDungeons;
 import fyresmodjam.worldgen.WorldGenTrapsTowersAndMore;
 
-@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.3b")
+@Mod(modid = "fyresmodjam", name = "Fyres ModJam Mod", version = "0.0.3c")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = {"FyresModJamMod"}, packetHandler = PacketHandler.class)
-public class ModjamMod extends CommandHandler implements IPlayerTracker {
+public class ModjamMod extends CommandHandler implements IPlayerTracker, ICraftingHandler {
 	
 	@SidedProxy(clientSide = "fyresmodjam.ClientProxy", serverSide = "fyresmodjam.CommonProxy")
     public static CommonProxy proxy;
@@ -116,6 +124,12 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     public static Item mysteryMushroom;
     public static Item sceptre;
     
+    public static Item crystalItem;
+	public static Item scroll;
+	
+	public static Block crystal;
+	public static Block crystalStand;
+    
     public static Achievement startTheGame; 
     public static Achievement losingIsFun;
     public static Achievement whoops;
@@ -125,8 +139,8 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
     
     public static AchievementPage page;
     
-    public static String version = "v0.0.3b";
-    public static String foundVersion = "v0.0.3b";
+    public static String version = "v0.0.3c";
+    public static String foundVersion = "v0.0.3c";
 	
     /*public static void loadProperties() {
 		Properties prop = new Properties();
@@ -252,11 +266,26 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		blockTrap = new BlockTrap(blockID + 1).setBlockUnbreakable().setResistance(6000000.0F);
 		mysteryMushroomBlock = new BlockMysteryMushroom(blockID + 2).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setLightValue(0.125F);
 		
+		crystal = new BlockCrystal(blockID + 3);
+		GameRegistry.registerBlock(crystal, "crystal");
+		GameRegistry.registerTileEntity(TileEntityCrystal.class, "Crystal Tile Entity");
+		LanguageRegistry.addName(crystal, "Crystal");
+		
+		crystalStand = new BlockCrystalStand(blockID + 4).setCreativeTab(CreativeTabs.tabDecorations);
+		GameRegistry.registerBlock(crystalStand, "crystalStand");
+		GameRegistry.registerTileEntity(TileEntityCrystalStand.class, "Crystal Stand Tile Entity");
+		LanguageRegistry.addName(crystalStand, "Crystal Stand");
+		
 		itemPillar = new ItemPillar(itemID).setUnlocalizedName("blockPillar");
 		mysteryPotion = new ItemMysteryPotion(itemID + 1).setUnlocalizedName("mysteryPotion").setCreativeTab(CreativeTabs.tabBrewing);
 		itemTrap = new ItemTrap(itemID + 2).setUnlocalizedName("itemTrap").setCreativeTab(CreativeTabs.tabBlock);
 		mysteryMushroom = new ItemMysteryMushroom(itemID + 3).setUnlocalizedName("mysteryMushroom").setCreativeTab(CreativeTabs.tabBrewing);
 		sceptre = new ItemObsidianSceptre(itemID + 4).setUnlocalizedName("sceptre").setCreativeTab(CreativeTabs.tabTools).setFull3D();
+		
+		crystalItem = new ItemCrystal(crystal.blockID - 256);
+		
+		scroll = new ItemScroll(itemID + 5).setUnlocalizedName("scroll").setCreativeTab(CreativeTabs.tabMisc);
+		LanguageRegistry.addName(scroll, "Scroll");
 		
 		GameRegistry.registerBlock(blockPillar, "blockPillar");
 		GameRegistry.registerTileEntity(TileEntityPillar.class, "Pillar Tile Entity");
@@ -264,9 +293,9 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		GameRegistry.registerBlock(blockTrap, "blockTrap");
 		GameRegistry.registerTileEntity(TileEntityTrap.class, "Trap Entity");
 		
-		LanguageRegistry.addName(blockPillar, "Pillar Block");
-		LanguageRegistry.addName(blockTrap, "Trap");
-		LanguageRegistry.addName(mysteryMushroomBlock, "Mystery Mushroom");
+		//LanguageRegistry.addName(blockPillar, "Pillar Block");
+		//LanguageRegistry.addName(blockTrap, "Trap");
+		//LanguageRegistry.addName(mysteryMushroomBlock, "Mystery Mushroom");
 		
 		LanguageRegistry.addName(itemPillar, "Pillar");
 		LanguageRegistry.addName(mysteryPotion, "Mystery Potion");
@@ -559,4 +588,10 @@ public class ModjamMod extends CommandHandler implements IPlayerTracker {
 		achievement.registerAchievement();
 		return achievement;
 	}
+
+	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
+		
+	}
+
+	public void onSmelting(EntityPlayer player, ItemStack item) {}
 }

@@ -137,7 +137,14 @@ public class BlockTrap extends BlockContainer implements IShearable {
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
     	TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
     	
-    	if(!par1World.isRemote && par5Entity.ridingEntity == null && te != null && te instanceof TileEntityTrap && !par5Entity.getEntityName().equals(((TileEntityTrap) te).placedBy) && ((TileEntityTrap) te).setting != 3 && (!(par5Entity instanceof EntityPlayer) || ((TileEntityTrap) te).setting >= 2) && (ModjamMod.spawnTraps || ((TileEntityTrap) te).placedBy != null) && ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob)) {
+    	boolean b1 = (((TileEntityTrap) te).placedBy == null || !par5Entity.getEntityName().equals(((TileEntityTrap) te).placedBy));
+    	boolean b2 = ((TileEntityTrap) te).setting != 3 && (!(par5Entity instanceof EntityPlayer) || ((TileEntityTrap) te).setting < 2);
+    	boolean b3 = (ModjamMod.spawnTraps || ((TileEntityTrap) te).placedBy != null);
+    	boolean b4 = ((par5Entity instanceof EntityPlayer && !((EntityPlayer) par5Entity).capabilities.isCreativeMode) || par5Entity instanceof EntityMob);
+    	
+    	System.out.println(b1 + ", " + b2 + ", " + b3 + ", " + b4 + ", " + ((TileEntityTrap) te).setting);
+    	
+    	if(!par1World.isRemote && par5Entity.ridingEntity == null && te != null && te instanceof TileEntityTrap && b1 && b2 && b3 && b4) {
     		
     		int type = par1World.getBlockMetadata(par2, par3, par4);
     		
