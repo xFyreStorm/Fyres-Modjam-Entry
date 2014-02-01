@@ -1,57 +1,53 @@
 package fyresmodjam.blocks;
 
-import java.util.List;
-import java.util.Random;
-
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import fyresmodjam.ModjamMod;
 import fyresmodjam.handlers.PacketHandler;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenBigMushroom;
-
-import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.IPlantable;
+
+import java.util.List;
+import java.util.Random;
 
 public class BlockMysteryMushroom extends BlockFlower
 {
+    public Icon icon;
+    public Icon overlay;
 
-	public Icon icon;
-	public Icon overlay;
-	
-    public BlockMysteryMushroom(int par1) {
+    public BlockMysteryMushroom(int par1)
+    {
         super(par1);
         float f = 0.2F;
         this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 2.0F, 0.5F + f);
         this.setTickRandomly(true);
     }
-    
+
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister) {
-    	icon = par1IconRegister.registerIcon("fyresmodjam:mushroomBlock");
-    	overlay = par1IconRegister.registerIcon("fyresmodjam:mushroomBlock_overlay");
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        icon = par1IconRegister.registerIcon("fyresmodjam:mushroomBlock");
+        overlay = par1IconRegister.registerIcon("fyresmodjam:mushroomBlock_overlay");
         this.blockIcon = icon;
     }
-    
+
     @SideOnly(Side.CLIENT)
-    public Icon getIcon(int par1, int par2) {
+    public Icon getIcon(int par1, int par2)
+    {
         return renderPass == 0 ? icon : overlay;
     }
 
-    public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) {
-        if (par5Random.nextInt(25) == 0) {
+    public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random)
+    {
+        if (par5Random.nextInt(25) == 0)
+        {
             byte b0 = 4;
             int l = 5;
             int i1;
@@ -129,20 +125,22 @@ public class BlockMysteryMushroom extends BlockFlower
             int l = par1World.getBlockId(par2, par3 - 1, par4);
             Block soil = Block.blocksList[l];
             return /*(l == Block.mycelium.blockID || par1World.getFullBlockLightValue(par2, par3, par4) < 13) &&*/
-                   (soil != null && soil.canSustainPlant(par1World, par2, par3 - 1, par4, ForgeDirection.UP, this));
+                    (soil != null && soil.canSustainPlant(par1World, par2, par3 - 1, par4, ForgeDirection.UP, this));
         }
         else
         {
             return false;
         }
     }
-    
+
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {
-        for(int i = 0; i < 13; i++) {par3List.add(new ItemStack(par1, 1, i));}
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
+    {
+        for (int i = 0; i < 13; i++) {par3List.add(new ItemStack(par1, 1, i));}
     }
-    
-    public int damageDropped(int par1) {
+
+    public int damageDropped(int par1)
+    {
         return par1 % 13;
     }
 
@@ -178,31 +176,37 @@ public class BlockMysteryMushroom extends BlockFlower
     public int getRenderColor(int par1) {
         return PacketHandler.mushroomColors[lastMeta][par1];
     }*/
-    
+
     @SideOnly(Side.CLIENT)
-    public int colorMultiplier(IBlockAccess par1IBlockAccess, int par2, int par3, int par4) {
-    	//lastMeta = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
+    public int colorMultiplier(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
+    {
+        //lastMeta = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
         return PacketHandler.mushroomColors[par1IBlockAccess.getBlockMetadata(par2, par3, par4)][renderPass];
     }
-    
+
     public static int renderPass;
-    public boolean canRenderInPass(int pass) {
-    	this.renderPass = pass;
+
+    public boolean canRenderInPass(int pass)
+    {
+        renderPass = pass;
         return true;
     }
-    
-    public int idPicked(World par1World, int par2, int par3, int par4) {
+
+    public int idPicked(World par1World, int par2, int par3, int par4)
+    {
         return ModjamMod.mysteryMushroom.itemID;
     }
-    
-    public int idDropped(int par1, Random par2Random, int par3) {
+
+    public int idDropped(int par1, Random par2Random, int par3)
+    {
         return ModjamMod.mysteryMushroom.itemID;
     }
-    
+
     @Override
-    public int getRenderBlockPass() {
+    public int getRenderBlockPass()
+    {
         return 1;
     }
-    
+
     //public int getRenderType() {return ClientProxy.mushroomRendererID;}
 }

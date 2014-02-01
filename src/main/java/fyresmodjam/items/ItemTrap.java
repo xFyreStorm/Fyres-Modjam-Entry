@@ -1,8 +1,5 @@
 package fyresmodjam.items;
 
-import java.util.List;
-
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import fyresmodjam.ModjamMod;
@@ -20,46 +17,53 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
-public class ItemTrap extends Item {
+import java.util.List;
 
-	private static final IBehaviorDispenseItem dispenseTrap = new BehaviorDispenseTrap();
-	
-	public Icon[] icons;
-	public static String[] iconLocations = new String[] {"fyresmodjam:itemTrap", "fyresmodjam:trap2", "fyresmodjam:trap3"};
+public class ItemTrap extends Item
+{
+    private static final IBehaviorDispenseItem dispenseTrap = new BehaviorDispenseTrap();
 
-	public ItemTrap(int par1) {
-		super(par1);
-		this.setHasSubtypes(true);
-		BlockDispenser.dispenseBehaviorRegistry.putObject(this, dispenseTrap);
-	}
-	
-	@SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister) {
-    	icons = new Icon[iconLocations.length];
-    	for(int i = 0; i < iconLocations.length; i++) {icons[i] = par1IconRegister.registerIcon(iconLocations[i]);}
-    	
+    public Icon[] icons;
+    public static String[] iconLocations = new String[] {"fyresmodjam:itemTrap", "fyresmodjam:trap2", "fyresmodjam:trap3"};
+
+    public ItemTrap(int par1)
+    {
+        super(par1);
+        this.setHasSubtypes(true);
+        BlockDispenser.dispenseBehaviorRegistry.putObject(this, dispenseTrap);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        icons = new Icon[iconLocations.length];
+        for (int i = 0; i < iconLocations.length; i++) {icons[i] = par1IconRegister.registerIcon(iconLocations[i]);}
+
         this.itemIcon = icons[0];
     }
-	
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
-        for(int i = 0; i < BlockTrap.trapTypes; i++) {par3List.add(new ItemStack(par1, 1, i));}
+
+    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
+    {
+        for (int i = 0; i < BlockTrap.trapTypes; i++) {par3List.add(new ItemStack(par1, 1, i));}
     }
-	
-	public static String[] names = {"Spike Trap", "Flame Trap", "Smoke Trap"};
-	
-	@SideOnly(Side.CLIENT)
-	public String getItemDisplayName(ItemStack par1ItemStack) {
-		return names[par1ItemStack.getItemDamage() % BlockTrap.trapTypes];
-	}
-	
-	@SideOnly(Side.CLIENT)
-    public Icon getIconFromDamage(int par1) {
+
+    public static String[] names = {"Spike Trap", "Flame Trap", "Smoke Trap"};
+
+    @SideOnly(Side.CLIENT)
+    public String getItemDisplayName(ItemStack par1ItemStack)
+    {
+        return names[par1ItemStack.getItemDamage() % BlockTrap.trapTypes];
+    }
+
+    @SideOnly(Side.CLIENT)
+    public Icon getIconFromDamage(int par1)
+    {
         return icons[par1 % BlockTrap.trapTypes];
     }
-	
-	//Below snipped and editted from ItemBlock, avoided using ItemBlock because blockID was private
 
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+    //Below snipped and editted from ItemBlock, avoided using ItemBlock because blockID was private
+
+    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
     {
         int i1 = par3World.getBlockId(par4, par5, par6);
 
@@ -67,8 +71,7 @@ public class ItemTrap extends Item {
         {
             par7 = 1;
         }
-        else if (i1 != Block.vine.blockID && i1 != Block.tallGrass.blockID && i1 != Block.deadBush.blockID
-                && (Block.blocksList[i1] == null || !Block.blocksList[i1].isBlockReplaceable(par3World, par4, par5, par6)))
+        else if (i1 != Block.vine.blockID && i1 != Block.tallGrass.blockID && i1 != Block.deadBush.blockID && (Block.blocksList[i1] == null || !Block.blocksList[i1].isBlockReplaceable(par3World, par4, par5, par6)))
         {
             if (par7 == 0)
             {
@@ -121,7 +124,7 @@ public class ItemTrap extends Item {
 
             if (placeBlockAt(par1ItemStack, par2EntityPlayer, par3World, par4, par5, par6, par7, par8, par9, par10, k1))
             {
-                par3World.playSoundEffect((double)((float)par4 + 0.5F), (double)((float)par5 + 0.5F), (double)((float)par6 + 0.5F), block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+                par3World.playSoundEffect((double) ((float) par4 + 0.5F), (double) ((float) par5 + 0.5F), (double) ((float) par6 + 0.5F), block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
                 --par1ItemStack.stackSize;
             }
 
@@ -146,8 +149,7 @@ public class ItemTrap extends Item {
         {
             par5 = 1;
         }
-        else if (i1 != Block.vine.blockID && i1 != Block.tallGrass.blockID && i1 != Block.deadBush.blockID
-                && (Block.blocksList[i1] == null || !Block.blocksList[i1].isBlockReplaceable(par1World, par2, par3, par4)))
+        else if (i1 != Block.vine.blockID && i1 != Block.tallGrass.blockID && i1 != Block.deadBush.blockID && (Block.blocksList[i1] == null || !Block.blocksList[i1].isBlockReplaceable(par1World, par2, par3, par4)))
         {
             if (par5 == 0)
             {
@@ -180,22 +182,22 @@ public class ItemTrap extends Item {
             }
         }
 
-        return par1World.canPlaceEntityOnSide(ModjamMod.blockTrap.blockID, par2, par3, par4, false, par5, (Entity)null, par7ItemStack);
+        return par1World.canPlaceEntityOnSide(ModjamMod.blockTrap.blockID, par2, par3, par4, false, par5, (Entity) null, par7ItemStack);
     }
-    
+
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
     {
-       if (!world.setBlock(x, y, z, ModjamMod.blockTrap.blockID, metadata, 3))
-       {
-           return false;
-       }
+        if (!world.setBlock(x, y, z, ModjamMod.blockTrap.blockID, metadata, 3))
+        {
+            return false;
+        }
 
-       if (world.getBlockId(x, y, z) == ModjamMod.blockTrap.blockID)
-       {
-           Block.blocksList[ModjamMod.blockTrap.blockID].onBlockPlacedBy(world, x, y, z, player, stack);
-           Block.blocksList[ModjamMod.blockTrap.blockID].onPostBlockPlaced(world, x, y, z, metadata);
-       }
+        if (world.getBlockId(x, y, z) == ModjamMod.blockTrap.blockID)
+        {
+            Block.blocksList[ModjamMod.blockTrap.blockID].onBlockPlacedBy(world, x, y, z, player, stack);
+            Block.blocksList[ModjamMod.blockTrap.blockID].onPostBlockPlaced(world, x, y, z, metadata);
+        }
 
-       return true;
+        return true;
     }
 }

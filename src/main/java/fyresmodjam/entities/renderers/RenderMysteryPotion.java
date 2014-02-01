@@ -2,6 +2,7 @@ package fyresmodjam.entities.renderers;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import fyresmodjam.entities.EntityMysteryPotion;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -15,14 +16,13 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import fyresmodjam.entities.EntityMysteryPotion;
-
 @SideOnly(Side.CLIENT)
 public class RenderMysteryPotion extends Render
 {
     private Item field_94151_a;
 
-    public RenderMysteryPotion(Item par1Item) {
+    public RenderMysteryPotion(Item par1Item)
+    {
         this.field_94151_a = par1Item;
     }
 
@@ -39,7 +39,7 @@ public class RenderMysteryPotion extends Render
         if (icon != null)
         {
             GL11.glPushMatrix();
-            GL11.glTranslatef((float)par2, (float)par4, (float)par6);
+            GL11.glTranslatef((float) par2, (float) par4, (float) par6);
             GL11.glEnable(GL12.GL_RESCALE_NORMAL);
             GL11.glScalef(0.5F, 0.5F, 0.5F);
             this.bindEntityTexture(par1Entity);
@@ -47,10 +47,10 @@ public class RenderMysteryPotion extends Render
 
             if (icon == ItemPotion.func_94589_d("bottle_splash"))
             {
-                int i = PotionHelper.func_77915_a(((EntityPotion)par1Entity).getPotionDamage(), false);
-                float f2 = (float)(i >> 16 & 255) / 255.0F;
-                float f3 = (float)(i >> 8 & 255) / 255.0F;
-                float f4 = (float)(i & 255) / 255.0F;
+                int i = PotionHelper.func_77915_a(((EntityPotion) par1Entity).getPotionDamage(), false);
+                float f2 = (float) (i >> 16 & 255) / 255.0F;
+                float f3 = (float) (i >> 8 & 255) / 255.0F;
+                float f4 = (float) (i & 255) / 255.0F;
                 GL11.glColor3f(f2, f3, f4);
                 GL11.glPushMatrix();
                 this.func_77026_a(tessellator, ItemPotion.func_94589_d("overlay"));
@@ -82,10 +82,10 @@ public class RenderMysteryPotion extends Render
         GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         par1Tessellator.startDrawingQuads();
         par1Tessellator.setNormal(0.0F, 1.0F, 0.0F);
-        par1Tessellator.addVertexWithUV((double)(0.0F - f5), (double)(0.0F - f6), 0.0D, (double)f, (double)f3);
-        par1Tessellator.addVertexWithUV((double)(f4 - f5), (double)(0.0F - f6), 0.0D, (double)f1, (double)f3);
-        par1Tessellator.addVertexWithUV((double)(f4 - f5), (double)(f4 - f6), 0.0D, (double)f1, (double)f2);
-        par1Tessellator.addVertexWithUV((double)(0.0F - f5), (double)(f4 - f6), 0.0D, (double)f, (double)f2);
+        par1Tessellator.addVertexWithUV((double) (0.0F - f5), (double) (0.0F - f6), 0.0D, (double) f, (double) f3);
+        par1Tessellator.addVertexWithUV((double) (f4 - f5), (double) (0.0F - f6), 0.0D, (double) f1, (double) f3);
+        par1Tessellator.addVertexWithUV((double) (f4 - f5), (double) (f4 - f6), 0.0D, (double) f1, (double) f2);
+        par1Tessellator.addVertexWithUV((double) (0.0F - f5), (double) (f4 - f6), 0.0D, (double) f, (double) f2);
         par1Tessellator.draw();
     }
 }
