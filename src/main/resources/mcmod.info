@@ -1,0 +1,19 @@
+[
+{
+  "modid": "fyresmodjam",
+  "name": "The You Will Die Mod",
+  "description": "The You Will Die Mod for Minecraft!",
+  "version": "0.0.3d",
+  "mcversion": "1.6.4",
+  "url": "",
+  "updateUrl": "",
+  "authors": [
+    "xFyreStorm"
+  ],
+  "credits" : "xFyreStorm - Developer",
+  "logoFile" : "",
+  "parent" : "",
+  "dependencies": [
+  ]
+}
+]
