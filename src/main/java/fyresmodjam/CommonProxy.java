@@ -38,6 +38,8 @@ public class CommonProxy
         enableWeaponKillStats = config.get(Configuration.CATEGORY_GENERAL, "enable_weapon_kill_stats", enableWeaponKillStats).getBoolean(enableWeaponKillStats);
         enableCraftingStats = config.get(Configuration.CATEGORY_GENERAL, "enable_crafting_stats", enableCraftingStats).getBoolean(enableCraftingStats);
 
+        enableMobNaming = config.get(Configuration.CATEGORY_GENERAL, "enable_mob_naming", enableMobNaming, "Disable to remove mob names, can fix spamming console and chat.").getBoolean(enableMobNaming);
+
         trapsBelowGroundOnly = config.get(Configuration.CATEGORY_GENERAL, "traps_below_ground_only", trapsBelowGroundOnly).getBoolean(trapsBelowGroundOnly);
     }
 }

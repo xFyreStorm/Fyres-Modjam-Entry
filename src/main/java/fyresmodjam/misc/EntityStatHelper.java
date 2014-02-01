@@ -108,7 +108,7 @@ public class EntityStatHelper
 
     public static Entity setName(EntityLiving entity, String name)
     {
-        entity.setCustomNameTag(name);
+        if (ModjamMod.enableMobNaming) entity.setCustomNameTag(name);
         //if(entity.getCustomNameTag().equals(entity.getEntityName())) {entity.setCustomNameTag("");}
         return entity;
     }
