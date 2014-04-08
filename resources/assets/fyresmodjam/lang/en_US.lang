@@ -1,0 +1,16 @@
+item.blockPillar.name=Pillar
+item.mysteryPotion.name=Mystery Potion
+item.itemTrap.name=Trap
+item.mysteryMushroom.name=Mystery Mushroom
+item.sceptre.name=Obsidian Sceptre
+tile.blockPillar.name=Pillar Block
+tile.blockTrap.name=Trap
+tile.mysteryMushroomBlock.name=Mystery Mushroom
+entity.MysteryPotion.name=Mystery Potion
+commands.currentBlessing.usage=/currentBlessing - used to check your current blessing
+commands.currentDisadvantage.usage=/currentDisadvantage - used to check your current world disadvantage
+commands.currentGoal.usage=/currentGoal - used to check your current world goal
+commands.creatureKnowledge.usage=/creatureKnowledge [page] - used to check your current creature knowledge stats
+commands.weaponKnowledge.usage=/weaponKnowledge [page] - used to check your current weapon knowledge stats
+commands.craftingKnowledge.usage=/craftingKnowledge [page] - used to check your current crafting knowledge stats
+fyresmodjam.newVersion=\u00A7bA newer version of the "You Will Die" Mod has been found
