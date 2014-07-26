@@ -1,0 +1,16 @@
+item.blockPillar.name=碑柱
+item.mysteryPotion.name=谜之药剂
+item.itemTrap.name=陷阱
+item.mysteryMushroom.name=谜之蘑菇
+item.sceptre.name=黑曜石权杖
+tile.blockPillar.name=碑柱
+tile.blockTrap.name=陷阱
+tile.mysteryMushroomBlock.name=谜之蘑菇
+entity.MysteryPotion.name=谜之药剂
+commands.currentBlessing.usage=/currentBlessing - 用来查看你当前的祝福
+commands.currentDisadvantage.usage=/currentDisadvantage - 用来查看世界的当前不利
+commands.currentGoal.usage=/currentGoal - 用来查看你当前的目标
+commands.creatureKnowledge.usage=/creatureKnowledge [page] - 用来查看你当前生物认知状态
+commands.weaponKnowledge.usage=/weaponKnowledge [page] - 用来查看你当前武器认知状态
+commands.craftingKnowledge.usage=/craftingKnowledge [page] - 用来查看你当前合成认知状态
+fyresmodjam.newVersion=\u00A7bA 新版本"必死无疑"Mod已经找到
